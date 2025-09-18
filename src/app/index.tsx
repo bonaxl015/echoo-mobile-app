@@ -1,84 +1,35 @@
-import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { Appbar, Avatar, Button, Card, Text, useTheme } from 'react-native-paper';
+import { useAuthStore } from '@store/useAuthStore';
+import { SplashScreen, useRouter } from 'expo-router';
+import { useEffect } from 'react';
+import { ActivityIndicator, View } from 'react-native';
 
-export default function HomeScreen() {
-	const theme = useTheme();
+SplashScreen.preventAutoHideAsync();
 
-	return (
-		<>
-			<Appbar.Header>
-				<Appbar.Content title="Home" />
-				<Appbar.Action icon="magnify" onPress={() => {}} />
-				<Appbar.Action icon="dots-vertical" onPress={() => {}} />
-			</Appbar.Header>
+export default function AuthGate() {
+	const router = useRouter();
+	const hasHydrated = useAuthStore((s) => s.hasHydrated);
+	const token = useAuthStore((s) => s.token);
 
-			<ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-				<Text variant="headlineMedium" style={styles.welcomeText}>
-					Hey hey hey hey welcome
-				</Text>
+	useEffect(() => {
+		if (hasHydrated) {
+			if (useAuthStore.getState().token) {
+				// temporary route for now
+				router.replace('/auth/register');
+			} else {
+				router.replace('/auth/login');
+			}
 
-				<View style={styles.avatarRow}>
-					<Avatar.Image
-						size={64}
-						source={{
-							uri: 'https://i.pravatar.cc/300'
-						}}
-					/>
-					<Text variant="titleMedium" style={styles.avatarText}>
-						hey there user
-					</Text>
-				</View>
+			SplashScreen.hideAsync();
+		}
+	}, [hasHydrated, router, token]);
 
-				<Card style={styles.card} mode="outlined">
-					<Card.Title
-						title="First Post"
-						subtitle="Test layout"
-						left={(props) => <Avatar.Icon {...props} icon="folder" />}
-					/>
-					<Card.Content>
-						<Text variant="bodyMedium">Placeholder card</Text>
-					</Card.Content>
-					<Card.Actions>
-						<Button onPress={() => {}}>Like</Button>
-						<Button onPress={() => {}}>Comment</Button>
-					</Card.Actions>
-				</Card>
-
-				<Card style={styles.card}>
-					<Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
-					<Card.Content>
-						<Text variant="bodyMedium" style={{ marginTop: 8 }}>
-							Nice image
-						</Text>
-					</Card.Content>
-					<Card.Actions>
-						<Button onPress={() => {}}>Share</Button>
-					</Card.Actions>
-				</Card>
-			</ScrollView>
-		</>
-	);
-}
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		padding: 16
-	},
-	welcomeText: {
-		marginBottom: 20,
-		fontWeight: 'bold'
-	},
-	avatarRow: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		marginBottom: 20
-	},
-	avatarText: {
-		marginLeft: 12
-	},
-	card: {
-		marginBottom: 16
+	if (!hasHydrated) {
+		return (
+			<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+				<ActivityIndicator size={100} color="#2E64E5" />
+			</View>
+		);
 	}
-});
+
+	return null;
+}
