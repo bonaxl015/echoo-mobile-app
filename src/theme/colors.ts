@@ -10,15 +10,15 @@ export const common = {
 export const light = {
 	background: '#F9FAFB',
 	surface: '#FFFFFF',
-	text: '#0F172A',
-	placeholder: '#94A3B8',
+	onSurface: '#0F172A',
+	onSurfaceVariant: '#94A3B8',
 	outline: '#CBD5E1'
 };
 
 export const dark = {
 	background: '#0F172A',
 	surface: '#1E293B',
-	text: '#F1F5F9',
-	placeholder: '#94A3B8',
+	onSurface: '#F1F5F9',
+	onSurfaceVariant: '#94A3B8',
 	outline: '#334155'
 };
