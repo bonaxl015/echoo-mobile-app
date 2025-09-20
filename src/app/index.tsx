@@ -13,8 +13,7 @@ export default function AuthGate() {
 	useEffect(() => {
 		if (hasHydrated) {
 			if (useAuthStore.getState().token) {
-				// temporary route for now
-				router.replace('/auth/register');
+				router.replace('/newsfeed');
 			} else {
 				router.replace('/auth/login');
 			}

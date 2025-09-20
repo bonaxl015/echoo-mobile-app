@@ -4,9 +4,16 @@ import { ColorScheme } from '@theme/types';
 import { useFonts } from 'expo-font';
 import { Slot, SplashScreen } from 'expo-router';
 import React, { useEffect } from 'react';
-import { useColorScheme } from 'react-native';
+import {
+	Keyboard,
+	KeyboardAvoidingView,
+	Platform,
+	TouchableWithoutFeedback,
+	useColorScheme
+} from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider } from 'react-native-paper';
+import Toast from 'react-native-toast-message';
 
 export default function RootLayout() {
 	const colorScheme = useColorScheme();
@@ -28,11 +35,19 @@ export default function RootLayout() {
 
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
-			<PaperProvider theme={theme}>
-				<AppQueryProvider>
-					<Slot />
-				</AppQueryProvider>
-			</PaperProvider>
+			<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+				<KeyboardAvoidingView
+					style={{ flex: 1 }}
+					behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+				>
+					<PaperProvider theme={theme}>
+						<AppQueryProvider>
+							<Slot />
+							<Toast />
+						</AppQueryProvider>
+					</PaperProvider>
+				</KeyboardAvoidingView>
+			</TouchableWithoutFeedback>
 		</GestureHandlerRootView>
 	);
 }
