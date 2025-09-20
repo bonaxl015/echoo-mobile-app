@@ -8,7 +8,7 @@ import tseslint from 'typescript-eslint';
 
 export default [
 	{
-		ignores: ['node_modules', '.env']
+		ignores: ['node_modules', '.env', 'expo-env.d.ts']
 	},
 	js.configs.recommended,
 	...tseslint.configs.recommended,
