@@ -41,7 +41,6 @@ export default function LoginForm() {
 					name="email"
 					label="Email"
 					placeholder="Email"
-					rules={{ required: 'Email is required' }}
 				/>
 				<FormTextInput
 					control={control as unknown as Control}
@@ -49,7 +48,6 @@ export default function LoginForm() {
 					label="Password"
 					placeholder="Password"
 					secureTextEntry
-					rules={{ required: 'Password is required' }}
 				/>
 
 				<Button
@@ -68,6 +66,15 @@ export default function LoginForm() {
 						style={[styles.registerText, { color: theme.colors.primary }]}
 					>
 						Register
+					</Text>
+				</View>
+				<View style={styles.bottomText}>
+					<Text style={{ color: theme.colors.onSurfaceVariant }}>Forgot password? </Text>
+					<Text
+						onPress={() => router.push('/auth/forgot-password')}
+						style={[styles.registerText, { color: theme.colors.primary }]}
+					>
+						Reset Password
 					</Text>
 				</View>
 			</Surface>
