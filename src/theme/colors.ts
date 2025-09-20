@@ -12,6 +12,7 @@ export const light = {
 	surface: '#FFFFFF',
 	onSurface: '#0F172A',
 	onSurfaceVariant: '#94A3B8',
+	onSurfaceDisabled: '#94A3B8',
 	outline: '#CBD5E1'
 };
 
@@ -20,5 +21,6 @@ export const dark = {
 	surface: '#1E293B',
 	onSurface: '#F1F5F9',
 	onSurfaceVariant: '#94A3B8',
+	onSurfaceDisabled: '#94A3B8',
 	outline: '#334155'
 };

@@ -41,14 +41,12 @@ export default function RegisterForm() {
 					name="name"
 					label="Name"
 					placeholder="Name"
-					rules={{ required: 'Name is required' }}
 				/>
 				<FormTextInput
 					control={control as unknown as Control}
 					name="email"
 					label="Email"
 					placeholder="Email"
-					rules={{ required: 'Email is required' }}
 				/>
 				<FormTextInput
 					control={control as unknown as Control}
@@ -56,7 +54,6 @@ export default function RegisterForm() {
 					label="Password"
 					placeholder="Password"
 					secureTextEntry
-					rules={{ required: 'Password is required' }}
 				/>
 
 				<Button
