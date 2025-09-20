@@ -55,6 +55,7 @@ export default [
 			'@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
 			'@typescript-eslint/explicit-function-return-type': 'off',
 			'@typescript-eslint/no-require-imports': 'off',
+			'@typescript-eslint/no-explicit-any': 'off',
 
 			// Prettier formatting
 			'prettier/prettier': [

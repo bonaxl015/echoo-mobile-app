@@ -8,6 +8,7 @@
 			"@app/*": ["app/*"],
 			"@assets/*": ["assets/*"],
 			"@components/*": ["components/*"],
+			"@config/*": ["config/*"],
 			"@constants/*": ["constants/*"],
 			"@features/*": ["features/*"],
 			"@services/*": ["services/*"],
