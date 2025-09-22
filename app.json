@@ -6,6 +6,7 @@
 		"orientation": "portrait",
 		"icon": "./src/assets/images/icon.png",
 		"scheme": "echoo",
+		"platforms": ["ios", "android", "web"],
 		"splash": {
 			"image": "./src/assets/images/splash-icon.png",
 			"resizeMode": "contain",
