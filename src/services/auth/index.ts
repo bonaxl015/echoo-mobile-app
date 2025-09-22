@@ -1,6 +1,11 @@
 import apiClient from '@services/apiClient';
 import { AxiosError } from 'axios';
-import { ForgotPasswordFormData, LoginFormData, RegisterFormData } from './types';
+import {
+	ForgotPasswordFormData,
+	LoginFormData,
+	RegisterFormData,
+	ResetPasswordFormData
+} from './types';
 import { AUTH_API_URL } from './url';
 
 export async function submitLoginForm(data: LoginFormData) {
@@ -38,6 +43,22 @@ export async function submitRegistrationForm(data: RegisterFormData) {
 export async function submitForgotPasswordForm(data: ForgotPasswordFormData) {
 	try {
 		const res = await apiClient.post(AUTH_API_URL.FORGOT_PASSWORD, data);
+
+		if (!res.data && res.status !== 200) {
+			throw new Error(res.data.message);
+		}
+
+		return res.data;
+	} catch (error) {
+		if (error instanceof AxiosError) {
+			throw new Error(error.message);
+		}
+	}
+}
+
+export async function submitResetPasswordForm(data: ResetPasswordFormData) {
+	try {
+		const res = await apiClient.post(AUTH_API_URL.RESET_PASSWORD, data);
 
 		if (!res.data && res.status !== 200) {
 			throw new Error(res.data.message);
