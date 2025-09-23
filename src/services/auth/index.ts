@@ -2,21 +2,21 @@ import apiClient from '@services/apiClient';
 import { AxiosError } from 'axios';
 import {
 	ForgotPasswordFormData,
+	ForgotPasswordResponse,
 	LoginFormData,
+	LoginResponse,
 	RegisterFormData,
-	ResetPasswordFormData
+	RegisterResponse,
+	ResetPasswordFormData,
+	ResetPasswordResponse
 } from './types';
 import { AUTH_API_URL } from './url';
 
 export async function submitLoginForm(data: LoginFormData) {
 	try {
-		const res = await apiClient.post(AUTH_API_URL.LOGIN, data);
+		const res = await apiClient.post<LoginResponse>(AUTH_API_URL.LOGIN, data);
 
-		if (!res.data && res.status !== 200) {
-			throw new Error(res.data.message);
-		}
-
-		return { token: res.data.token };
+		return res.data;
 	} catch (error) {
 		if (error instanceof AxiosError) {
 			throw new Error(error.message);
@@ -26,13 +26,9 @@ export async function submitLoginForm(data: LoginFormData) {
 
 export async function submitRegistrationForm(data: RegisterFormData) {
 	try {
-		const res = await apiClient.post(AUTH_API_URL.REGISTER, data);
+		const res = await apiClient.post<RegisterResponse>(AUTH_API_URL.REGISTER, data);
 
-		if (!res.data && res.status !== 200) {
-			throw new Error(res.data.message);
-		}
-
-		return { token: res.data.token };
+		return res.data;
 	} catch (error) {
 		if (error instanceof AxiosError) {
 			throw new Error(error.message);
@@ -42,11 +38,7 @@ export async function submitRegistrationForm(data: RegisterFormData) {
 
 export async function submitForgotPasswordForm(data: ForgotPasswordFormData) {
 	try {
-		const res = await apiClient.post(AUTH_API_URL.FORGOT_PASSWORD, data);
-
-		if (!res.data && res.status !== 200) {
-			throw new Error(res.data.message);
-		}
+		const res = await apiClient.post<ForgotPasswordResponse>(AUTH_API_URL.FORGOT_PASSWORD, data);
 
 		return res.data;
 	} catch (error) {
@@ -58,11 +50,7 @@ export async function submitForgotPasswordForm(data: ForgotPasswordFormData) {
 
 export async function submitResetPasswordForm(data: ResetPasswordFormData) {
 	try {
-		const res = await apiClient.post(AUTH_API_URL.RESET_PASSWORD, data);
-
-		if (!res.data && res.status !== 200) {
-			throw new Error(res.data.message);
-		}
+		const res = await apiClient.post<ResetPasswordResponse>(AUTH_API_URL.RESET_PASSWORD, data);
 
 		return res.data;
 	} catch (error) {
