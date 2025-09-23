@@ -11,7 +11,9 @@ export default function AuthGate() {
 	const token = useAuthStore((s) => s.token);
 
 	useEffect(() => {
-		if (hasHydrated) {
+		if (!hasHydrated) return;
+
+		const timeout = setTimeout(() => {
 			if (useAuthStore.getState().token) {
 				router.replace('/newsfeed');
 			} else {
@@ -19,7 +21,9 @@ export default function AuthGate() {
 			}
 
 			SplashScreen.hideAsync();
-		}
+		}, 10);
+
+		return () => clearTimeout(timeout);
 	}, [hasHydrated, router, token]);
 
 	if (!hasHydrated) {
