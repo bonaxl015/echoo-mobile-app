@@ -2,20 +2,24 @@ import { useAuthStore } from '@store/useAuthStore';
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Avatar, Button, Text, TextInput, useTheme } from 'react-native-paper';
+import { PostFormData } from './PostFormModal';
 
 interface ICreatePostForm {
+	formData: PostFormData;
 	onSubmit: (content: string) => void;
 	isPending: boolean;
 }
 
-export function CreatePostForm({ onSubmit, isPending }: ICreatePostForm) {
+export function PostForm({ formData, onSubmit, isPending }: ICreatePostForm) {
 	const theme = useTheme();
 	const user = useAuthStore((s) => s.user);
-	const [content, setContent] = useState<string>('');
+	const [content, setContent] = useState<string>(formData.content);
+
+	const isEditMode = Boolean(formData.id);
 
 	return (
 		<View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-			<Text variant="headlineMedium">Create Post</Text>
+			<Text variant="headlineMedium">{isEditMode ? 'Update Post' : 'Create Post'}</Text>
 			<View style={styles.header}>
 				<Avatar.Image size={50} source={{ uri: user?.profilePhoto }} />
 				<Text variant="titleMedium" style={{ marginLeft: 10 }}>
