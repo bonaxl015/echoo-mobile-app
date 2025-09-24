@@ -2,7 +2,7 @@ import { updatePost } from '@services/post';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Toast from 'react-native-toast-message';
 
-export function useUpdatePost(closeModal: () => void) {
+export function useUpdatePost(actions?: () => void) {
 	const queryClient = useQueryClient();
 
 	return useMutation({
@@ -14,7 +14,7 @@ export function useUpdatePost(closeModal: () => void) {
 				text2: 'Post updated successfully'
 			});
 
-			closeModal?.();
+			actions?.();
 
 			await queryClient.fetchQuery({
 				queryKey: ['getPostList']
@@ -22,7 +22,7 @@ export function useUpdatePost(closeModal: () => void) {
 		},
 		onError: () => {
 			Toast.show({
-				type: 'success',
+				type: 'error',
 				text1: 'Error',
 				text2: 'Could not update post'
 			});

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { RefObject } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Avatar, IconButton, Surface, Text, useTheme } from 'react-native-paper';
-import { PostFormData } from './PostFormModal';
+import { ConfirmDialogRef } from './DeletePostDialog';
+import { PostFormModalRef } from './PostFormModal';
 
 interface IPostProps {
 	authorName?: string;
@@ -13,8 +14,8 @@ interface IPostProps {
 	id?: string | null;
 	authorId?: string;
 	createdAt?: string;
-	openModal: () => void;
-	updatePostFormData: (value: PostFormData) => void;
+	postFormModalRef: RefObject<PostFormModalRef | null>;
+	postDeleteDialogRef: RefObject<ConfirmDialogRef | null>;
 }
 
 export function PostCard({
@@ -25,15 +26,22 @@ export function PostCard({
 	commentsCount,
 	likesCount,
 	content,
-	openModal,
-	updatePostFormData
+	postFormModalRef,
+	postDeleteDialogRef
 }: IPostProps) {
 	const theme = useTheme();
 
 	const handleEditPost = () => {
 		if (id) {
-			updatePostFormData({ id, content: content ?? '' });
-			openModal();
+			postFormModalRef.current?.updatePostFormData({ id, content: content ?? '' });
+			postFormModalRef.current?.openModal();
+		}
+	};
+
+	const handleDeletePost = () => {
+		if (id) {
+			postDeleteDialogRef.current?.updateDeleteData({ id });
+			postDeleteDialogRef.current?.openDialog();
 		}
 	};
 
@@ -53,7 +61,7 @@ export function PostCard({
 					</View>
 					<View style={styles.headerRight}>
 						<IconButton icon="pencil" size={20} onPress={handleEditPost} />
-						<IconButton icon="delete" size={20} onPress={() => {}} />
+						<IconButton icon="delete" size={20} onPress={handleDeletePost} />
 					</View>
 				</View>
 

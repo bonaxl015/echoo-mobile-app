@@ -1,24 +1,23 @@
 import { useAuthStore } from '@store/useAuthStore';
-import React from 'react';
+import React, { RefObject } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { Avatar, Surface, Text, useTheme } from 'react-native-paper';
-import { PostFormData } from './PostFormModal';
+import { PostFormModalRef } from './PostFormModal';
 
 interface ICreatePostPreview {
-	openModal: () => void;
-	updatePostFormData: (value: PostFormData) => void;
+	postFormModalRef: RefObject<PostFormModalRef | null>;
 }
 
-export function CreatePostPreview({ openModal, updatePostFormData }: ICreatePostPreview) {
+export function CreatePostPreview({ postFormModalRef }: ICreatePostPreview) {
 	const theme = useTheme();
 	const user = useAuthStore((s) => s.user);
 
 	const handleCreatePost = () => {
-		updatePostFormData({
+		postFormModalRef.current?.updatePostFormData({
 			id: null,
 			content: ''
 		});
-		openModal();
+		postFormModalRef.current?.openModal();
 	};
 
 	return (
