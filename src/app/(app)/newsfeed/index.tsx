@@ -1,7 +1,8 @@
 import { CreatePostPreview } from '@features/posts/components/CreatePostPreview';
 import { PostCard } from '@features/posts/components/PostCard';
+import PostFormModal, { PostFormModalRef } from '@features/posts/components/PostFormModal';
 import { useGetPostList } from '@features/posts/hooks/useGetPostList';
-import React from 'react';
+import React, { useRef } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,6 +10,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function NewsfeedScreen() {
 	const theme = useTheme();
 	const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useGetPostList();
+	const postFormModalRef = useRef<PostFormModalRef>({
+		openModal: () => {},
+		closeModal: () => {},
+		updatePostFormData: () => {}
+	});
 
 	const posts = data?.pages.flatMap((page) => page?.posts) || [];
 
@@ -23,37 +29,53 @@ export default function NewsfeedScreen() {
 	}
 
 	return (
-		<SafeAreaView
-			style={[styles.container, { backgroundColor: theme.colors.background }]}
-			edges={['bottom']}
-		>
-			<FlatList
-				data={posts}
-				keyExtractor={(item, index) => item?.id.toString() ?? `post-${index}`}
-				renderItem={({ item }) => <PostCard {...item} />}
-				contentContainerStyle={{ paddingBottom: 24 }}
-				scrollEnabled
-				keyboardShouldPersistTaps="handled"
-				ListHeaderComponent={<CreatePostPreview />}
-				onEndReached={() => {
-					if (hasNextPage) {
-						fetchNextPage();
+		<>
+			<SafeAreaView
+				style={[styles.container, { backgroundColor: theme.colors.background }]}
+				edges={['bottom']}
+			>
+				<FlatList
+					data={posts}
+					keyExtractor={(item, index) => item?.id?.toString() ?? `post-${index}`}
+					renderItem={({ item }) => (
+						<PostCard
+							{...item}
+							openModal={postFormModalRef.current.openModal}
+							updatePostFormData={postFormModalRef.current.updatePostFormData}
+						/>
+					)}
+					contentContainerStyle={{ paddingBottom: 24 }}
+					scrollEnabled
+					keyboardShouldPersistTaps="handled"
+					ListHeaderComponent={
+						<CreatePostPreview
+							openModal={postFormModalRef.current.openModal}
+							updatePostFormData={postFormModalRef.current.updatePostFormData}
+						/>
 					}
-				}}
-				onEndReachedThreshold={0.5}
-				ListFooterComponent={() => (
-					<View style={{ alignItems: 'center' }}>
-						{isFetchingNextPage ? (
-							<ActivityIndicator size="small" color={theme.colors.primary} />
-						) : hasNextPage ? null : (
-							<Text style={{ color: theme.colors.onSurfaceVariant }}>
-								You have read all of the posts
-							</Text>
-						)}
-					</View>
-				)}
-			/>
-		</SafeAreaView>
+					onEndReached={() => {
+						if (hasNextPage) {
+							fetchNextPage();
+						}
+					}}
+					onEndReachedThreshold={0.5}
+					ListFooterComponent={() => (
+						<View style={{ alignItems: 'center' }}>
+							{isFetchingNextPage ? (
+								<ActivityIndicator size="small" color={theme.colors.primary} />
+							) : hasNextPage ? null : (
+								<Text style={{ color: theme.colors.onSurfaceVariant }}>
+									You have read all of the posts
+								</Text>
+							)}
+						</View>
+					)}
+				/>
+			</SafeAreaView>
+
+			{/* Create or edit posts */}
+			<PostFormModal ref={postFormModalRef} />
+		</>
 	);
 }
 

@@ -1,22 +1,30 @@
-import AnimatedModal from '@components/AnimatedModal';
-import { CreatePostForm } from '@features/posts/components/CreatePostForm';
-import { useCreatePost } from '@features/posts/hooks/useCreatePost';
 import { useAuthStore } from '@store/useAuthStore';
-import React, { useState } from 'react';
+import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { Avatar, Surface, Text, useTheme } from 'react-native-paper';
+import { PostFormData } from './PostFormModal';
 
-export function CreatePostPreview() {
+interface ICreatePostPreview {
+	openModal: () => void;
+	updatePostFormData: (value: PostFormData) => void;
+}
+
+export function CreatePostPreview({ openModal, updatePostFormData }: ICreatePostPreview) {
 	const theme = useTheme();
 	const user = useAuthStore((s) => s.user);
-	const [modalVisible, setModalVisible] = useState<boolean>(false);
-	const closeModal = () => setModalVisible(false);
-	const createPostMutation = useCreatePost(closeModal);
+
+	const handleCreatePost = () => {
+		updatePostFormData({
+			id: null,
+			content: ''
+		});
+		openModal();
+	};
 
 	return (
 		<Surface style={[styles.card, { backgroundColor: theme.colors.surface }]}>
 			{/* Pressable form in newsfeed */}
-			<Pressable onPress={() => setModalVisible(true)} style={styles.row}>
+			<Pressable onPress={handleCreatePost} style={styles.row}>
 				<Avatar.Image size={40} source={{ uri: user?.profilePhoto }} />
 				<Text
 					style={[
@@ -30,14 +38,6 @@ export function CreatePostPreview() {
 					Share your thoughts, {user?.name}
 				</Text>
 			</Pressable>
-
-			{/* Create Post Modal */}
-			<AnimatedModal modalVisible={modalVisible} onDismiss={closeModal}>
-				<CreatePostForm
-					onSubmit={(content) => createPostMutation.mutate({ content })}
-					isPending={createPostMutation.isPending}
-				/>
-			</AnimatedModal>
 		</Surface>
 	);
 }

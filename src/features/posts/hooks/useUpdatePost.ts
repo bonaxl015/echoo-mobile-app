@@ -1,17 +1,17 @@
-import { createPost } from '@services/post';
+import { updatePost } from '@services/post';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Toast from 'react-native-toast-message';
 
-export function useCreatePost(closeModal: () => void) {
+export function useUpdatePost(closeModal: () => void) {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: createPost,
+		mutationFn: updatePost,
 		onSuccess: async () => {
 			Toast.show({
 				type: 'success',
 				text1: 'Success',
-				text2: 'Post added successfully'
+				text2: 'Post updated successfully'
 			});
 
 			closeModal?.();
@@ -24,7 +24,7 @@ export function useCreatePost(closeModal: () => void) {
 			Toast.show({
 				type: 'success',
 				text1: 'Error',
-				text2: 'Could not create post'
+				text2: 'Could not update post'
 			});
 		}
 	});

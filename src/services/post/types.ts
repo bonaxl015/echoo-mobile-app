@@ -5,7 +5,7 @@ export type Post = {
 	likesCount: number;
 	isLikedByCurrentUser: boolean;
 	content: string;
-	id: string;
+	id: string | null;
 	authorId: string;
 	createdAt: string;
 	updatedAt: string;
@@ -23,10 +23,12 @@ export interface PostResponse {
 	posts: Post[];
 }
 
-export type ICreatePostService = {
-	content: string;
-};
+export type ICreatePostService = Pick<Post, 'content'>;
 
 export type CreatePostResponse = {
 	post: CreatePostData;
 };
+
+export type IUpdatePostService = Pick<Post, 'id' | 'content'>;
+
+export type UpdatePostResponse = CreatePostResponse;
