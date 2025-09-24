@@ -1,22 +1,28 @@
 import { CreatePostPreview } from '@features/posts/components/CreatePostPreview';
-import { PostCard } from '@features/posts/components/PostCard';
+import DeletePostDialog, { ConfirmDialogRef } from '@features/posts/components/DeletePostDialog';
 import PostFormModal, { PostFormModalRef } from '@features/posts/components/PostFormModal';
+import PostListFooter from '@features/posts/components/PostListFooter';
 import { useGetPostList } from '@features/posts/hooks/useGetPostList';
+import usePostListProps from '@features/posts/hooks/usePostListProps';
+import { Post } from '@services/post/types';
 import React, { useRef } from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
-import { Text, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function NewsfeedScreen() {
 	const theme = useTheme();
 	const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useGetPostList();
-	const postFormModalRef = useRef<PostFormModalRef>({
-		openModal: () => {},
-		closeModal: () => {},
-		updatePostFormData: () => {}
+	const postFormModalRef = useRef<PostFormModalRef>(null);
+	const postDeleteDialogRef = useRef<ConfirmDialogRef>(null);
+	const { renderItem, onEndReached } = usePostListProps({
+		postFormModalRef,
+		postDeleteDialogRef,
+		fetchNextPage,
+		hasNextPage
 	});
 
-	const posts = data?.pages.flatMap((page) => page?.posts) || [];
+	const posts = (data?.pages.flatMap((page) => page?.posts) as Post[]) ?? [];
 
 	if (isLoading) {
 		return (
@@ -30,51 +36,36 @@ export default function NewsfeedScreen() {
 
 	return (
 		<>
+			{/* Post list display */}
 			<SafeAreaView
 				style={[styles.container, { backgroundColor: theme.colors.background }]}
 				edges={['bottom']}
 			>
-				<FlatList
+				<FlatList<Post>
 					data={posts}
-					keyExtractor={(item, index) => item?.id?.toString() ?? `post-${index}`}
-					renderItem={({ item }) => (
-						<PostCard
-							{...item}
-							openModal={postFormModalRef.current.openModal}
-							updatePostFormData={postFormModalRef.current.updatePostFormData}
-						/>
-					)}
+					keyExtractor={(item, index) => item.id?.toString() ?? `post-${index}`}
+					renderItem={renderItem}
 					contentContainerStyle={{ paddingBottom: 24 }}
 					scrollEnabled
 					keyboardShouldPersistTaps="handled"
-					ListHeaderComponent={
-						<CreatePostPreview
-							openModal={postFormModalRef.current.openModal}
-							updatePostFormData={postFormModalRef.current.updatePostFormData}
-						/>
-					}
-					onEndReached={() => {
-						if (hasNextPage) {
-							fetchNextPage();
-						}
-					}}
+					initialNumToRender={5}
+					maxToRenderPerBatch={10}
+					windowSize={5}
+					removeClippedSubviews
+					onEndReached={onEndReached}
 					onEndReachedThreshold={0.5}
-					ListFooterComponent={() => (
-						<View style={{ alignItems: 'center' }}>
-							{isFetchingNextPage ? (
-								<ActivityIndicator size="small" color={theme.colors.primary} />
-							) : hasNextPage ? null : (
-								<Text style={{ color: theme.colors.onSurfaceVariant }}>
-									You have read all of the posts
-								</Text>
-							)}
-						</View>
-					)}
+					ListHeaderComponent={<CreatePostPreview postFormModalRef={postFormModalRef} />}
+					ListFooterComponent={
+						<PostListFooter isFetchingNextPage={isFetchingNextPage} hasNextPage={hasNextPage} />
+					}
 				/>
 			</SafeAreaView>
 
 			{/* Create or edit posts */}
 			<PostFormModal ref={postFormModalRef} />
+
+			{/* Confirm delete dialog */}
+			<DeletePostDialog ref={postDeleteDialogRef} />
 		</>
 	);
 }

@@ -3,7 +3,9 @@ import dateFormatter from '@utils/dateFormatter';
 import { AxiosError } from 'axios';
 import {
 	CreatePostResponse,
+	DeletePostResponse,
 	ICreatePostService,
+	IDeletePostService,
 	IUpdatePostService,
 	PostResponse,
 	UpdatePostResponse
@@ -55,6 +57,18 @@ export async function createPost(data: ICreatePostService) {
 export async function updatePost(data: IUpdatePostService) {
 	try {
 		const res = await apiClient.patch<UpdatePostResponse>(POST_API_URL.UPDATE_POST, data);
+
+		return res.data;
+	} catch (error) {
+		if (error instanceof AxiosError) {
+			throw new Error(error.message);
+		}
+	}
+}
+
+export async function deletePost(data: IDeletePostService) {
+	try {
+		const res = await apiClient.delete<DeletePostResponse>(POST_API_URL.DELETE_POST, { data });
 
 		return res.data;
 	} catch (error) {

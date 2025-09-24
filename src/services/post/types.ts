@@ -32,3 +32,9 @@ export type CreatePostResponse = {
 export type IUpdatePostService = Pick<Post, 'id' | 'content'>;
 
 export type UpdatePostResponse = CreatePostResponse;
+
+export type IDeletePostService = Pick<Post, 'id'>;
+
+export type DeletePostResponse = {
+	deleted: boolean;
+};

@@ -2,7 +2,7 @@ import { createPost } from '@services/post';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Toast from 'react-native-toast-message';
 
-export function useCreatePost(closeModal: () => void) {
+export function useCreatePost(actions?: () => void) {
 	const queryClient = useQueryClient();
 
 	return useMutation({
@@ -14,7 +14,7 @@ export function useCreatePost(closeModal: () => void) {
 				text2: 'Post added successfully'
 			});
 
-			closeModal?.();
+			actions?.();
 
 			await queryClient.fetchQuery({
 				queryKey: ['getPostList']
@@ -22,7 +22,7 @@ export function useCreatePost(closeModal: () => void) {
 		},
 		onError: () => {
 			Toast.show({
-				type: 'success',
+				type: 'error',
 				text1: 'Error',
 				text2: 'Could not create post'
 			});
