@@ -21,7 +21,7 @@ export function useLogin() {
 			});
 
 			setUser(userData?.user ?? null);
-			router.replace('/newsfeed');
+			router.replace('/(authenticated)/(tabs)/newsfeed');
 		},
 		onError: (error) => {
 			Toast.show({

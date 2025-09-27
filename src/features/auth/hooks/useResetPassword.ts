@@ -12,7 +12,7 @@ export function useResetPassword() {
 			Toast.show({
 				type: 'success',
 				text1: 'Password Reset',
-				text2: data.message,
+				text2: data?.message,
 				position: 'top'
 			});
 			router.replace('/auth/login');
