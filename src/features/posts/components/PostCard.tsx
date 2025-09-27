@@ -1,3 +1,5 @@
+import { useAuthStore } from '@store/useAuthStore';
+import { router } from 'expo-router';
 import React, { RefObject } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Avatar, IconButton, Surface, Text, useTheme } from 'react-native-paper';
@@ -20,6 +22,7 @@ interface IPostProps {
 
 export function PostCard({
 	id,
+	authorId,
 	authorName,
 	authorProfilePhoto,
 	createdAt,
@@ -30,6 +33,7 @@ export function PostCard({
 	postDeleteDialogRef
 }: IPostProps) {
 	const theme = useTheme();
+	const currentUser = useAuthStore((s) => s.user);
 
 	const handleEditPost = () => {
 		if (id) {
@@ -45,8 +49,26 @@ export function PostCard({
 		}
 	};
 
+	const handleViewPost = () => {
+		const postData = {
+			id,
+			authorId,
+			authorName,
+			authorProfilePhoto,
+			createdAt,
+			likesCount,
+			content
+		};
+		router.push({
+			pathname: '/(authenticated)/(full-screen)/view-post',
+			params: {
+				post: JSON.stringify(postData)
+			}
+		});
+	};
+
 	return (
-		<Pressable onPress={() => {}}>
+		<Pressable onPress={handleViewPost}>
 			<Surface style={[styles.card, { backgroundColor: theme.colors.surface }]}>
 				{/* Header */}
 				<View style={styles.header}>
@@ -60,8 +82,12 @@ export function PostCard({
 						</View>
 					</View>
 					<View style={styles.headerRight}>
-						<IconButton icon="pencil" size={20} onPress={handleEditPost} />
-						<IconButton icon="delete" size={20} onPress={handleDeletePost} />
+						{currentUser?.id === authorId && (
+							<>
+								<IconButton icon="pencil" size={20} onPress={handleEditPost} />
+								<IconButton icon="delete" size={20} onPress={handleDeletePost} />
+							</>
+						)}
 					</View>
 				</View>
 
@@ -114,8 +140,7 @@ const styles = StyleSheet.create({
 		marginVertical: 5
 	},
 	footer: {
-		flexDirection: 'row',
-		borderTopWidth: 1
+		flexDirection: 'row'
 	},
 	footerButton: {
 		flex: 1,
