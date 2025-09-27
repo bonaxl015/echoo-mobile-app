@@ -14,7 +14,7 @@ export function useForgotPassword() {
 			Toast.show({
 				type: 'success',
 				text1: 'Email Sent',
-				text2: data.message,
+				text2: data?.message,
 				position: 'top'
 			});
 			setIsEmailSent(true);
@@ -36,7 +36,7 @@ export function useForgotPassword() {
 			Toast.show({
 				type: 'success',
 				text1: 'Email Sent',
-				text2: data.message,
+				text2: data?.message,
 				position: 'top'
 			});
 			startResendTimer();

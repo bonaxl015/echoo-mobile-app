@@ -43,7 +43,7 @@ export default function NewsfeedScreen() {
 			>
 				<FlatList<Post>
 					data={posts}
-					keyExtractor={(item, index) => item.id?.toString() ?? `post-${index}`}
+					keyExtractor={(item, index) => item.id ?? `post-${index}`}
 					renderItem={renderItem}
 					contentContainerStyle={{ paddingBottom: 24 }}
 					scrollEnabled

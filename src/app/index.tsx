@@ -14,8 +14,8 @@ export default function AuthGate() {
 		if (!hasHydrated) return;
 
 		const timeout = setTimeout(() => {
-			if (useAuthStore.getState().token) {
-				router.replace('/newsfeed');
+			if (token) {
+				router.replace('/(authenticated)/(tabs)/newsfeed');
 			} else {
 				router.replace('/auth/login');
 			}

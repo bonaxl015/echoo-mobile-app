@@ -15,7 +15,10 @@ export default function AppsTabLayout() {
 					backgroundColor: theme.colors.surface
 				},
 				animation: 'shift',
-				tabBarShowLabel: false
+				tabBarShowLabel: false,
+				sceneStyle: {
+					backgroundColor: theme.colors.background
+				}
 			}}
 		>
 			<Tabs.Screen
