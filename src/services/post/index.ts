@@ -1,4 +1,5 @@
 import apiClient from '@services/apiClient';
+import { DEFAULT_PAGE_SIZE, DEFAULT_PAGE_SIZE_STRING } from '@services/constants';
 import dateFormatter from '@utils/dateFormatter';
 import { AxiosError } from 'axios';
 import {
@@ -16,7 +17,7 @@ export async function getPostList({ pageParam = 1 }) {
 	try {
 		const params = {
 			pageNumber: pageParam.toString(),
-			pageSize: '20'
+			pageSize: DEFAULT_PAGE_SIZE_STRING
 		};
 		const urlStringParams = new URLSearchParams(params);
 		const res = await apiClient.get<PostResponse>(
@@ -33,7 +34,10 @@ export async function getPostList({ pageParam = 1 }) {
 
 		return {
 			posts: dateFormattedPosts,
-			nextPage: res.data.posts.length ? pageParam + 1 : undefined
+			nextPage:
+				res.data.posts.length && res.data.posts.length === DEFAULT_PAGE_SIZE
+					? pageParam + 1
+					: undefined
 		};
 	} catch (error) {
 		if (error instanceof AxiosError) {

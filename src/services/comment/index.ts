@@ -1,4 +1,5 @@
 import apiClient from '@services/apiClient';
+import { DEFAULT_PAGE_SIZE, DEFAULT_PAGE_SIZE_STRING } from '@services/constants';
 import dateFormatter from '@utils/dateFormatter';
 import { AxiosError } from 'axios';
 import { CommentListRequest, CommentListResponse } from './types';
@@ -9,14 +10,14 @@ export async function getCommentList({ postId, pageParam }: CommentListRequest) 
 		const params = {
 			postId,
 			pageNumber: pageParam.toString(),
-			pageSize: '20'
+			pageSize: DEFAULT_PAGE_SIZE_STRING
 		};
 		const urlStringParams = new URLSearchParams(params);
 		const res = await apiClient.get<CommentListResponse>(
 			`${COMMENT_API_URL.GET_COMMENT_LIST}?${urlStringParams.toString()}`
 		);
 
-		const dateFormattedPosts = res.data.comments.length
+		const dateFormattedComments = res.data.comments.length
 			? res.data.comments.map((item) => ({
 					...item,
 					createdAt: dateFormatter(item.createdAt),
@@ -25,8 +26,11 @@ export async function getCommentList({ postId, pageParam }: CommentListRequest) 
 			: [];
 
 		return {
-			posts: dateFormattedPosts,
-			nextPage: res.data.comments.length ? pageParam + 1 : undefined
+			comments: dateFormattedComments,
+			nextPage:
+				res.data.comments.length && res.data.comments.length === DEFAULT_PAGE_SIZE
+					? pageParam + 1
+					: undefined
 		};
 	} catch (error) {
 		if (error instanceof AxiosError) {
