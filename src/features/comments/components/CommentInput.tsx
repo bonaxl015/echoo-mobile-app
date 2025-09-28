@@ -1,29 +1,25 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import {
-	Keyboard,
-	KeyboardAvoidingView,
-	TextInput as NativeTextInput,
-	Platform,
-	StyleSheet,
-	View
-} from 'react-native';
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { IconButton, TextInput, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useCommentFormOperations } from '../hooks/useCommentFormOperations';
 
 interface ICommentInput {
-	onSubmit: (content: string) => void;
+	postId: string;
 }
 
 export interface ICommentInputRef {
 	updateIsFocused: (value: boolean) => void;
+	updateContent: (value: string) => void;
+	updateCommentId: (value: string | null) => void;
 }
 
-export const CommentInput = forwardRef<ICommentInputRef, ICommentInput>(({ onSubmit }, ref) => {
+export const CommentInput = forwardRef<ICommentInputRef, ICommentInput>(({ postId }, ref) => {
 	const theme = useTheme();
 	const insets = useSafeAreaInsets();
-	const [content, setContent] = useState<string>('');
 	const [isFocused, setIsFocused] = useState<boolean>(false);
-	const textInputRef = useRef<NativeTextInput>(null);
+	const { updateCommentId, updateContent, handleSubmit, content, textInputRef } =
+		useCommentFormOperations({ postId });
 
 	useEffect(() => {
 		const hideKeyboardEvent = Keyboard.addListener(
@@ -38,16 +34,21 @@ export const CommentInput = forwardRef<ICommentInputRef, ICommentInput>(({ onSub
 		};
 	}, []);
 
-	const updateIsFocused = (value: boolean) => {
-		if (!isFocused) {
-			textInputRef.current?.blur();
-			textInputRef.current?.focus();
-			setIsFocused(value);
-		}
-	};
+	const updateIsFocused = useCallback(
+		(value: boolean) => {
+			if (!isFocused) {
+				textInputRef.current?.blur();
+				textInputRef.current?.focus();
+				setIsFocused(value);
+			}
+		},
+		[isFocused, textInputRef]
+	);
 
 	useImperativeHandle(ref, () => ({
-		updateIsFocused
+		updateIsFocused,
+		updateContent,
+		updateCommentId
 	}));
 
 	return (
@@ -67,12 +68,13 @@ export const CommentInput = forwardRef<ICommentInputRef, ICommentInput>(({ onSub
 			>
 				<TextInput
 					ref={textInputRef}
+					numberOfLines={1}
 					mode="outlined"
 					placeholder="Add a comment..."
 					value={content}
-					onChangeText={setContent}
+					onChangeText={updateContent}
 					maxLength={1500}
-					style={{ flex: 1, paddingVertical: 10, backgroundColor: theme.colors.surface }}
+					style={[styles.textInput, { backgroundColor: theme.colors.surface }]}
 					outlineColor={theme.colors.outline}
 					activeOutlineColor={theme.colors.outline}
 					onFocus={() => setIsFocused(true)}
@@ -84,9 +86,9 @@ export const CommentInput = forwardRef<ICommentInputRef, ICommentInput>(({ onSub
 						icon="send"
 						disabled={!content.trim()}
 						onPress={() => {
-							onSubmit(content);
+							handleSubmit(content);
 							Keyboard.dismiss();
-							setContent('');
+							updateContent('');
 							setIsFocused(false);
 						}}
 					/>
@@ -103,5 +105,10 @@ const styles = StyleSheet.create({
 		paddingTop: 10,
 		alignItems: 'center',
 		borderTopWidth: 1
+	},
+	textInput: {
+		flex: 1,
+		paddingVertical: 10,
+		height: 28
 	}
 });
