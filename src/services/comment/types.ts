@@ -11,6 +11,15 @@ export type Comment = {
 	updatedAt: string;
 };
 
+export type CreateCommentData = {
+	content: string;
+	id: string;
+	postId: string;
+	authorId: string;
+	createdAt: string;
+	updatedAt: string;
+};
+
 export type CommentListRequest = {
 	postId: string;
 	pageParam: number;
@@ -18,4 +27,13 @@ export type CommentListRequest = {
 
 export type CommentListResponse = {
 	comments: Comment[];
+};
+
+export type CommentCreateParams = {
+	postId: string;
+	content: string;
+};
+
+export type CreateCommentResponse = {
+	comment: CreateCommentData;
 };
