@@ -1,7 +1,8 @@
 import { useAuthStore } from '@store/useAuthStore';
-import React from 'react';
+import React, { RefObject } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { Avatar, IconButton, Text, useTheme } from 'react-native-paper';
+import { ICommentInputRef } from './CommentInput';
 
 interface ICommentItem {
 	id: string | null;
@@ -11,18 +12,27 @@ interface ICommentItem {
 	authorProfilePhoto: string;
 	likesCount: number;
 	createdAt: string;
+	commentInputRef: RefObject<ICommentInputRef | null>;
 }
 
 export function CommentItem({
+	id,
 	content,
 	authorName,
 	authorId,
 	authorProfilePhoto,
 	likesCount,
-	createdAt
+	createdAt,
+	commentInputRef
 }: ICommentItem) {
 	const theme = useTheme();
 	const currentUser = useAuthStore((s) => s.user);
+
+	const handleEdit = () => {
+		commentInputRef.current?.updateIsFocused(true);
+		commentInputRef.current?.updateContent(content);
+		commentInputRef.current?.updateCommentId(id);
+	};
 
 	return (
 		<TouchableWithoutFeedback onPress={() => {}}>
@@ -38,7 +48,7 @@ export function CommentItem({
 
 					{currentUser?.id === authorId && (
 						<>
-							<IconButton icon="pencil" size={20} onPress={() => {}} />
+							<IconButton icon="pencil" size={20} onPress={handleEdit} />
 							<IconButton icon="delete" size={20} onPress={() => {}} />
 						</>
 					)}

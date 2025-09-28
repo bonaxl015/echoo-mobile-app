@@ -5,9 +5,10 @@ import {
 	InfiniteData,
 	InfiniteQueryObserverResult
 } from '@tanstack/react-query';
-import { useCallback } from 'react';
+import { RefObject, useCallback } from 'react';
 import { ListRenderItem, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
+import { ICommentInputRef } from '../components/CommentInput';
 
 interface IUseCommentListProps {
 	isLoading: boolean;
@@ -19,12 +20,14 @@ interface IUseCommentListProps {
 			InfiniteData<(CommentListResponse & { nextPage?: number }) | undefined, unknown>
 		>
 	>;
+	commentInputRef: RefObject<ICommentInputRef | null>;
 }
 
 export default function useCommentListProps({
 	isLoading,
 	hasNextPage,
-	fetchNextPage
+	fetchNextPage,
+	commentInputRef
 }: IUseCommentListProps) {
 	const theme = useTheme();
 
@@ -40,9 +43,9 @@ export default function useCommentListProps({
 				);
 			}
 
-			return <CommentItem {...item} />;
+			return <CommentItem {...item} commentInputRef={commentInputRef} />;
 		},
-		[isLoading, theme.colors.background, theme.colors.primary]
+		[isLoading, theme.colors.background, theme.colors.primary, commentInputRef]
 	);
 
 	const onEndReached = useCallback(() => {

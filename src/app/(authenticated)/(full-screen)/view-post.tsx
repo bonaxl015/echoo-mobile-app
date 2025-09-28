@@ -1,7 +1,6 @@
 import { CommentInput, ICommentInputRef } from '@features/comments/components/CommentInput';
 import { CommentListFooter } from '@features/comments/components/CommentListFooter';
 import useCommentListProps from '@features/comments/hooks/useCommentListProps';
-import { useCreateComment } from '@features/comments/hooks/useCreateComment';
 import { useGetCommentList } from '@features/comments/hooks/useGetComments';
 import PostDetail from '@features/posts/components/PostDetail';
 import { Comment } from '@services/comment/types';
@@ -13,16 +12,16 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 export default function ViewPostScreen() {
 	const { post } = useLocalSearchParams<{ post: string }>();
 	const parsedPost = post ? JSON.parse(post) : null;
-	const commentInputRef = useRef<ICommentInputRef>(null);
+	const commentInputRef = useRef<ICommentInputRef | null>(null);
 	const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useGetCommentList(
 		parsedPost.id
 	);
 	const { renderItem, onEndReached } = useCommentListProps({
 		isLoading,
 		hasNextPage,
-		fetchNextPage
+		fetchNextPage,
+		commentInputRef
 	});
-	const createCommentMutation = useCreateComment();
 
 	const comments = (data?.pages.flatMap((page) => page?.comments) as Comment[]) || [];
 
@@ -45,10 +44,7 @@ export default function ViewPostScreen() {
 					<CommentListFooter isFetchingNextPage={isFetchingNextPage} hasNextPage={hasNextPage} />
 				}
 			/>
-			<CommentInput
-				ref={commentInputRef}
-				onSubmit={(content) => createCommentMutation.mutate({ content, postId: parsedPost.id })}
-			/>
+			<CommentInput ref={commentInputRef} postId={parsedPost?.id} />
 		</SafeAreaView>
 	);
 }
