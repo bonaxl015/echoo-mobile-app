@@ -8,7 +8,6 @@ import {
 import { useCallback } from 'react';
 import { ListRenderItem, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface IUseCommentListProps {
 	isLoading: boolean;
@@ -33,11 +32,11 @@ export default function useCommentListProps({
 		({ item }) => {
 			if (isLoading) {
 				return (
-					<SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+					<View style={[styles.container, { backgroundColor: theme.colors.background }]}>
 						<View style={styles.center}>
 							<ActivityIndicator size="large" color={theme.colors.primary} />
 						</View>
-					</SafeAreaView>
+					</View>
 				);
 			}
 
