@@ -1,5 +1,6 @@
+import { ICommentInputRef } from '@features/comments/components/CommentInput';
 import { useAuthStore } from '@store/useAuthStore';
-import React from 'react';
+import React, { RefObject } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Avatar, IconButton, Text, useTheme } from 'react-native-paper';
 
@@ -10,6 +11,7 @@ interface IPostDetails {
 	likesCount: number;
 	content: string;
 	createdAt: string;
+	commentInputRef: RefObject<ICommentInputRef>;
 }
 
 export default function PostDetail({
@@ -18,7 +20,8 @@ export default function PostDetail({
 	authorProfilePhoto,
 	likesCount,
 	content,
-	createdAt
+	createdAt,
+	commentInputRef
 }: IPostDetails) {
 	const theme = useTheme();
 	const currentUser = useAuthStore((s) => s.user);
@@ -55,7 +58,11 @@ export default function PostDetail({
 
 			<View style={[styles.footer, { borderColor: theme.colors.onSurfaceVariant }]}>
 				<IconButton icon="thumb-up-outline" style={styles.footerButton} onPress={() => {}} />
-				<IconButton icon="comment-outline" style={styles.footerButton} onPress={() => {}} />
+				<IconButton
+					icon="comment-outline"
+					style={styles.footerButton}
+					onPress={() => commentInputRef.current?.updateIsFocused(true)}
+				/>
 			</View>
 		</View>
 	);
