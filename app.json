@@ -12,11 +12,17 @@
 			"resizeMode": "contain",
 			"backgroundColor": "#2563EB"
 		},
+		"android": {
+			"package": "com.bonaxl015.echoo"
+		},
 		"userInterfaceStyle": "automatic",
 		"newArchEnabled": true,
 		"plugins": ["expo-router"],
 		"experiments": {
 			"typedRoutes": true
+		},
+		"ios": {
+			"bundleIdentifier": "com.bonaxl015.echoo"
 		}
 	}
 }
