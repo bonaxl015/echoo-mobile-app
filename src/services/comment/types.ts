@@ -46,3 +46,11 @@ export type CommentUpdateParams = {
 export type UpdateCommentResponse = {
 	comment: CreateCommentData;
 };
+
+export type CommentDeleteParams = {
+	id: string;
+};
+
+export type DeleteCommentResponse = {
+	deleted: boolean;
+};
