@@ -1,4 +1,6 @@
+import { ICommentInputRef } from '@features/comments/components/CommentInput';
 import { CommentItem } from '@features/comments/components/CommentItem';
+import { ConfirmDialogRef } from '@features/comments/components/DeleteCommentDialog';
 import { Comment, CommentListResponse } from '@services/comment/types';
 import {
 	FetchNextPageOptions,
@@ -8,7 +10,6 @@ import {
 import { RefObject, useCallback } from 'react';
 import { ListRenderItem, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
-import { ICommentInputRef } from '../components/CommentInput';
 
 interface IUseCommentListProps {
 	isLoading: boolean;
@@ -21,13 +22,15 @@ interface IUseCommentListProps {
 		>
 	>;
 	commentInputRef: RefObject<ICommentInputRef | null>;
+	commentDeleteRef: RefObject<ConfirmDialogRef | null>;
 }
 
 export default function useCommentListProps({
 	isLoading,
 	hasNextPage,
 	fetchNextPage,
-	commentInputRef
+	commentInputRef,
+	commentDeleteRef
 }: IUseCommentListProps) {
 	const theme = useTheme();
 
@@ -43,9 +46,15 @@ export default function useCommentListProps({
 				);
 			}
 
-			return <CommentItem {...item} commentInputRef={commentInputRef} />;
+			return (
+				<CommentItem
+					{...item}
+					commentInputRef={commentInputRef}
+					commentDeleteRef={commentDeleteRef}
+				/>
+			);
 		},
-		[isLoading, theme.colors.background, theme.colors.primary, commentInputRef]
+		[isLoading, theme.colors.background, theme.colors.primary, commentInputRef, commentDeleteRef]
 	);
 
 	const onEndReached = useCallback(() => {

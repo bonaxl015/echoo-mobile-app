@@ -3,6 +3,7 @@ import React, { RefObject } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { Avatar, IconButton, Text, useTheme } from 'react-native-paper';
 import { ICommentInputRef } from './CommentInput';
+import { ConfirmDialogRef } from './DeleteCommentDialog';
 
 interface ICommentItem {
 	id: string | null;
@@ -13,6 +14,7 @@ interface ICommentItem {
 	likesCount: number;
 	createdAt: string;
 	commentInputRef: RefObject<ICommentInputRef | null>;
+	commentDeleteRef: RefObject<ConfirmDialogRef | null>;
 }
 
 export function CommentItem({
@@ -23,15 +25,25 @@ export function CommentItem({
 	authorProfilePhoto,
 	likesCount,
 	createdAt,
-	commentInputRef
+	commentInputRef,
+	commentDeleteRef
 }: ICommentItem) {
 	const theme = useTheme();
 	const currentUser = useAuthStore((s) => s.user);
 
 	const handleEdit = () => {
-		commentInputRef.current?.updateIsFocused(true);
-		commentInputRef.current?.updateContent(content);
-		commentInputRef.current?.updateCommentId(id);
+		if (id) {
+			commentInputRef.current?.updateIsFocused(true);
+			commentInputRef.current?.updateContent(content);
+			commentInputRef.current?.updateCommentId(id);
+		}
+	};
+
+	const handleDelete = () => {
+		if (id) {
+			commentDeleteRef.current?.updateDeleteData({ id });
+			commentDeleteRef.current?.openDialog();
+		}
 	};
 
 	return (
@@ -49,7 +61,7 @@ export function CommentItem({
 					{currentUser?.id === authorId && (
 						<>
 							<IconButton icon="pencil" size={20} onPress={handleEdit} />
-							<IconButton icon="delete" size={20} onPress={() => {}} />
+							<IconButton icon="delete" size={20} onPress={handleDelete} />
 						</>
 					)}
 				</View>

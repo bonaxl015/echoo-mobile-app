@@ -4,10 +4,12 @@ import dateFormatter from '@utils/dateFormatter';
 import { AxiosError } from 'axios';
 import {
 	CommentCreateParams,
+	CommentDeleteParams,
 	CommentListRequest,
 	CommentListResponse,
 	CommentUpdateParams,
 	CreateCommentResponse,
+	DeleteCommentResponse,
 	UpdateCommentResponse
 } from './types';
 import { COMMENT_API_URL } from './url';
@@ -61,6 +63,20 @@ export async function createComment(data: CommentCreateParams) {
 export async function updateComment(data: CommentUpdateParams) {
 	try {
 		const res = await apiClient.patch<UpdateCommentResponse>(COMMENT_API_URL.UPDATE_COMMENT, data);
+
+		return res.data;
+	} catch (error) {
+		if (error instanceof AxiosError) {
+			throw new Error(error.message);
+		}
+	}
+}
+
+export async function deleteComment(data: CommentDeleteParams) {
+	try {
+		const res = await apiClient.delete<DeleteCommentResponse>(COMMENT_API_URL.DELETE_COMMENT, {
+			data
+		});
 
 		return res.data;
 	} catch (error) {
