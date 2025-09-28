@@ -2,7 +2,7 @@ import { createComment } from '@services/comment';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Toast from 'react-native-toast-message';
 
-export function useCreateComment(actions?: () => void) {
+export function useCreateComment() {
 	const queryClient = useQueryClient();
 
 	return useMutation({
@@ -13,8 +13,6 @@ export function useCreateComment(actions?: () => void) {
 				text1: 'Success',
 				text2: 'Comment added successfully'
 			});
-
-			actions?.();
 
 			await queryClient.fetchQuery({
 				queryKey: ['getCommentList', data?.comment.postId]
