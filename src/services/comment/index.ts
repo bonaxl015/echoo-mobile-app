@@ -6,7 +6,9 @@ import {
 	CommentCreateParams,
 	CommentListRequest,
 	CommentListResponse,
-	CreateCommentResponse
+	CommentUpdateParams,
+	CreateCommentResponse,
+	UpdateCommentResponse
 } from './types';
 import { COMMENT_API_URL } from './url';
 
@@ -47,6 +49,18 @@ export async function getCommentList({ postId, pageParam }: CommentListRequest) 
 export async function createComment(data: CommentCreateParams) {
 	try {
 		const res = await apiClient.post<CreateCommentResponse>(COMMENT_API_URL.CREATE_COMMENT, data);
+
+		return res.data;
+	} catch (error) {
+		if (error instanceof AxiosError) {
+			throw new Error(error.message);
+		}
+	}
+}
+
+export async function updateComment(data: CommentUpdateParams) {
+	try {
+		const res = await apiClient.patch<UpdateCommentResponse>(COMMENT_API_URL.UPDATE_COMMENT, data);
 
 		return res.data;
 	} catch (error) {

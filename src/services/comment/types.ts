@@ -37,3 +37,12 @@ export type CommentCreateParams = {
 export type CreateCommentResponse = {
 	comment: CreateCommentData;
 };
+
+export type CommentUpdateParams = {
+	id: string;
+	content: string;
+};
+
+export type UpdateCommentResponse = {
+	comment: CreateCommentData;
+};
