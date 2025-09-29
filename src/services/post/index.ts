@@ -5,8 +5,10 @@ import { AxiosError } from 'axios';
 import {
 	CreatePostResponse,
 	DeletePostResponse,
+	GetPostByIdResponse,
 	ICreatePostService,
 	IDeletePostService,
+	IGetPostByIdService,
 	IUpdatePostService,
 	PostResponse,
 	UpdatePostResponse
@@ -39,6 +41,24 @@ export async function getPostList({ pageParam = 1 }) {
 					? pageParam + 1
 					: undefined
 		};
+	} catch (error) {
+		if (error instanceof AxiosError) {
+			throw new Error(error.message);
+		}
+	}
+}
+
+export async function getPostById(data: IGetPostByIdService) {
+	try {
+		const params = {
+			id: data.id
+		};
+		const urlStringParams = new URLSearchParams(params);
+		const res = await apiClient.get<GetPostByIdResponse>(
+			`${POST_API_URL.GET_POST_BY_ID}?${urlStringParams.toString()}`
+		);
+
+		return res.data;
 	} catch (error) {
 		if (error instanceof AxiosError) {
 			throw new Error(error.message);

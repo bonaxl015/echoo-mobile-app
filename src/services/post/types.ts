@@ -23,6 +23,14 @@ export interface PostResponse {
 	posts: Post[];
 }
 
+export type IGetPostByIdService = {
+	id: string;
+};
+
+export type GetPostByIdResponse = {
+	post: Post;
+};
+
 export type ICreatePostService = Pick<Post, 'content'>;
 
 export type CreatePostResponse = {
