@@ -1,9 +1,12 @@
+import { NEWSFEED_PATH } from '@constants/route';
 import { updatePost } from '@services/post';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { usePathname } from 'expo-router';
 import Toast from 'react-native-toast-message';
 
 export function useUpdatePost(actions?: () => void) {
 	const queryClient = useQueryClient();
+	const pathname = usePathname();
 
 	return useMutation({
 		mutationFn: updatePost,
@@ -16,9 +19,15 @@ export function useUpdatePost(actions?: () => void) {
 
 			actions?.();
 
-			await queryClient.fetchQuery({
-				queryKey: ['getPostList']
-			});
+			if (pathname !== NEWSFEED_PATH) {
+				await queryClient.invalidateQueries({
+					queryKey: ['getPostById']
+				});
+			} else {
+				await queryClient.invalidateQueries({
+					queryKey: ['getPostList']
+				});
+			}
 		},
 		onError: () => {
 			Toast.show({
