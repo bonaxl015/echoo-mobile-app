@@ -16,7 +16,7 @@ export function useCreatePost(actions?: () => void) {
 
 			actions?.();
 
-			await queryClient.fetchQuery({
+			await queryClient.invalidateQueries({
 				queryKey: ['getPostList']
 			});
 		},
