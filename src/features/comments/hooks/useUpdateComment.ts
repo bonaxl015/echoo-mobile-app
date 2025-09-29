@@ -14,7 +14,7 @@ export function useUpdateComment() {
 				text2: 'Comment updated successfully'
 			});
 
-			await queryClient.fetchQuery({
+			await queryClient.invalidateQueries({
 				queryKey: ['getCommentList', data?.comment.postId]
 			});
 		},

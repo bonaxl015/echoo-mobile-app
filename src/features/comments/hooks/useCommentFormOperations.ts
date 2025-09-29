@@ -16,7 +16,7 @@ export function useCommentFormOperations({ postId }: IUseCommentFormOperations) 
 	const updateCommentMutation = useUpdateComment();
 
 	const handleSubmit = commentId
-		? (content: string) => updateCommentMutation.mutate({ content, id: commentId })
+		? (content: string) => updateCommentMutation.mutate({ content, id: commentId, postId })
 		: (content: string) => createCommentMutation.mutate({ content, postId });
 
 	const updateContent = useCallback((value: string) => {

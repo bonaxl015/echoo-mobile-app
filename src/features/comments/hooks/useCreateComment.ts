@@ -14,7 +14,7 @@ export function useCreateComment() {
 				text2: 'Comment added successfully'
 			});
 
-			await queryClient.fetchQuery({
+			await queryClient.invalidateQueries({
 				queryKey: ['getCommentList', data?.comment.postId]
 			});
 		},

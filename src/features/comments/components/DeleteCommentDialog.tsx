@@ -29,7 +29,7 @@ const DeleteCommentDialog = forwardRef<ConfirmDialogRef, IDeleteCommentDialog>(
 
 		const handleConfirm = () => {
 			if (deleteData.id) {
-				deleteCommentMutation.mutate({ id: deleteData.id });
+				deleteCommentMutation.mutate({ id: deleteData.id, postId });
 			}
 		};
 

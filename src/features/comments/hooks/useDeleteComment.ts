@@ -16,7 +16,7 @@ export function useDeleteComment(postId: string, action?: () => void) {
 
 			action?.();
 
-			await queryClient.fetchQuery({
+			await queryClient.invalidateQueries({
 				queryKey: ['getCommentList', postId]
 			});
 		},

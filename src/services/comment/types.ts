@@ -40,6 +40,7 @@ export type CreateCommentResponse = {
 
 export type CommentUpdateParams = {
 	id: string;
+	postId: string;
 	content: string;
 };
 
@@ -49,6 +50,7 @@ export type UpdateCommentResponse = {
 
 export type CommentDeleteParams = {
 	id: string;
+	postId: string;
 };
 
 export type DeleteCommentResponse = {
