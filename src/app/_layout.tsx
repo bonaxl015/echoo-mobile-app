@@ -1,8 +1,8 @@
-import { AppQueryProvider } from '@services/QueryClientProvider';
 import { darkTheme, lightTheme } from '@theme/paperTheme';
 import { ColorScheme } from '@theme/types';
 import { useFonts } from 'expo-font';
 import { Slot, SplashScreen } from 'expo-router';
+import { AppQueryProvider } from 'provider/QueryClientProvider';
 import React, { useEffect } from 'react';
 import {
 	Keyboard,
