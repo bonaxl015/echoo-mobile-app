@@ -12,7 +12,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function NewsfeedScreen() {
 	const theme = useTheme();
-	const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useGetPostList();
+	const { data, isFetching, refetch, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
+		useGetPostList();
 	const postFormModalRef = useRef<PostFormModalRef>(null);
 	const postDeleteDialogRef = useRef<ConfirmDialogRef>(null);
 	const { renderItem, onEndReached } = usePostListProps({
@@ -43,17 +44,20 @@ export default function NewsfeedScreen() {
 			>
 				<FlatList<Post>
 					data={posts}
-					keyExtractor={(item, index) => item.id ?? `post-${index}`}
+					keyExtractor={(item, index) => item?.id ?? `post-${index}`}
 					renderItem={renderItem}
 					contentContainerStyle={{ paddingBottom: 24 }}
 					scrollEnabled
 					keyboardShouldPersistTaps="handled"
+					keyboardDismissMode="on-drag"
 					initialNumToRender={5}
 					maxToRenderPerBatch={10}
 					windowSize={5}
 					removeClippedSubviews
 					onEndReached={onEndReached}
 					onEndReachedThreshold={0.5}
+					refreshing={isFetching}
+					onRefresh={() => refetch()}
 					ListHeaderComponent={<CreatePostPreview postFormModalRef={postFormModalRef} />}
 					ListFooterComponent={
 						<PostListFooter isFetchingNextPage={isFetchingNextPage} hasNextPage={hasNextPage} />
