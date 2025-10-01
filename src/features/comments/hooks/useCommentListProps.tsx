@@ -8,11 +8,9 @@ import {
 	InfiniteQueryObserverResult
 } from '@tanstack/react-query';
 import { RefObject, useCallback } from 'react';
-import { ListRenderItem, StyleSheet, View } from 'react-native';
-import { ActivityIndicator, useTheme } from 'react-native-paper';
+import { ListRenderItem } from 'react-native';
 
 interface IUseCommentListProps {
-	isLoading: boolean;
 	hasNextPage: boolean;
 	fetchNextPage: (
 		options?: FetchNextPageOptions
@@ -26,35 +24,20 @@ interface IUseCommentListProps {
 }
 
 export default function useCommentListProps({
-	isLoading,
 	hasNextPage,
 	fetchNextPage,
 	commentInputRef,
 	commentDeleteRef
 }: IUseCommentListProps) {
-	const theme = useTheme();
-
 	const renderItem: ListRenderItem<Comment> = useCallback(
-		({ item }) => {
-			if (isLoading) {
-				return (
-					<View style={[styles.container, { backgroundColor: theme.colors.background }]}>
-						<View style={styles.center}>
-							<ActivityIndicator size="large" color={theme.colors.primary} />
-						</View>
-					</View>
-				);
-			}
-
-			return (
-				<CommentItem
-					{...item}
-					commentInputRef={commentInputRef}
-					commentDeleteRef={commentDeleteRef}
-				/>
-			);
-		},
-		[isLoading, theme.colors.background, theme.colors.primary, commentInputRef, commentDeleteRef]
+		({ item }) => (
+			<CommentItem
+				{...item}
+				commentInputRef={commentInputRef}
+				commentDeleteRef={commentDeleteRef}
+			/>
+		),
+		[commentInputRef, commentDeleteRef]
 	);
 
 	const onEndReached = useCallback(() => {
@@ -65,15 +48,3 @@ export default function useCommentListProps({
 
 	return { renderItem, onEndReached };
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		paddingTop: 0
-	},
-	center: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
-	}
-});

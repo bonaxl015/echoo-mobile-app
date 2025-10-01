@@ -30,7 +30,10 @@ export const useAuthStore = create<AuthState>()(
 			user: null,
 			setToken: (token: string | null) => set({ token }),
 			setUser: (user: User | null) => set({ user }),
-			logout: () => set({ token: null, user: null }),
+			logout: () => {
+				set({ token: null, user: null });
+				AsyncStorage.removeItem('auth-storage');
+			},
 			hasHydrated: false,
 			setHasHydrated: (state: boolean) => set({ hasHydrated: state })
 		}),

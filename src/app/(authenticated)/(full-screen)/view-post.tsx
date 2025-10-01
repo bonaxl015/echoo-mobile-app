@@ -21,11 +21,9 @@ export default function ViewPostScreen() {
 	const commentDeleteRef = useRef<ConfirmDialogRef | null>(null);
 	const postFormModalRef = useRef<PostFormModalRef>(null);
 	const postDeleteDialogRef = useRef<ConfirmDialogRef>(null);
-	const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useGetCommentList(
-		parsedPost.id
-	);
+	const { data, isFetching, refetch, hasNextPage, fetchNextPage, isFetchingNextPage } =
+		useGetCommentList(parsedPost.id);
 	const { renderItem, onEndReached } = useCommentListProps({
-		isLoading,
 		hasNextPage,
 		fetchNextPage,
 		commentInputRef,
@@ -39,16 +37,19 @@ export default function ViewPostScreen() {
 			<SafeAreaView style={{ flex: 1 }}>
 				<FlatList
 					data={comments}
-					keyExtractor={(item, index) => item.id ?? `comment-${index}`}
+					keyExtractor={(item, index) => item?.id ?? `comment-${index}`}
 					renderItem={renderItem}
 					onEndReached={onEndReached}
 					onEndReachedThreshold={5}
 					keyboardShouldPersistTaps="handled"
+					keyboardDismissMode="on-drag"
 					initialNumToRender={5}
 					maxToRenderPerBatch={10}
 					windowSize={5}
 					contentContainerStyle={{ paddingBottom: 20 }}
 					removeClippedSubviews
+					refreshing={isFetching}
+					onRefresh={() => refetch()}
 					ListHeaderComponent={
 						<PostDetail
 							{...parsedPost}
