@@ -12,7 +12,7 @@ import {
 	useColorScheme
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { PaperProvider } from 'react-native-paper';
+import { PaperProvider, Portal } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
 
 export default function RootLayout() {
@@ -42,8 +42,10 @@ export default function RootLayout() {
 				>
 					<PaperProvider theme={theme}>
 						<AppQueryProvider>
-							<Slot />
-							<Toast />
+							<Portal.Host>
+								<Slot />
+								<Toast />
+							</Portal.Host>
 						</AppQueryProvider>
 					</PaperProvider>
 				</KeyboardAvoidingView>
