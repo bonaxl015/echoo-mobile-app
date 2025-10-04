@@ -1,3 +1,4 @@
+import { CustomToast } from '@components/Toast';
 import { darkTheme, lightTheme } from '@theme/paperTheme';
 import { ColorScheme } from '@theme/types';
 import { useFonts } from 'expo-font';
@@ -13,7 +14,6 @@ import {
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider, Portal } from 'react-native-paper';
-import Toast from 'react-native-toast-message';
 
 export default function RootLayout() {
 	const colorScheme = useColorScheme();
@@ -44,7 +44,7 @@ export default function RootLayout() {
 						<AppQueryProvider>
 							<Portal.Host>
 								<Slot />
-								<Toast />
+								<CustomToast />
 							</Portal.Host>
 						</AppQueryProvider>
 					</PaperProvider>

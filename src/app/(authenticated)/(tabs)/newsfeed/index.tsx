@@ -10,7 +10,7 @@ import { useGetPostList } from '@features/posts/hooks/useGetPostList';
 import usePostListProps from '@features/posts/hooks/usePostListProps';
 import { Post } from '@services/post/types';
 import React, { useRef } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -31,15 +31,50 @@ export default function NewsfeedScreen() {
 
 	const posts = (data?.pages.flatMap((page) => page?.posts) as Post[]) ?? [];
 
-	if (isLoading) {
-		return (
-			<SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
-				<View style={styles.center}>
-					<ActivityIndicator size="large" color={theme.colors.primary} />
+	const renderPostList = (() => {
+		if (isLoading) {
+			return (
+				<SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+					<View style={styles.center}>
+						<ActivityIndicator size="large" color={theme.colors.primary} />
+					</View>
+				</SafeAreaView>
+			);
+		}
+
+		if (!posts.length) {
+			return (
+				<View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+					<View style={styles.center}>
+						<Text style={{ color: theme.colors.onSurfaceVariant }}>No posts to display</Text>
+					</View>
 				</View>
-			</SafeAreaView>
+			);
+		}
+
+		return (
+			<FlatList<Post>
+				data={posts}
+				keyExtractor={(item, index) => item?.id ?? `post-${index}`}
+				renderItem={renderItem}
+				contentContainerStyle={{ paddingBottom: 24 }}
+				scrollEnabled
+				keyboardShouldPersistTaps="handled"
+				keyboardDismissMode="on-drag"
+				initialNumToRender={5}
+				maxToRenderPerBatch={10}
+				windowSize={5}
+				removeClippedSubviews
+				onEndReached={onEndReached}
+				onEndReachedThreshold={0.5}
+				refreshing={isFetching}
+				onRefresh={() => refetch()}
+				ListFooterComponent={
+					<PostListFooter isFetchingNextPage={isFetchingNextPage} hasNextPage={hasNextPage} />
+				}
+			/>
 		);
-	}
+	})();
 
 	return (
 		<>
@@ -48,27 +83,8 @@ export default function NewsfeedScreen() {
 				style={[styles.container, { backgroundColor: theme.colors.background }]}
 				edges={['bottom']}
 			>
-				<FlatList<Post>
-					data={posts}
-					keyExtractor={(item, index) => item?.id ?? `post-${index}`}
-					renderItem={renderItem}
-					contentContainerStyle={{ paddingBottom: 24 }}
-					scrollEnabled
-					keyboardShouldPersistTaps="handled"
-					keyboardDismissMode="on-drag"
-					initialNumToRender={5}
-					maxToRenderPerBatch={10}
-					windowSize={5}
-					removeClippedSubviews
-					onEndReached={onEndReached}
-					onEndReachedThreshold={0.5}
-					refreshing={isFetching}
-					onRefresh={() => refetch()}
-					ListHeaderComponent={<CreatePostPreview postFormModalRef={postFormModalRef} />}
-					ListFooterComponent={
-						<PostListFooter isFetchingNextPage={isFetchingNextPage} hasNextPage={hasNextPage} />
-					}
-				/>
+				<CreatePostPreview postFormModalRef={postFormModalRef} />
+				{renderPostList}
 			</SafeAreaView>
 
 			{/* Create or edit posts */}

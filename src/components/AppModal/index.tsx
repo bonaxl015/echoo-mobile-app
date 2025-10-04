@@ -11,7 +11,7 @@ interface IAppModal {
 export function AppModal({ isModalVisible, dismissModal, children }: IAppModal) {
 	return (
 		<Modal
-			style={[styles.modal]}
+			style={styles.modal}
 			animationIn="slideInUp"
 			animationOut="slideOutDown"
 			animationInTiming={300}
@@ -23,6 +23,8 @@ export function AppModal({ isModalVisible, dismissModal, children }: IAppModal) 
 			swipeDirection="down"
 			swipeThreshold={100}
 			backdropOpacity={0.5}
+			coverScreen
+			statusBarTranslucent={false}
 		>
 			{children}
 		</Modal>
