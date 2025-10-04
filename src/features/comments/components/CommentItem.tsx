@@ -48,7 +48,7 @@ export function CommentItem({
 
 	return (
 		<TouchableWithoutFeedback onPress={() => {}}>
-			<View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+			<View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
 				<View style={styles.header}>
 					<Avatar.Image size={36} source={{ uri: authorProfilePhoto }} />
 					<View style={{ marginLeft: 8, flex: 1 }}>

@@ -53,7 +53,7 @@ export const CommentInput = forwardRef<ICommentInputRef, ICommentInput>(({ postI
 
 	return (
 		<KeyboardAvoidingView
-			style={{ backgroundColor: theme.colors.background, paddingBottom: insets.bottom }}
+			style={{ backgroundColor: theme.colors.background }}
 			behavior="padding"
 			keyboardVerticalOffset={isFocused ? 10 : -1 * insets.bottom}
 		>

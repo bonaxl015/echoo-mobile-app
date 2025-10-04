@@ -57,7 +57,7 @@ export default function PostDetail({
 
 	return (
 		<TouchableWithoutFeedback onPress={() => {}}>
-			<View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+			<View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
 				<View style={styles.header}>
 					<View style={styles.headerLeft}>
 						<Avatar.Image size={40} source={{ uri: authorProfilePhoto }} />
@@ -101,7 +101,7 @@ export default function PostDetail({
 
 const styles = StyleSheet.create({
 	container: {
-		paddingBottom: 10
+		marginBottom: 10
 	},
 	header: {
 		flexDirection: 'row',
