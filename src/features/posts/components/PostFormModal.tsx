@@ -1,4 +1,4 @@
-import AnimatedModal from '@components/AnimatedModal';
+import { AppModal } from '@components/AppModal';
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { useCreatePost } from '../hooks/useCreatePost';
 import { useUpdatePost } from '../hooks/useUpdatePost';
@@ -44,14 +44,12 @@ export const PostFormModal = forwardRef<PostFormModalRef>((_props, ref) => {
 		: (content: string) => createPostMutation.mutate({ content });
 
 	return (
-		<AnimatedModal modalVisible={modalVisible} onDismiss={closeModal}>
+		<AppModal isModalVisible={modalVisible} dismissModal={closeModal}>
 			<PostForm
 				formData={postFormData}
 				onSubmit={handleFormSubmit}
 				isPending={postFormData.id ? updatePostMutation.isPending : createPostMutation.isPending}
 			/>
-		</AnimatedModal>
+		</AppModal>
 	);
 });
-
-export default PostFormModal;

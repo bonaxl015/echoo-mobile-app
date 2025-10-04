@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Dialog, Portal, Text, useTheme } from 'react-native-paper';
+import Modal from 'react-native-modal';
+import { Button, Dialog, Text, useTheme } from 'react-native-paper';
 
 export interface IConfirmDialog {
 	title?: string;
@@ -23,12 +24,15 @@ export default function ConfirmDialog({
 	const theme = useTheme();
 
 	return (
-		<Portal>
-			<Dialog
-				visible={dialogVisible}
-				onDismiss={onCancel}
-				style={{ backgroundColor: theme.colors.background }}
-			>
+		<Modal
+			animationIn="fadeIn"
+			animationOut="fadeOut"
+			isVisible={dialogVisible}
+			onBackButtonPress={onCancel}
+			style={{ margin: 0 }}
+			backdropOpacity={0.3}
+		>
+			<Dialog visible={true} style={{ backgroundColor: theme.colors.background }}>
 				{title && <Dialog.Title style={{ color: theme.colors.onSurface }}>{title}</Dialog.Title>}
 				<Dialog.Content>
 					<Text variant="bodyLarge" style={{ color: theme.colors.onSurface }}>
@@ -44,6 +48,6 @@ export default function ConfirmDialog({
 					</Button>
 				</Dialog.Actions>
 			</Dialog>
-		</Portal>
+		</Modal>
 	);
 }
