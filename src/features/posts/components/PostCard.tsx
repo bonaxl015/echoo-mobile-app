@@ -3,6 +3,7 @@ import { router } from 'expo-router';
 import React, { RefObject } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Avatar, IconButton, Surface, Text, useTheme } from 'react-native-paper';
+import { CommentListModalRef } from '../../comments/components/CommentListModal';
 import { ConfirmDialogRef } from './DeletePostDialog';
 import { PostFormModalRef } from './PostFormModal';
 
@@ -18,6 +19,7 @@ interface IPostProps {
 	createdAt?: string;
 	postFormModalRef: RefObject<PostFormModalRef | null>;
 	postDeleteDialogRef: RefObject<ConfirmDialogRef | null>;
+	commentListModalRef: RefObject<CommentListModalRef | null>;
 }
 
 export function PostCard({
@@ -30,7 +32,8 @@ export function PostCard({
 	likesCount,
 	content,
 	postFormModalRef,
-	postDeleteDialogRef
+	postDeleteDialogRef,
+	commentListModalRef
 }: IPostProps) {
 	const theme = useTheme();
 	const currentUser = useAuthStore((s) => s.user);
@@ -65,6 +68,13 @@ export function PostCard({
 				post: JSON.stringify(postData)
 			}
 		});
+	};
+
+	const handleOpenCommentModal = () => {
+		if (id) {
+			commentListModalRef.current?.updatePostId(id);
+			commentListModalRef.current?.openModal();
+		}
 	};
 
 	return (
@@ -107,7 +117,11 @@ export function PostCard({
 				{/* Footer */}
 				<View style={[styles.footer, { borderColor: theme.colors.onSurfaceVariant }]}>
 					<IconButton icon="thumb-up-outline" style={styles.footerButton} onPress={() => {}} />
-					<IconButton icon="comment-outline" style={styles.footerButton} onPress={() => {}} />
+					<IconButton
+						icon="comment-outline"
+						style={styles.footerButton}
+						onPress={handleOpenCommentModal}
+					/>
 				</View>
 			</Surface>
 		</Pressable>

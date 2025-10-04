@@ -7,12 +7,14 @@ import {
 } from '@tanstack/react-query';
 import { RefObject, useCallback } from 'react';
 import { ListRenderItem } from 'react-native';
+import { CommentListModalRef } from '../../comments/components/CommentListModal';
 import { ConfirmDialogRef } from '../components/DeletePostDialog';
 import { PostFormModalRef } from '../components/PostFormModal';
 
 interface IUsePostListProps {
 	postFormModalRef: RefObject<PostFormModalRef | null>;
 	postDeleteDialogRef: RefObject<ConfirmDialogRef | null>;
+	commentListModalRef: RefObject<CommentListModalRef | null>;
 	hasNextPage: boolean;
 	fetchNextPage: (
 		options?: FetchNextPageOptions
@@ -26,6 +28,7 @@ interface IUsePostListProps {
 export default function usePostListProps({
 	postFormModalRef,
 	postDeleteDialogRef,
+	commentListModalRef,
 	hasNextPage,
 	fetchNextPage
 }: IUsePostListProps) {
@@ -35,9 +38,10 @@ export default function usePostListProps({
 				{...item}
 				postFormModalRef={postFormModalRef}
 				postDeleteDialogRef={postDeleteDialogRef}
+				commentListModalRef={commentListModalRef}
 			/>
 		),
-		[postDeleteDialogRef, postFormModalRef]
+		[postDeleteDialogRef, postFormModalRef, commentListModalRef]
 	);
 
 	const onEndReached = useCallback(() => {

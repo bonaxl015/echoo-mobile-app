@@ -7,7 +7,7 @@ import useCommentListProps from '@features/comments/hooks/useCommentListProps';
 import { useGetCommentList } from '@features/comments/hooks/useGetComments';
 import DeletePostDialog from '@features/posts/components/DeletePostDialog';
 import PostDetail from '@features/posts/components/PostDetail';
-import PostFormModal, { PostFormModalRef } from '@features/posts/components/PostFormModal';
+import { PostFormModal, PostFormModalRef } from '@features/posts/components/PostFormModal';
 import { Comment } from '@services/comment/types';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useRef } from 'react';
