@@ -24,6 +24,7 @@ export default function ViewPostScreen() {
 	const { data, isFetching, refetch, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useGetCommentList(parsedPost.id);
 	const { renderItem, onEndReached } = useCommentListProps({
+		postId: parsedPost.id,
 		hasNextPage,
 		fetchNextPage,
 		commentInputRef,

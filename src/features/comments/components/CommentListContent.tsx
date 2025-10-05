@@ -19,6 +19,7 @@ export function CommentListContent({ postId }: ICommentListContent) {
 	const { data, isFetching, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useGetCommentList(postId);
 	const { renderItem, onEndReached } = useCommentListProps({
+		postId,
 		hasNextPage,
 		fetchNextPage,
 		commentInputRef,

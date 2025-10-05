@@ -3,14 +3,17 @@ import React, { RefObject } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { Avatar, IconButton, Text, useTheme } from 'react-native-paper';
 import { ICommentInputRef } from './CommentInput';
+import { CommentLikeButton } from './CommentLikeButton';
 import { ConfirmDialogRef } from './DeleteCommentDialog';
 
 interface ICommentItem {
 	id: string | null;
+	postId: string;
 	content: string;
 	authorName: string;
 	authorId: string;
 	authorProfilePhoto: string;
+	isLikedByCurrentUser: boolean;
 	likesCount: number;
 	createdAt: string;
 	commentInputRef: RefObject<ICommentInputRef | null>;
@@ -19,10 +22,12 @@ interface ICommentItem {
 
 export function CommentItem({
 	id,
+	postId,
 	content,
 	authorName,
 	authorId,
 	authorProfilePhoto,
+	isLikedByCurrentUser,
 	likesCount,
 	createdAt,
 	commentInputRef,
@@ -72,7 +77,11 @@ export function CommentItem({
 						<Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant }}>
 							{likesCount}
 						</Text>
-						<IconButton icon="thumb-up-outline" size={20} onPress={() => {}} />
+						<CommentLikeButton
+							isLikedByCurrentUser={isLikedByCurrentUser}
+							commentId={id as string}
+							postId={postId}
+						/>
 					</View>
 				</View>
 			</View>

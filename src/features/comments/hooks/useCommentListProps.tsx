@@ -11,6 +11,7 @@ import { RefObject, useCallback } from 'react';
 import { ListRenderItem } from 'react-native';
 
 interface IUseCommentListProps {
+	postId: string;
 	hasNextPage: boolean;
 	fetchNextPage: (
 		options?: FetchNextPageOptions
@@ -24,6 +25,7 @@ interface IUseCommentListProps {
 }
 
 export default function useCommentListProps({
+	postId,
 	hasNextPage,
 	fetchNextPage,
 	commentInputRef,
@@ -33,11 +35,12 @@ export default function useCommentListProps({
 		({ item }) => (
 			<CommentItem
 				{...item}
+				postId={postId}
 				commentInputRef={commentInputRef}
 				commentDeleteRef={commentDeleteRef}
 			/>
 		),
-		[commentInputRef, commentDeleteRef]
+		[postId, commentInputRef, commentDeleteRef]
 	);
 
 	const onEndReached = useCallback(() => {
