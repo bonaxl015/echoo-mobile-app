@@ -3,18 +3,18 @@
 	"compilerOptions": {
 		"strict": true,
 		"allowJs": false,
-		"baseUrl": "./src",
 		"paths": {
-			"@app/*": ["app/*"],
-			"@assets/*": ["assets/*"],
-			"@components/*": ["components/*"],
-			"@config/*": ["config/*"],
-			"@constants/*": ["constants/*"],
-			"@features/*": ["features/*"],
-			"@services/*": ["services/*"],
-			"@store/*": ["store/*"],
-			"@utils/*": ["utils/*"],
-			"@theme/*": ["theme/*"]
+			"@app/*": ["./src/app/*"],
+			"@assets/*": ["./src/assets/*"],
+			"@components/*": ["./src/components/*"],
+			"@config/*": ["./src/config/*"],
+			"@constants/*": ["./src/constants/*"],
+			"@features/*": ["./src/features/*"],
+			"@provider/*": ["./src/provider/*"],
+			"@services/*": ["./src/services/*"],
+			"@store/*": ["./src/store/*"],
+			"@utils/*": ["./src/utils/*"],
+			"@theme/*": ["./src/theme/*"]
 		}
 	},
 	"include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]

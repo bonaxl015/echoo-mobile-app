@@ -5,6 +5,7 @@ import React, { RefObject } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { Avatar, IconButton, Text, useTheme } from 'react-native-paper';
 import { useGetPostById } from '../hooks/useGetPostById';
+import { LikePostSingleButton } from './LikePostSingleButton';
 import { PostFormModalRef } from './PostFormModal';
 
 interface IPostDetails {
@@ -12,6 +13,7 @@ interface IPostDetails {
 	authorName: string;
 	authorId: string;
 	authorProfilePhoto: string;
+	isLikedByCurrentUser: boolean;
 	likesCount: number;
 	content: string;
 	createdAt: string;
@@ -25,6 +27,7 @@ export default function PostDetail({
 	authorName,
 	authorId,
 	authorProfilePhoto,
+	isLikedByCurrentUser,
 	likesCount,
 	content,
 	createdAt,
@@ -38,7 +41,8 @@ export default function PostDetail({
 
 	const postInfo = {
 		content: isFetching ? content : postData?.post.content,
-		likesCount: isFetching ? likesCount : postData?.post.likesCount
+		likesCount: isFetching ? likesCount : postData?.post.likesCount,
+		isLikedByCurrentUser: isFetching ? isLikedByCurrentUser : postData?.post.isLikedByCurrentUser
 	};
 
 	const handleEditPost = () => {
@@ -87,7 +91,10 @@ export default function PostDetail({
 				</View>
 
 				<View style={[styles.footer, { borderColor: theme.colors.onSurfaceVariant }]}>
-					<IconButton icon="thumb-up-outline" style={styles.footerButton} onPress={() => {}} />
+					<LikePostSingleButton
+						postId={id}
+						isLikedByCurrentUser={postInfo.isLikedByCurrentUser as boolean}
+					/>
 					<IconButton
 						icon="comment-outline"
 						style={styles.footerButton}
