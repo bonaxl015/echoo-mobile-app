@@ -35,3 +35,14 @@ export type PostLikeResponse = Like;
 export type PostUnlikeRequest = PostLikeRequest;
 
 export type PostUnlikeResponse = Unlike;
+
+export type CommentLikeRequest = {
+	commentId: string;
+	postId: string;
+};
+
+export type CommentLikeResponse = Like;
+
+export type CommentUnlikeRequest = CommentLikeRequest;
+
+export type CommentUnlikeResponse = Unlike;

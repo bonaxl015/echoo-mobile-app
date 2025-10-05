@@ -3,6 +3,10 @@ import { DEFAULT_PAGE_SIZE, DEFAULT_PAGE_SIZE_STRING } from '@services/constants
 import dateFormatter from '@utils/dateFormatter';
 import { AxiosError } from 'axios';
 import {
+	CommentLikeRequest,
+	CommentLikeResponse,
+	CommentUnlikeRequest,
+	CommentUnlikeResponse,
 	PostLikeListRequest,
 	PostLikeListResponse,
 	PostLikeRequest,
@@ -61,6 +65,30 @@ export async function likePost(data: PostLikeRequest) {
 export async function unlikePost(data: PostUnlikeRequest) {
 	try {
 		const res = await apiClient.delete<PostUnlikeResponse>(LIKE_API_URL.LIKE_POST, { data });
+
+		return res.data;
+	} catch (error) {
+		if (error instanceof AxiosError) {
+			throw new Error(error.message);
+		}
+	}
+}
+
+export async function likeComment(data: CommentLikeRequest) {
+	try {
+		const res = await apiClient.post<CommentLikeResponse>(LIKE_API_URL.LIKE_COMMENT, data);
+
+		return res.data;
+	} catch (error) {
+		if (error instanceof AxiosError) {
+			throw new Error(error.message);
+		}
+	}
+}
+
+export async function unlikeComment(data: CommentUnlikeRequest) {
+	try {
+		const res = await apiClient.delete<CommentUnlikeResponse>(LIKE_API_URL.LIKE_COMMENT, { data });
 
 		return res.data;
 	} catch (error) {
