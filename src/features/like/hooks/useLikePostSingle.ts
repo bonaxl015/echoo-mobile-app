@@ -4,9 +4,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export function useLikePostSingle() {
 	const queryClient = useQueryClient();
+	const queryKey = ['getPostById'];
 
 	const optimisticUpdate = (liked: boolean) => {
-		queryClient.setQueryData<Post>(['getPostById'], (old) => {
+		queryClient.setQueryData<Post>(queryKey, (old) => {
 			if (!old) return old;
 
 			return {
@@ -20,9 +21,9 @@ export function useLikePostSingle() {
 	const likeMutation = useMutation({
 		mutationFn: likePost,
 		onMutate: async () => {
-			await queryClient.cancelQueries({ queryKey: ['getPostById'] });
+			await queryClient.cancelQueries({ queryKey });
 
-			const previousPost = queryClient.getQueryData<Post>(['getPostById']);
+			const previousPost = queryClient.getQueryData<Post>(queryKey);
 
 			optimisticUpdate(true);
 
@@ -30,20 +31,20 @@ export function useLikePostSingle() {
 		},
 		onError: (_err, _postId, context) => {
 			if (context?.previousPost) {
-				queryClient.setQueryData(['getPostById'], context.previousPost);
+				queryClient.setQueryData(queryKey, context.previousPost);
 			}
 		},
 		onSettled: async () => {
-			await queryClient.invalidateQueries({ queryKey: ['getPostById'] });
+			await queryClient.invalidateQueries({ queryKey });
 		}
 	});
 
 	const unlikeMutation = useMutation({
 		mutationFn: unlikePost,
 		onMutate: async () => {
-			await queryClient.cancelQueries({ queryKey: ['getPostById'] });
+			await queryClient.cancelQueries({ queryKey });
 
-			const previousPost = queryClient.getQueryData<Post>(['getPostById']);
+			const previousPost = queryClient.getQueryData<Post>(queryKey);
 
 			optimisticUpdate(false);
 
@@ -51,11 +52,11 @@ export function useLikePostSingle() {
 		},
 		onError: (_err, _postId, context) => {
 			if (context?.previousPost) {
-				queryClient.setQueryData(['getPostById'], context.previousPost);
+				queryClient.setQueryData(queryKey, context.previousPost);
 			}
 		},
 		onSettled: async () => {
-			await queryClient.invalidateQueries({ queryKey: ['getPostById'] });
+			await queryClient.invalidateQueries({ queryKey });
 		}
 	});
 

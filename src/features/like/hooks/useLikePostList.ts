@@ -12,9 +12,10 @@ interface InfinitePosts {
 
 export function useLikePostList(postId: string) {
 	const queryClient = useQueryClient();
+	const queryKey = ['getPostList'];
 
 	const optimisticUpdate = (liked: boolean) => {
-		queryClient.setQueryData<InfinitePosts>(['getPostList'], (old) => {
+		queryClient.setQueryData<InfinitePosts>(queryKey, (old) => {
 			if (!old) return old;
 
 			return {
@@ -38,9 +39,9 @@ export function useLikePostList(postId: string) {
 	const likeMutation = useMutation({
 		mutationFn: likePost,
 		onMutate: async () => {
-			await queryClient.cancelQueries({ queryKey: ['getPostList'] });
+			await queryClient.cancelQueries({ queryKey });
 
-			const previousPosts = queryClient.getQueryData<InfinitePosts>(['getPostList']);
+			const previousPosts = queryClient.getQueryData<InfinitePosts>(queryKey);
 
 			optimisticUpdate(true);
 
@@ -48,20 +49,20 @@ export function useLikePostList(postId: string) {
 		},
 		onError: (_err, _postId, context) => {
 			if (context?.previousPosts) {
-				queryClient.setQueryData(['getPostList'], context.previousPosts);
+				queryClient.setQueryData(queryKey, context.previousPosts);
 			}
 		},
 		onSettled: async () => {
-			await queryClient.invalidateQueries({ queryKey: ['getPostList'] });
+			await queryClient.invalidateQueries({ queryKey });
 		}
 	});
 
 	const unlikeMutation = useMutation({
 		mutationFn: unlikePost,
 		onMutate: async () => {
-			await queryClient.cancelQueries({ queryKey: ['getPostList'] });
+			await queryClient.cancelQueries({ queryKey });
 
-			const previousPosts = queryClient.getQueryData<InfinitePosts>(['getPostList']);
+			const previousPosts = queryClient.getQueryData<InfinitePosts>(queryKey);
 
 			optimisticUpdate(false);
 
@@ -69,11 +70,11 @@ export function useLikePostList(postId: string) {
 		},
 		onError: (_err, _postId, context) => {
 			if (context?.previousPosts) {
-				queryClient.setQueryData(['getPostList'], context.previousPosts);
+				queryClient.setQueryData(queryKey, context.previousPosts);
 			}
 		},
 		onSettled: async () => {
-			await queryClient.invalidateQueries({ queryKey: ['getPostList'] });
+			await queryClient.invalidateQueries({ queryKey });
 		}
 	});
 
