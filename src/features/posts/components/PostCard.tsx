@@ -5,8 +5,8 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Avatar, IconButton, Surface, Text, useTheme } from 'react-native-paper';
 import { CommentListModalRef } from '../../comments/components/CommentListModal';
 import { ConfirmDialogRef } from './DeletePostDialog';
+import { EditPostButton } from './EditPostButton';
 import { LikePostListButton } from './LikePostListButton';
-import { PostFormModalRef } from './PostFormModal';
 
 interface IPostProps {
 	authorName?: string;
@@ -18,7 +18,6 @@ interface IPostProps {
 	id?: string | null;
 	authorId?: string;
 	createdAt?: string;
-	postFormModalRef: RefObject<PostFormModalRef | null>;
 	postDeleteDialogRef: RefObject<ConfirmDialogRef | null>;
 	commentListModalRef: RefObject<CommentListModalRef | null>;
 }
@@ -33,19 +32,11 @@ export function PostCard({
 	likesCount,
 	content,
 	isLikedByCurrentUser,
-	postFormModalRef,
 	postDeleteDialogRef,
 	commentListModalRef
 }: IPostProps) {
 	const theme = useTheme();
 	const currentUser = useAuthStore((s) => s.user);
-
-	const handleEditPost = () => {
-		if (id) {
-			postFormModalRef.current?.updatePostFormData({ id, content: content ?? '' });
-			postFormModalRef.current?.openModal();
-		}
-	};
 
 	const handleDeletePost = () => {
 		if (id) {
@@ -97,7 +88,7 @@ export function PostCard({
 					<View style={styles.headerRight}>
 						{currentUser?.id === authorId && (
 							<>
-								<IconButton icon="pencil" size={20} onPress={handleEditPost} />
+								<EditPostButton postId={id as string} content={content as string} />
 								<IconButton icon="delete" size={20} onPress={handleDeletePost} />
 							</>
 						)}

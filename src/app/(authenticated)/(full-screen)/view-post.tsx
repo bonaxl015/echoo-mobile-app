@@ -7,7 +7,6 @@ import useCommentListProps from '@features/comments/hooks/useCommentListProps';
 import { useGetCommentList } from '@features/comments/hooks/useGetComments';
 import DeletePostDialog from '@features/posts/components/DeletePostDialog';
 import PostDetail from '@features/posts/components/PostDetail';
-import { PostFormModal, PostFormModalRef } from '@features/posts/components/PostFormModal';
 import { Comment } from '@services/comment/types';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useRef } from 'react';
@@ -19,7 +18,6 @@ export default function ViewPostScreen() {
 	const parsedPost = post ? JSON.parse(post) : null;
 	const commentInputRef = useRef<ICommentInputRef | null>(null);
 	const commentDeleteRef = useRef<ConfirmDialogRef | null>(null);
-	const postFormModalRef = useRef<PostFormModalRef>(null);
 	const postDeleteDialogRef = useRef<ConfirmDialogRef>(null);
 	const { data, isFetching, refetch, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useGetCommentList(parsedPost.id);
@@ -55,7 +53,6 @@ export default function ViewPostScreen() {
 						<PostDetail
 							{...parsedPost}
 							commentInputRef={commentInputRef}
-							postFormModalRef={postFormModalRef}
 							postDeleteDialogRef={postDeleteDialogRef}
 						/>
 					}
@@ -68,9 +65,6 @@ export default function ViewPostScreen() {
 
 			{/* Delete comment dialog */}
 			<DeleteCommentDialog ref={commentDeleteRef} postId={parsedPost?.id} />
-
-			{/* Edit posts */}
-			<PostFormModal ref={postFormModalRef} />
 
 			{/* Delete post dialog */}
 			<DeletePostDialog ref={postDeleteDialogRef} />

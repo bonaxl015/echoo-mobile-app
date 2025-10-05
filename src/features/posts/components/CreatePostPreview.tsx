@@ -1,16 +1,13 @@
+import { usePostDataContext } from '@provider/PostDataProvider';
 import { useAuthStore } from '@store/useAuthStore';
-import React, { RefObject } from 'react';
+import React from 'react';
 import { Pressable, StyleSheet } from 'react-native';
 import { Avatar, Surface, Text, useTheme } from 'react-native-paper';
-import { PostFormModalRef } from './PostFormModal';
 
-interface ICreatePostPreview {
-	postFormModalRef: RefObject<PostFormModalRef | null>;
-}
-
-export function CreatePostPreview({ postFormModalRef }: ICreatePostPreview) {
+export function CreatePostPreview() {
 	const theme = useTheme();
 	const user = useAuthStore((s) => s.user);
+	const { postFormModalRef } = usePostDataContext();
 
 	const handleCreatePost = () => {
 		postFormModalRef.current?.updatePostFormData({
