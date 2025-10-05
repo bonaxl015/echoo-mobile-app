@@ -5,8 +5,8 @@ import React, { RefObject } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { Avatar, IconButton, Text, useTheme } from 'react-native-paper';
 import { useGetPostById } from '../hooks/useGetPostById';
+import { EditPostButton } from './EditPostButton';
 import { LikePostSingleButton } from './LikePostSingleButton';
-import { PostFormModalRef } from './PostFormModal';
 
 interface IPostDetails {
 	id: string;
@@ -18,7 +18,6 @@ interface IPostDetails {
 	content: string;
 	createdAt: string;
 	commentInputRef: RefObject<ICommentInputRef>;
-	postFormModalRef: RefObject<PostFormModalRef | null>;
 	postDeleteDialogRef: RefObject<ConfirmDialogRef | null>;
 }
 
@@ -32,7 +31,6 @@ export default function PostDetail({
 	content,
 	createdAt,
 	commentInputRef,
-	postFormModalRef,
 	postDeleteDialogRef
 }: IPostDetails) {
 	const theme = useTheme();
@@ -43,13 +41,6 @@ export default function PostDetail({
 		content: isFetching ? content : postData?.post.content,
 		likesCount: isFetching ? likesCount : postData?.post.likesCount,
 		isLikedByCurrentUser: isFetching ? isLikedByCurrentUser : postData?.post.isLikedByCurrentUser
-	};
-
-	const handleEditPost = () => {
-		if (id) {
-			postFormModalRef.current?.updatePostFormData({ id, content: postInfo.content ?? '' });
-			postFormModalRef.current?.openModal();
-		}
 	};
 
 	const handleDeletePost = () => {
@@ -75,7 +66,7 @@ export default function PostDetail({
 
 					{currentUser?.id === authorId && (
 						<View style={styles.headerRight}>
-							<IconButton icon="pencil" onPress={handleEditPost} />
+							<EditPostButton postId={id as string} content={content as string} />
 							<IconButton icon="delete" onPress={handleDeletePost} />
 						</View>
 					)}

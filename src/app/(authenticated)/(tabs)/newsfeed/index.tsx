@@ -4,7 +4,6 @@ import {
 } from '@features/comments/components/CommentListModal';
 import { CreatePostPreview } from '@features/posts/components/CreatePostPreview';
 import DeletePostDialog, { ConfirmDialogRef } from '@features/posts/components/DeletePostDialog';
-import { PostFormModal, PostFormModalRef } from '@features/posts/components/PostFormModal';
 import PostListFooter from '@features/posts/components/PostListFooter';
 import { useGetPostList } from '@features/posts/hooks/useGetPostList';
 import usePostListProps from '@features/posts/hooks/usePostListProps';
@@ -18,11 +17,9 @@ export default function NewsfeedScreen() {
 	const theme = useTheme();
 	const { data, isFetching, refetch, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useGetPostList();
-	const postFormModalRef = useRef<PostFormModalRef>(null);
 	const postDeleteDialogRef = useRef<ConfirmDialogRef>(null);
 	const commentListModalRef = useRef<CommentListModalRef>(null);
 	const { renderItem, onEndReached } = usePostListProps({
-		postFormModalRef,
 		postDeleteDialogRef,
 		commentListModalRef,
 		fetchNextPage,
@@ -83,12 +80,9 @@ export default function NewsfeedScreen() {
 				style={[styles.container, { backgroundColor: theme.colors.background }]}
 				edges={['bottom']}
 			>
-				<CreatePostPreview postFormModalRef={postFormModalRef} />
+				<CreatePostPreview />
 				{renderPostList}
 			</SafeAreaView>
-
-			{/* Create or edit posts */}
-			<PostFormModal ref={postFormModalRef} />
 
 			{/* Confirm delete dialog */}
 			<DeletePostDialog ref={postDeleteDialogRef} />
