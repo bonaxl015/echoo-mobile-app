@@ -5,6 +5,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Avatar, IconButton, Surface, Text, useTheme } from 'react-native-paper';
 import { CommentListModalRef } from '../../comments/components/CommentListModal';
 import { ConfirmDialogRef } from './DeletePostDialog';
+import { LikePostListButton } from './LikePostListButton';
 import { PostFormModalRef } from './PostFormModal';
 
 interface IPostProps {
@@ -31,6 +32,7 @@ export function PostCard({
 	commentsCount,
 	likesCount,
 	content,
+	isLikedByCurrentUser,
 	postFormModalRef,
 	postDeleteDialogRef,
 	commentListModalRef
@@ -58,6 +60,7 @@ export function PostCard({
 			authorId,
 			authorName,
 			authorProfilePhoto,
+			isLikedByCurrentUser,
 			createdAt,
 			likesCount,
 			content
@@ -116,7 +119,10 @@ export function PostCard({
 
 				{/* Footer */}
 				<View style={[styles.footer, { borderColor: theme.colors.onSurfaceVariant }]}>
-					<IconButton icon="thumb-up-outline" style={styles.footerButton} onPress={() => {}} />
+					<LikePostListButton
+						postId={id as string}
+						isLikedByCurrentUser={isLikedByCurrentUser as boolean}
+					/>
 					<IconButton
 						icon="comment-outline"
 						style={styles.footerButton}
