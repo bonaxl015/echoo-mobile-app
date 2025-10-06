@@ -1,10 +1,10 @@
 import { ICommentInputRef } from '@features/comments/components/CommentInput';
-import { ConfirmDialogRef } from '@features/comments/components/DeleteCommentDialog';
 import { useAuthStore } from '@store/useAuthStore';
 import React, { RefObject } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { Avatar, IconButton, Text, useTheme } from 'react-native-paper';
 import { useGetPostById } from '../hooks/useGetPostById';
+import { DeletePostButton } from './DeletePostButton';
 import { EditPostButton } from './EditPostButton';
 import { LikePostSingleButton } from './LikePostSingleButton';
 
@@ -18,7 +18,6 @@ interface IPostDetails {
 	content: string;
 	createdAt: string;
 	commentInputRef: RefObject<ICommentInputRef>;
-	postDeleteDialogRef: RefObject<ConfirmDialogRef | null>;
 }
 
 export default function PostDetail({
@@ -30,8 +29,7 @@ export default function PostDetail({
 	likesCount,
 	content,
 	createdAt,
-	commentInputRef,
-	postDeleteDialogRef
+	commentInputRef
 }: IPostDetails) {
 	const theme = useTheme();
 	const currentUser = useAuthStore((s) => s.user);
@@ -41,13 +39,6 @@ export default function PostDetail({
 		content: isFetching ? content : postData?.post.content,
 		likesCount: isFetching ? likesCount : postData?.post.likesCount,
 		isLikedByCurrentUser: isFetching ? isLikedByCurrentUser : postData?.post.isLikedByCurrentUser
-	};
-
-	const handleDeletePost = () => {
-		if (id) {
-			postDeleteDialogRef.current?.updateDeleteData({ id });
-			postDeleteDialogRef.current?.openDialog();
-		}
 	};
 
 	return (
@@ -67,7 +58,7 @@ export default function PostDetail({
 					{currentUser?.id === authorId && (
 						<View style={styles.headerRight}>
 							<EditPostButton postId={id as string} content={content as string} />
-							<IconButton icon="delete" onPress={handleDeletePost} />
+							<DeletePostButton postId={id as string} />
 						</View>
 					)}
 				</View>

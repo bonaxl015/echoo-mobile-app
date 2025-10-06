@@ -3,7 +3,6 @@ import {
 	CommentListModalRef
 } from '@features/comments/components/CommentListModal';
 import { CreatePostPreview } from '@features/posts/components/CreatePostPreview';
-import DeletePostDialog, { ConfirmDialogRef } from '@features/posts/components/DeletePostDialog';
 import PostListFooter from '@features/posts/components/PostListFooter';
 import { useGetPostList } from '@features/posts/hooks/useGetPostList';
 import usePostListProps from '@features/posts/hooks/usePostListProps';
@@ -17,10 +16,8 @@ export default function NewsfeedScreen() {
 	const theme = useTheme();
 	const { data, isFetching, refetch, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useGetPostList();
-	const postDeleteDialogRef = useRef<ConfirmDialogRef>(null);
 	const commentListModalRef = useRef<CommentListModalRef>(null);
 	const { renderItem, onEndReached } = usePostListProps({
-		postDeleteDialogRef,
 		commentListModalRef,
 		fetchNextPage,
 		hasNextPage
@@ -83,9 +80,6 @@ export default function NewsfeedScreen() {
 				<CreatePostPreview />
 				{renderPostList}
 			</SafeAreaView>
-
-			{/* Confirm delete dialog */}
-			<DeletePostDialog ref={postDeleteDialogRef} />
 
 			{/* Comment list modal */}
 			<CommentListModal ref={commentListModalRef} />

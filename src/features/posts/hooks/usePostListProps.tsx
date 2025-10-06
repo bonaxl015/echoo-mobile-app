@@ -8,10 +8,8 @@ import {
 import { RefObject, useCallback } from 'react';
 import { ListRenderItem } from 'react-native';
 import { CommentListModalRef } from '../../comments/components/CommentListModal';
-import { ConfirmDialogRef } from '../components/DeletePostDialog';
 
 interface IUsePostListProps {
-	postDeleteDialogRef: RefObject<ConfirmDialogRef | null>;
 	commentListModalRef: RefObject<CommentListModalRef | null>;
 	hasNextPage: boolean;
 	fetchNextPage: (
@@ -24,20 +22,13 @@ interface IUsePostListProps {
 }
 
 export default function usePostListProps({
-	postDeleteDialogRef,
 	commentListModalRef,
 	hasNextPage,
 	fetchNextPage
 }: IUsePostListProps) {
 	const renderItem: ListRenderItem<Post> = useCallback(
-		({ item }) => (
-			<PostCard
-				{...item}
-				postDeleteDialogRef={postDeleteDialogRef}
-				commentListModalRef={commentListModalRef}
-			/>
-		),
-		[postDeleteDialogRef, commentListModalRef]
+		({ item }) => <PostCard {...item} commentListModalRef={commentListModalRef} />,
+		[commentListModalRef]
 	);
 
 	const onEndReached = useCallback(() => {

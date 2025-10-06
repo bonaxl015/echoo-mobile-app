@@ -1,8 +1,10 @@
+import DeletePostDialog, { ConfirmDialogRef } from '@features/posts/components/DeletePostDialog';
 import { PostFormModal, PostFormModalRef } from '@features/posts/components/PostFormModal';
 import React, { createContext, ReactNode, RefObject, useContext, useRef } from 'react';
 
 interface PostData {
 	postFormModalRef: RefObject<PostFormModalRef | null>;
+	postDeleteDialogRef: RefObject<ConfirmDialogRef | null>;
 }
 
 interface IPostDataProvider {
@@ -11,6 +13,9 @@ interface IPostDataProvider {
 
 const initialPostData: PostData = {
 	postFormModalRef: {
+		current: null
+	},
+	postDeleteDialogRef: {
 		current: null
 	}
 };
@@ -29,9 +34,11 @@ export function usePostDataContext() {
 
 export function PostDataProvider({ children }: IPostDataProvider) {
 	const postFormModalRef = useRef<PostFormModalRef>(null);
+	const postDeleteDialogRef = useRef<ConfirmDialogRef>(null);
 
 	const value = {
-		postFormModalRef
+		postFormModalRef,
+		postDeleteDialogRef
 	};
 
 	return (
@@ -40,6 +47,9 @@ export function PostDataProvider({ children }: IPostDataProvider) {
 
 			{/* Create or edit posts */}
 			<PostFormModal ref={postFormModalRef} />
+
+			{/* Delete post dialog */}
+			<DeletePostDialog ref={postDeleteDialogRef} />
 		</PostDataContext.Provider>
 	);
 }
