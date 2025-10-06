@@ -1,4 +1,4 @@
-type LikeObject = {
+export type LikeObject = {
 	userName: string;
 	userProfilePhoto: string;
 	userId: string;
@@ -28,6 +28,15 @@ export type PostLikeListResponse = {
 
 export type PostLikeRequest = {
 	postId: string;
+};
+
+export type CommentLikeListRequest = {
+	commentId: string;
+	pageParam?: number;
+};
+
+export type CommentLikeListResponse = {
+	likes: LikeObject[];
 };
 
 export type PostLikeResponse = Like;
