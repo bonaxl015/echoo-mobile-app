@@ -1,6 +1,5 @@
 import { ICommentInputRef } from '@features/comments/components/CommentInput';
 import { CommentItem } from '@features/comments/components/CommentItem';
-import { ConfirmDialogRef } from '@features/comments/components/DeleteCommentDialog';
 import { Comment, CommentListResponse } from '@services/comment/types';
 import {
 	FetchNextPageOptions,
@@ -21,26 +20,17 @@ interface IUseCommentListProps {
 		>
 	>;
 	commentInputRef: RefObject<ICommentInputRef | null>;
-	commentDeleteRef: RefObject<ConfirmDialogRef | null>;
 }
 
 export default function useCommentListProps({
 	postId,
 	hasNextPage,
 	fetchNextPage,
-	commentInputRef,
-	commentDeleteRef
+	commentInputRef
 }: IUseCommentListProps) {
 	const renderItem: ListRenderItem<Comment> = useCallback(
-		({ item }) => (
-			<CommentItem
-				{...item}
-				postId={postId}
-				commentInputRef={commentInputRef}
-				commentDeleteRef={commentDeleteRef}
-			/>
-		),
-		[postId, commentInputRef, commentDeleteRef]
+		({ item }) => <CommentItem {...item} postId={postId} commentInputRef={commentInputRef} />,
+		[postId, commentInputRef]
 	);
 
 	const onEndReached = useCallback(() => {

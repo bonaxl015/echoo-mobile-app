@@ -1,9 +1,9 @@
+import { usePostDataContext } from '@provider/PostDataProvider';
 import { useAuthStore } from '@store/useAuthStore';
 import { router } from 'expo-router';
-import React, { RefObject } from 'react';
+import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Avatar, IconButton, Surface, Text, useTheme } from 'react-native-paper';
-import { CommentListModalRef } from '../../comments/components/CommentListModal';
 import { DeletePostButton } from './DeletePostButton';
 import { EditPostButton } from './EditPostButton';
 import { LikePostListButton } from './LikePostListButton';
@@ -18,7 +18,6 @@ interface IPostProps {
 	id?: string | null;
 	authorId?: string;
 	createdAt?: string;
-	commentListModalRef: RefObject<CommentListModalRef | null>;
 }
 
 export function PostCard({
@@ -30,11 +29,11 @@ export function PostCard({
 	commentsCount,
 	likesCount,
 	content,
-	isLikedByCurrentUser,
-	commentListModalRef
+	isLikedByCurrentUser
 }: IPostProps) {
 	const theme = useTheme();
 	const currentUser = useAuthStore((s) => s.user);
+	const { commentListModalRef } = usePostDataContext();
 
 	const handleViewPost = () => {
 		const postData = {

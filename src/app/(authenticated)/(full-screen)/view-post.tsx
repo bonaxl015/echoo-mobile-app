@@ -1,8 +1,5 @@
 import { CommentInput, ICommentInputRef } from '@features/comments/components/CommentInput';
 import { CommentListFooter } from '@features/comments/components/CommentListFooter';
-import DeleteCommentDialog, {
-	ConfirmDialogRef
-} from '@features/comments/components/DeleteCommentDialog';
 import useCommentListProps from '@features/comments/hooks/useCommentListProps';
 import { useGetCommentList } from '@features/comments/hooks/useGetComments';
 import PostDetail from '@features/posts/components/PostDetail';
@@ -16,15 +13,13 @@ export default function ViewPostScreen() {
 	const { post } = useLocalSearchParams<{ post: string }>();
 	const parsedPost = post ? JSON.parse(post) : null;
 	const commentInputRef = useRef<ICommentInputRef | null>(null);
-	const commentDeleteRef = useRef<ConfirmDialogRef | null>(null);
 	const { data, isFetching, refetch, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useGetCommentList(parsedPost.id);
 	const { renderItem, onEndReached } = useCommentListProps({
 		postId: parsedPost.id,
 		hasNextPage,
 		fetchNextPage,
-		commentInputRef,
-		commentDeleteRef
+		commentInputRef
 	});
 
 	const comments = (data?.pages.flatMap((page) => page?.comments) as Comment[]) || [];
@@ -54,9 +49,6 @@ export default function ViewPostScreen() {
 				/>
 				<CommentInput ref={commentInputRef} postId={parsedPost?.id} />
 			</SafeAreaView>
-
-			{/* Delete comment dialog */}
-			<DeleteCommentDialog ref={commentDeleteRef} postId={parsedPost?.id} />
 		</>
 	);
 }

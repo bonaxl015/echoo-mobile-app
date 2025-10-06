@@ -1,10 +1,18 @@
-import DeletePostDialog, { ConfirmDialogRef } from '@features/posts/components/DeletePostDialog';
+import { CommentListModalRef } from '@features/comments/components/CommentListModal';
+import DeleteCommentDialog, {
+	ConfirmCommentDeleteDialogRef
+} from '@features/comments/components/DeleteCommentDialog';
+import DeletePostDialog, {
+	ConfirmPostDeleteDialogRef
+} from '@features/posts/components/DeletePostDialog';
 import { PostFormModal, PostFormModalRef } from '@features/posts/components/PostFormModal';
 import React, { createContext, ReactNode, RefObject, useContext, useRef } from 'react';
 
 interface PostData {
 	postFormModalRef: RefObject<PostFormModalRef | null>;
-	postDeleteDialogRef: RefObject<ConfirmDialogRef | null>;
+	postDeleteDialogRef: RefObject<ConfirmPostDeleteDialogRef | null>;
+	commentDeleteRef: RefObject<ConfirmCommentDeleteDialogRef | null>;
+	commentListModalRef: RefObject<CommentListModalRef | null>;
 }
 
 interface IPostDataProvider {
@@ -16,6 +24,12 @@ const initialPostData: PostData = {
 		current: null
 	},
 	postDeleteDialogRef: {
+		current: null
+	},
+	commentDeleteRef: {
+		current: null
+	},
+	commentListModalRef: {
 		current: null
 	}
 };
@@ -34,11 +48,15 @@ export function usePostDataContext() {
 
 export function PostDataProvider({ children }: IPostDataProvider) {
 	const postFormModalRef = useRef<PostFormModalRef>(null);
-	const postDeleteDialogRef = useRef<ConfirmDialogRef>(null);
+	const postDeleteDialogRef = useRef<ConfirmPostDeleteDialogRef>(null);
+	const commentDeleteRef = useRef<ConfirmCommentDeleteDialogRef>(null);
+	const commentListModalRef = useRef<CommentListModalRef>(null);
 
 	const value = {
 		postFormModalRef,
-		postDeleteDialogRef
+		postDeleteDialogRef,
+		commentDeleteRef,
+		commentListModalRef
 	};
 
 	return (
@@ -50,6 +68,9 @@ export function PostDataProvider({ children }: IPostDataProvider) {
 
 			{/* Delete post dialog */}
 			<DeletePostDialog ref={postDeleteDialogRef} />
+
+			{/* Delete comment dialog */}
+			<DeleteCommentDialog ref={commentDeleteRef} />
 		</PostDataContext.Provider>
 	);
 }
