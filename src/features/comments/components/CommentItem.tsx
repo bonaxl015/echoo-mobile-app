@@ -5,6 +5,7 @@ import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { Avatar, IconButton, Text, useTheme } from 'react-native-paper';
 import { ICommentInputRef } from './CommentInput';
 import { CommentLikeButton } from './CommentLikeButton';
+import { ViewCommentLikesButton } from './ViewCommentLikesButton';
 
 interface ICommentItem {
 	id: string | null;
@@ -73,14 +74,12 @@ export function CommentItem({
 				<View style={styles.body}>
 					<Text variant="bodyMedium">{content}</Text>
 					<View style={styles.bodyBottom}>
-						<Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-							{likesCount}
-						</Text>
 						<CommentLikeButton
 							isLikedByCurrentUser={isLikedByCurrentUser}
 							commentId={id as string}
 							postId={postId}
 						/>
+						<ViewCommentLikesButton commentId={id as string} likesCount={likesCount} />
 					</View>
 				</View>
 			</View>
@@ -103,6 +102,6 @@ const styles = StyleSheet.create({
 	bodyBottom: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		marginTop: 5
+		marginVertical: 8
 	}
 });
