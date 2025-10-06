@@ -5,12 +5,10 @@ import {
 	InfiniteData,
 	InfiniteQueryObserverResult
 } from '@tanstack/react-query';
-import { RefObject, useCallback } from 'react';
+import { useCallback } from 'react';
 import { ListRenderItem } from 'react-native';
-import { CommentListModalRef } from '../../comments/components/CommentListModal';
 
 interface IUsePostListProps {
-	commentListModalRef: RefObject<CommentListModalRef | null>;
 	hasNextPage: boolean;
 	fetchNextPage: (
 		options?: FetchNextPageOptions
@@ -21,15 +19,8 @@ interface IUsePostListProps {
 	>;
 }
 
-export default function usePostListProps({
-	commentListModalRef,
-	hasNextPage,
-	fetchNextPage
-}: IUsePostListProps) {
-	const renderItem: ListRenderItem<Post> = useCallback(
-		({ item }) => <PostCard {...item} commentListModalRef={commentListModalRef} />,
-		[commentListModalRef]
-	);
+export default function usePostListProps({ hasNextPage, fetchNextPage }: IUsePostListProps) {
+	const renderItem: ListRenderItem<Post> = useCallback(({ item }) => <PostCard {...item} />, []);
 
 	const onEndReached = useCallback(() => {
 		if (hasNextPage) {

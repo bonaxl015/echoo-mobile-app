@@ -1,13 +1,11 @@
-import {
-	CommentListModal,
-	CommentListModalRef
-} from '@features/comments/components/CommentListModal';
+import { CommentListModal } from '@features/comments/components/CommentListModal';
 import { CreatePostPreview } from '@features/posts/components/CreatePostPreview';
 import PostListFooter from '@features/posts/components/PostListFooter';
 import { useGetPostList } from '@features/posts/hooks/useGetPostList';
 import usePostListProps from '@features/posts/hooks/usePostListProps';
+import { usePostDataContext } from '@provider/PostDataProvider';
 import { Post } from '@services/post/types';
-import React, { useRef } from 'react';
+import React from 'react';
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,9 +14,8 @@ export default function NewsfeedScreen() {
 	const theme = useTheme();
 	const { data, isFetching, refetch, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useGetPostList();
-	const commentListModalRef = useRef<CommentListModalRef>(null);
+	const { commentListModalRef } = usePostDataContext();
 	const { renderItem, onEndReached } = usePostListProps({
-		commentListModalRef,
 		fetchNextPage,
 		hasNextPage
 	});

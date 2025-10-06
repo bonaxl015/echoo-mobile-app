@@ -2,7 +2,7 @@ import ConfirmDialog from '@components/ConfirmDialog';
 import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import { useDeletePost } from '../hooks/useDeletePost';
 
-export interface ConfirmDialogRef {
+export interface ConfirmPostDeleteDialogRef {
 	openDialog: () => void;
 	closeDialog: () => void;
 	updateDeleteData: (data: DeleteData) => void;
@@ -12,7 +12,7 @@ export type DeleteData = {
 	id: string | null;
 };
 
-const DeletePostDialog = forwardRef<ConfirmDialogRef>((_props, ref) => {
+const DeletePostDialog = forwardRef<ConfirmPostDeleteDialogRef>((_props, ref) => {
 	const [dialogVisible, setDialogVisible] = useState<boolean>(false);
 	const [deleteData, setDeleteData] = useState<DeleteData>({
 		id: null

@@ -1,10 +1,10 @@
+import { usePostDataContext } from '@provider/PostDataProvider';
 import { useAuthStore } from '@store/useAuthStore';
 import React, { RefObject } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { Avatar, IconButton, Text, useTheme } from 'react-native-paper';
 import { ICommentInputRef } from './CommentInput';
 import { CommentLikeButton } from './CommentLikeButton';
-import { ConfirmDialogRef } from './DeleteCommentDialog';
 
 interface ICommentItem {
 	id: string | null;
@@ -17,7 +17,6 @@ interface ICommentItem {
 	likesCount: number;
 	createdAt: string;
 	commentInputRef: RefObject<ICommentInputRef | null>;
-	commentDeleteRef: RefObject<ConfirmDialogRef | null>;
 }
 
 export function CommentItem({
@@ -30,11 +29,11 @@ export function CommentItem({
 	isLikedByCurrentUser,
 	likesCount,
 	createdAt,
-	commentInputRef,
-	commentDeleteRef
+	commentInputRef
 }: ICommentItem) {
 	const theme = useTheme();
 	const currentUser = useAuthStore((s) => s.user);
+	const { commentDeleteRef } = usePostDataContext();
 
 	const handleEdit = () => {
 		if (id) {
@@ -46,7 +45,7 @@ export function CommentItem({
 
 	const handleDelete = () => {
 		if (id) {
-			commentDeleteRef.current?.updateDeleteData({ id });
+			commentDeleteRef.current?.updateDeleteData({ commentId: id, postId });
 			commentDeleteRef.current?.openDialog();
 		}
 	};
