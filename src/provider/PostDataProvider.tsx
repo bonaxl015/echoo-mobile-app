@@ -2,6 +2,7 @@ import { CommentListModalRef } from '@features/comments/components/CommentListMo
 import DeleteCommentDialog, {
 	ConfirmCommentDeleteDialogRef
 } from '@features/comments/components/DeleteCommentDialog';
+import { LikesListModal, LikesListModalRef } from '@features/like/components/LikesListModal';
 import DeletePostDialog, {
 	ConfirmPostDeleteDialogRef
 } from '@features/posts/components/DeletePostDialog';
@@ -13,6 +14,7 @@ interface PostData {
 	postDeleteDialogRef: RefObject<ConfirmPostDeleteDialogRef | null>;
 	commentDeleteRef: RefObject<ConfirmCommentDeleteDialogRef | null>;
 	commentListModalRef: RefObject<CommentListModalRef | null>;
+	likeListModalRef: RefObject<LikesListModalRef | null>;
 }
 
 interface IPostDataProvider {
@@ -30,6 +32,9 @@ const initialPostData: PostData = {
 		current: null
 	},
 	commentListModalRef: {
+		current: null
+	},
+	likeListModalRef: {
 		current: null
 	}
 };
@@ -51,12 +56,14 @@ export function PostDataProvider({ children }: IPostDataProvider) {
 	const postDeleteDialogRef = useRef<ConfirmPostDeleteDialogRef>(null);
 	const commentDeleteRef = useRef<ConfirmCommentDeleteDialogRef>(null);
 	const commentListModalRef = useRef<CommentListModalRef>(null);
+	const likeListModalRef = useRef<LikesListModalRef>(null);
 
 	const value = {
 		postFormModalRef,
 		postDeleteDialogRef,
 		commentDeleteRef,
-		commentListModalRef
+		commentListModalRef,
+		likeListModalRef
 	};
 
 	return (
@@ -71,6 +78,9 @@ export function PostDataProvider({ children }: IPostDataProvider) {
 
 			{/* Delete comment dialog */}
 			<DeleteCommentDialog ref={commentDeleteRef} />
+
+			{/* Likes list modal */}
+			<LikesListModal ref={likeListModalRef} />
 		</PostDataContext.Provider>
 	);
 }
