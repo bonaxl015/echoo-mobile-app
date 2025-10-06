@@ -6,7 +6,6 @@ import useCommentListProps from '../hooks/useCommentListProps';
 import { useGetCommentList } from '../hooks/useGetComments';
 import { CommentInput, ICommentInputRef } from './CommentInput';
 import { CommentListFooter } from './CommentListFooter';
-import DeleteCommentDialog, { ConfirmDialogRef } from './DeleteCommentDialog';
 
 interface ICommentListContent {
 	postId: string;
@@ -15,15 +14,13 @@ interface ICommentListContent {
 export function CommentListContent({ postId }: ICommentListContent) {
 	const theme = useTheme();
 	const commentInputRef = useRef<ICommentInputRef | null>(null);
-	const commentDeleteRef = useRef<ConfirmDialogRef | null>(null);
 	const { data, isFetching, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useGetCommentList(postId);
 	const { renderItem, onEndReached } = useCommentListProps({
 		postId,
 		hasNextPage,
 		fetchNextPage,
-		commentInputRef,
-		commentDeleteRef
+		commentInputRef
 	});
 
 	const comments = (data?.pages.flatMap((page) => page?.comments) as Comment[]) || [];
@@ -74,9 +71,6 @@ export function CommentListContent({ postId }: ICommentListContent) {
 		<View style={{ flex: 1, backgroundColor: theme.colors.background }}>
 			{renderContent}
 			<CommentInput ref={commentInputRef} postId={postId} />
-
-			{/* Delete comment dialog */}
-			<DeleteCommentDialog ref={commentDeleteRef} postId={postId} />
 		</View>
 	);
 }
