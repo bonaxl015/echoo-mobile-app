@@ -13,7 +13,10 @@ export const CommentListModal = forwardRef<CommentListModalRef>((_props, ref) =>
 	const [postId, setPostId] = useState<string>('');
 
 	const openModal = () => setModalVisible(true);
-	const closeModal = () => setModalVisible(false);
+	const closeModal = () => {
+		setModalVisible(false);
+		setPostId('');
+	};
 	const updatePostId = (value: string) => setPostId(value);
 
 	useImperativeHandle(ref, () => ({

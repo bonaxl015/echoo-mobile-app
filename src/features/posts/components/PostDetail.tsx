@@ -1,13 +1,13 @@
 import { ICommentInputRef } from '@features/comments/components/CommentInput';
-import { usePostDataContext } from '@provider/PostDataProvider';
 import { useAuthStore } from '@store/useAuthStore';
 import React, { RefObject } from 'react';
-import { StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { Avatar, IconButton, Text, useTheme } from 'react-native-paper';
 import { useGetPostById } from '../hooks/useGetPostById';
 import { DeletePostButton } from './DeletePostButton';
 import { EditPostButton } from './EditPostButton';
 import { LikePostSingleButton } from './LikePostSingleButton';
+import { ViewPostLikesButton } from './ViewPostLikesButton';
 
 interface IPostDetails {
 	id: string;
@@ -35,19 +35,11 @@ export default function PostDetail({
 	const theme = useTheme();
 	const currentUser = useAuthStore((s) => s.user);
 	const { data: postData, isFetching } = useGetPostById(id);
-	const { likeListModalRef } = usePostDataContext();
 
 	const postInfo = {
 		content: isFetching ? content : postData?.post.content,
 		likesCount: isFetching ? likesCount : postData?.post.likesCount,
 		isLikedByCurrentUser: isFetching ? isLikedByCurrentUser : postData?.post.isLikedByCurrentUser
-	};
-
-	const handleViewLikes = () => {
-		if (id) {
-			likeListModalRef.current?.updatePostId(id);
-			likeListModalRef.current?.openModal();
-		}
 	};
 
 	return (
@@ -75,13 +67,7 @@ export default function PostDetail({
 				<View style={styles.body}>
 					<Text variant="bodyLarge">{postInfo.content}</Text>
 					<View style={styles.bodyBottom}>
-						{Boolean(postInfo.likesCount) && (
-							<TouchableOpacity onPress={handleViewLikes}>
-								<Text variant="labelLarge" style={{ color: theme.colors.onSurfaceVariant }}>
-									{postInfo.likesCount} {Number(postInfo.likesCount) > 1 ? 'Likes' : 'Like'}
-								</Text>
-							</TouchableOpacity>
-						)}
+						<ViewPostLikesButton postId={id} likesCount={postInfo.likesCount} />
 					</View>
 				</View>
 

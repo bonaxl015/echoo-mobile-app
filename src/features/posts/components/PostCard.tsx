@@ -1,12 +1,13 @@
-import { usePostDataContext } from '@provider/PostDataProvider';
 import { useAuthStore } from '@store/useAuthStore';
 import { router } from 'expo-router';
 import React from 'react';
-import { Pressable, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Avatar, IconButton, Surface, Text, useTheme } from 'react-native-paper';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { Avatar, Surface, Text, useTheme } from 'react-native-paper';
 import { DeletePostButton } from './DeletePostButton';
 import { EditPostButton } from './EditPostButton';
 import { LikePostListButton } from './LikePostListButton';
+import { COMMENT_BUTTON, ViewCommentButton } from './ViewCommentButton';
+import { ViewPostLikesButton } from './ViewPostLikesButton';
 
 interface IPostProps {
 	authorName?: string;
@@ -33,7 +34,6 @@ export function PostCard({
 }: IPostProps) {
 	const theme = useTheme();
 	const currentUser = useAuthStore((s) => s.user);
-	const { commentListModalRef, likeListModalRef } = usePostDataContext();
 
 	const handleViewPost = () => {
 		const postData = {
@@ -52,20 +52,6 @@ export function PostCard({
 				post: JSON.stringify(postData)
 			}
 		});
-	};
-
-	const handleOpenCommentModal = () => {
-		if (id) {
-			commentListModalRef.current?.updatePostId(id);
-			commentListModalRef.current?.openModal();
-		}
-	};
-
-	const handleViewLikes = () => {
-		if (id) {
-			likeListModalRef.current?.updatePostId(id);
-			likeListModalRef.current?.openModal();
-		}
 	};
 
 	return (
@@ -97,31 +83,14 @@ export function PostCard({
 					<Text variant="bodyLarge">{content}</Text>
 					<View style={styles.bodyBottom}>
 						<View style={{ flex: 1 }}>
-							{Boolean(likesCount) && (
-								<TouchableOpacity onPress={handleViewLikes}>
-									<Text
-										variant="labelLarge"
-										style={{ color: theme.colors.onSurfaceVariant, textAlign: 'left' }}
-									>
-										{likesCount} {Number(likesCount) > 1 ? 'Likes' : 'Like'}
-									</Text>
-								</TouchableOpacity>
-							)}
+							<ViewPostLikesButton postId={id} likesCount={likesCount} />
 						</View>
 						<View style={{ flex: 1 }}>
-							{Boolean(commentsCount) && (
-								<TouchableOpacity onPress={handleOpenCommentModal}>
-									<Text
-										variant="labelLarge"
-										style={{
-											color: theme.colors.onSurfaceVariant,
-											textAlign: 'right'
-										}}
-									>
-										{commentsCount} {Number(commentsCount) > 1 ? 'Comments' : 'Comment'}
-									</Text>
-								</TouchableOpacity>
-							)}
+							<ViewCommentButton
+								postId={id}
+								mode={COMMENT_BUTTON.COUNT_TEXT}
+								commentsCount={commentsCount}
+							/>
 						</View>
 					</View>
 				</View>
@@ -132,11 +101,7 @@ export function PostCard({
 						postId={id as string}
 						isLikedByCurrentUser={isLikedByCurrentUser as boolean}
 					/>
-					<IconButton
-						icon="comment-outline"
-						style={styles.footerButton}
-						onPress={handleOpenCommentModal}
-					/>
+					<ViewCommentButton postId={id} mode={COMMENT_BUTTON.ICON} />
 				</View>
 			</Surface>
 		</Pressable>
@@ -170,10 +135,5 @@ const styles = StyleSheet.create({
 	},
 	footer: {
 		flexDirection: 'row'
-	},
-	footerButton: {
-		flex: 1,
-		margin: 0,
-		height: 50
 	}
 });
