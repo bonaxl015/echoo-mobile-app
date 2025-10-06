@@ -17,5 +17,5 @@ export function EditPostButton({ postId, content }: IEditPostButton) {
 		}
 	};
 
-	return <IconButton icon="pencil" size={20} onPress={handleEditPost} />;
+	return <IconButton icon="pencil" onPress={handleEditPost} />;
 }

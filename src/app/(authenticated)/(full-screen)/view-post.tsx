@@ -5,7 +5,6 @@ import DeleteCommentDialog, {
 } from '@features/comments/components/DeleteCommentDialog';
 import useCommentListProps from '@features/comments/hooks/useCommentListProps';
 import { useGetCommentList } from '@features/comments/hooks/useGetComments';
-import DeletePostDialog from '@features/posts/components/DeletePostDialog';
 import PostDetail from '@features/posts/components/PostDetail';
 import { Comment } from '@services/comment/types';
 import { useLocalSearchParams } from 'expo-router';
@@ -18,7 +17,6 @@ export default function ViewPostScreen() {
 	const parsedPost = post ? JSON.parse(post) : null;
 	const commentInputRef = useRef<ICommentInputRef | null>(null);
 	const commentDeleteRef = useRef<ConfirmDialogRef | null>(null);
-	const postDeleteDialogRef = useRef<ConfirmDialogRef>(null);
 	const { data, isFetching, refetch, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useGetCommentList(parsedPost.id);
 	const { renderItem, onEndReached } = useCommentListProps({
@@ -49,13 +47,7 @@ export default function ViewPostScreen() {
 					removeClippedSubviews
 					refreshing={isFetching}
 					onRefresh={() => refetch()}
-					ListHeaderComponent={
-						<PostDetail
-							{...parsedPost}
-							commentInputRef={commentInputRef}
-							postDeleteDialogRef={postDeleteDialogRef}
-						/>
-					}
+					ListHeaderComponent={<PostDetail {...parsedPost} commentInputRef={commentInputRef} />}
 					ListFooterComponent={
 						<CommentListFooter isFetchingNextPage={isFetchingNextPage} hasNextPage={hasNextPage} />
 					}
@@ -65,9 +57,6 @@ export default function ViewPostScreen() {
 
 			{/* Delete comment dialog */}
 			<DeleteCommentDialog ref={commentDeleteRef} postId={parsedPost?.id} />
-
-			{/* Delete post dialog */}
-			<DeletePostDialog ref={postDeleteDialogRef} />
 		</>
 	);
 }
