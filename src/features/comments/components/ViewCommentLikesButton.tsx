@@ -13,8 +13,10 @@ export function ViewCommentLikesButton({ likesCount, commentId }: IViewCommentLi
 	const { likeListModalRef } = usePostDataContext();
 
 	const handleViewCommentLikes = () => {
-		likeListModalRef.current?.updateCommentId(commentId);
-		likeListModalRef.current?.openModal();
+		if (commentId) {
+			likeListModalRef.current?.updateCommentId(commentId);
+			likeListModalRef.current?.openModal();
+		}
 	};
 
 	if (!likesCount) {
