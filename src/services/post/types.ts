@@ -23,6 +23,15 @@ export interface PostResponse {
 	posts: Post[];
 }
 
+export interface PostByUserRequest {
+	userId: string;
+	pageParam?: number;
+}
+
+export interface PostByUserResponse {
+	posts: Post[];
+}
+
 export type IGetPostByIdService = {
 	id: string;
 };

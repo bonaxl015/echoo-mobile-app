@@ -10,6 +10,8 @@ import {
 	IDeletePostService,
 	IGetPostByIdService,
 	IUpdatePostService,
+	PostByUserRequest,
+	PostByUserResponse,
 	PostResponse,
 	UpdatePostResponse
 } from './types';
@@ -24,6 +26,40 @@ export async function getPostList({ pageParam = 1 }) {
 		const urlStringParams = new URLSearchParams(params);
 		const res = await apiClient.get<PostResponse>(
 			`${POST_API_URL.GET_POST_LIST}?${urlStringParams.toString()}`
+		);
+
+		const dateFormattedPosts = res.data.posts.length
+			? res.data.posts.map((item) => ({
+					...item,
+					createdAt: dateFormatter(item.createdAt),
+					updatedAt: dateFormatter(item.updatedAt)
+				}))
+			: [];
+
+		return {
+			posts: dateFormattedPosts,
+			nextPage:
+				res.data.posts.length && res.data.posts.length === DEFAULT_PAGE_SIZE
+					? pageParam + 1
+					: undefined
+		};
+	} catch (error) {
+		if (error instanceof AxiosError) {
+			throw new Error(error.message);
+		}
+	}
+}
+
+export async function getPostListByUser({ userId, pageParam = 1 }: PostByUserRequest) {
+	try {
+		const params = {
+			userId,
+			pageNumber: pageParam.toString(),
+			pageSize: DEFAULT_PAGE_SIZE_STRING
+		};
+		const urlStringParams = new URLSearchParams(params);
+		const res = await apiClient.get<PostByUserResponse>(
+			`${POST_API_URL.GET_POST_BY_USER}?${urlStringParams.toString()}`
 		);
 
 		const dateFormattedPosts = res.data.posts.length
