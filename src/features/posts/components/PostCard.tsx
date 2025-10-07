@@ -1,11 +1,13 @@
+import { PATHS } from '@constants/route';
 import { useAuthStore } from '@store/useAuthStore';
 import { router } from 'expo-router';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Avatar, Surface, Text, useTheme } from 'react-native-paper';
+import { Surface, Text, useTheme } from 'react-native-paper';
 import { DeletePostButton } from './DeletePostButton';
 import { EditPostButton } from './EditPostButton';
 import { LikePostListButton } from './LikePostListButton';
+import { UserHeadingData } from './UserHeadingData';
 import { COMMENT_BUTTON, ViewCommentButton } from './ViewCommentButton';
 import { ViewPostLikesButton } from './ViewPostLikesButton';
 
@@ -47,7 +49,7 @@ export function PostCard({
 			content
 		};
 		router.push({
-			pathname: '/(authenticated)/(full-screen)/view-post',
+			pathname: PATHS.VIEW_POST,
 			params: {
 				post: JSON.stringify(postData)
 			}
@@ -59,15 +61,13 @@ export function PostCard({
 			<Surface style={[styles.card, { backgroundColor: theme.colors.surface }]}>
 				{/* Header */}
 				<View style={styles.header}>
-					<View style={styles.headerLeft}>
-						<Avatar.Image size={40} source={{ uri: authorProfilePhoto }} />
-						<View style={{ marginLeft: 8 }}>
-							<Text variant="titleMedium">{authorName}</Text>
-							<Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-								{createdAt}
-							</Text>
-						</View>
-					</View>
+					<UserHeadingData
+						type="post"
+						authorId={authorId}
+						authorName={authorName}
+						authorProfilePhoto={authorProfilePhoto}
+						createdAt={createdAt}
+					/>
 					<View style={styles.headerRight}>
 						{currentUser?.id === authorId && (
 							<>
@@ -115,12 +115,9 @@ const styles = StyleSheet.create({
 	header: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
+		alignItems: 'center',
 		paddingVertical: 10,
 		paddingHorizontal: 12
-	},
-	headerLeft: {
-		flexDirection: 'row',
-		alignItems: 'center'
 	},
 	headerRight: {
 		flexDirection: 'row'

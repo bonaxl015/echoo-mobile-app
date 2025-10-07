@@ -1,8 +1,9 @@
+import { UserHeadingData } from '@features/posts/components/UserHeadingData';
 import { usePostDataContext } from '@provider/PostDataProvider';
 import { useAuthStore } from '@store/useAuthStore';
 import React, { RefObject } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
-import { Avatar, IconButton, Text, useTheme } from 'react-native-paper';
+import { IconButton, Text, useTheme } from 'react-native-paper';
 import { ICommentInputRef } from './CommentInput';
 import { CommentLikeButton } from './CommentLikeButton';
 import { ViewCommentLikesButton } from './ViewCommentLikesButton';
@@ -55,19 +56,18 @@ export function CommentItem({
 		<TouchableWithoutFeedback onPress={() => {}}>
 			<View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
 				<View style={styles.header}>
-					<Avatar.Image size={36} source={{ uri: authorProfilePhoto }} />
-					<View style={{ marginLeft: 8, flex: 1 }}>
-						<Text variant="titleSmall">{authorName}</Text>
-						<Text variant="labelSmall" style={{ color: theme.colors.onSurfaceVariant }}>
-							{createdAt}
-						</Text>
-					</View>
-
+					<UserHeadingData
+						type="comment"
+						authorId={authorId}
+						authorName={authorName}
+						authorProfilePhoto={authorProfilePhoto}
+						createdAt={createdAt}
+					/>
 					{currentUser?.id === authorId && (
-						<>
+						<View style={styles.headerRight}>
 							<IconButton icon="pencil" size={20} onPress={handleEdit} />
 							<IconButton icon="delete" size={20} onPress={handleDelete} />
-						</>
+						</View>
 					)}
 				</View>
 
@@ -94,7 +94,11 @@ const styles = StyleSheet.create({
 	},
 	header: {
 		flexDirection: 'row',
+		justifyContent: 'space-between',
 		alignItems: 'center'
+	},
+	headerRight: {
+		flexDirection: 'row'
 	},
 	body: {
 		marginLeft: 44
