@@ -1,11 +1,20 @@
+import { UserProfile } from '@features/user/components/UserProfile';
+import { useAuthStore } from '@store/useAuthStore';
 import React from 'react';
-import { View } from 'react-native';
-import { Text } from 'react-native-paper';
 
 export default function ProfileScreen() {
-	return (
-		<View>
-			<Text style={{ color: '#454545' }}>Profile</Text>
-		</View>
-	);
+	const userData = useAuthStore((s) => s.user);
+
+	if (!userData) {
+		return null;
+	}
+
+	const user = {
+		id: userData.id ?? '',
+		name: userData.name ?? '',
+		bio: userData.bio ?? '',
+		profilePhoto: userData.profilePhoto ?? ''
+	};
+
+	return <UserProfile user={user} />;
 }
