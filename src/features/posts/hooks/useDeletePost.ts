@@ -1,4 +1,4 @@
-import { NEWSFEED_PATH } from '@constants/route';
+import { PATHS } from '@constants/route';
 import { deletePost } from '@services/post';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { usePathname, useRouter } from 'expo-router';
@@ -20,7 +20,7 @@ export function useDeletePost(actions?: () => void) {
 
 			actions?.();
 
-			if (pathname !== NEWSFEED_PATH) {
+			if (pathname !== PATHS.NEWSFEED) {
 				router.back();
 			}
 

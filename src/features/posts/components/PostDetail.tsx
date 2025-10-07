@@ -2,11 +2,12 @@ import { ICommentInputRef } from '@features/comments/components/CommentInput';
 import { useAuthStore } from '@store/useAuthStore';
 import React, { RefObject } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
-import { Avatar, IconButton, Text, useTheme } from 'react-native-paper';
+import { IconButton, Text, useTheme } from 'react-native-paper';
 import { useGetPostById } from '../hooks/useGetPostById';
 import { DeletePostButton } from './DeletePostButton';
 import { EditPostButton } from './EditPostButton';
 import { LikePostSingleButton } from './LikePostSingleButton';
+import { UserHeadingData } from './UserHeadingData';
 import { ViewPostLikesButton } from './ViewPostLikesButton';
 
 interface IPostDetails {
@@ -46,15 +47,13 @@ export default function PostDetail({
 		<TouchableWithoutFeedback onPress={() => {}}>
 			<View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
 				<View style={styles.header}>
-					<View style={styles.headerLeft}>
-						<Avatar.Image size={40} source={{ uri: authorProfilePhoto }} />
-						<View style={{ marginLeft: 8 }}>
-							<Text variant="titleMedium">{authorName}</Text>
-							<Text variant="labelMedium" style={{ color: theme.colors.onSurfaceVariant }}>
-								{createdAt}
-							</Text>
-						</View>
-					</View>
+					<UserHeadingData
+						type="post"
+						authorId={authorId}
+						authorName={authorName}
+						authorProfilePhoto={authorProfilePhoto}
+						createdAt={createdAt}
+					/>
 
 					{currentUser?.id === authorId && (
 						<View style={styles.headerRight}>
@@ -94,11 +93,8 @@ const styles = StyleSheet.create({
 	header: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
+		alignItems: 'center',
 		padding: 10
-	},
-	headerLeft: {
-		flexDirection: 'row',
-		alignItems: 'center'
 	},
 	headerRight: {
 		flexDirection: 'row'

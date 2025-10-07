@@ -11,9 +11,10 @@ import { UserProfileInfo } from './UserProfileInfo';
 
 interface IUserProfile {
 	user: Pick<UserProfileData, 'id' | 'name' | 'bio' | 'profilePhoto'>;
+	isFullScreenMode?: boolean;
 }
 
-export function UserProfile({ user }: IUserProfile) {
+export function UserProfile({ user, isFullScreenMode }: IUserProfile) {
 	const theme = useTheme();
 	const insets = useSafeAreaInsets();
 
@@ -45,6 +46,7 @@ export function UserProfile({ user }: IUserProfile) {
 			style={{
 				flex: 1,
 				backgroundColor: theme.colors.background,
+				paddingTop: isFullScreenMode ? insets.top : undefined,
 				paddingBottom: insets.bottom
 			}}
 		>

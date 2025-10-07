@@ -1,4 +1,4 @@
-import { NEWSFEED_PATH } from '@constants/route';
+import { PATHS } from '@constants/route';
 import { updatePost } from '@services/post';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { usePathname } from 'expo-router';
@@ -19,7 +19,7 @@ export function useUpdatePost(actions?: () => void) {
 
 			actions?.();
 
-			if (pathname !== NEWSFEED_PATH) {
+			if (pathname !== PATHS.NEWSFEED) {
 				await queryClient.invalidateQueries({
 					queryKey: ['getPostById']
 				});

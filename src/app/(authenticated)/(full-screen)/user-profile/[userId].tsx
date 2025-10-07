@@ -4,13 +4,13 @@ import { useLocalSearchParams } from 'expo-router';
 import React from 'react';
 
 type UserProfileParams = {
-	id: string;
+	userId: string;
 };
 
 export default function UserProfileScreen() {
-	const { id } = useLocalSearchParams<UserProfileParams>();
+	const { userId } = useLocalSearchParams<UserProfileParams>();
 
-	const { data } = useGetUserProfile(id);
+	const { data } = useGetUserProfile(userId);
 
 	if (!data) {
 		return null;
@@ -23,5 +23,5 @@ export default function UserProfileScreen() {
 		profilePhoto: data.user.profilePhoto
 	};
 
-	return <UserProfile user={user} />;
+	return <UserProfile user={user} isFullScreenMode />;
 }
