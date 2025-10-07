@@ -1,12 +1,12 @@
 import { CommentListModal } from '@features/comments/components/CommentListModal';
 import { CreatePostPreview } from '@features/posts/components/CreatePostPreview';
-import PostListFooter from '@features/posts/components/PostListFooter';
+import { PostList } from '@features/posts/components/PostList';
 import { useGetPostList } from '@features/posts/hooks/useGetPostList';
 import usePostListProps from '@features/posts/hooks/usePostListProps';
 import { usePostDataContext } from '@provider/PostDataProvider';
 import { Post } from '@services/post/types';
 import React from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -44,25 +44,14 @@ export default function NewsfeedScreen() {
 		}
 
 		return (
-			<FlatList<Post>
-				data={posts}
-				keyExtractor={(item, index) => item?.id ?? `post-${index}`}
+			<PostList
+				posts={posts}
 				renderItem={renderItem}
-				contentContainerStyle={{ paddingBottom: 24 }}
-				scrollEnabled
-				keyboardShouldPersistTaps="handled"
-				keyboardDismissMode="on-drag"
-				initialNumToRender={5}
-				maxToRenderPerBatch={10}
-				windowSize={5}
-				removeClippedSubviews
 				onEndReached={onEndReached}
-				onEndReachedThreshold={0.5}
-				refreshing={isFetching}
-				onRefresh={() => refetch()}
-				ListFooterComponent={
-					<PostListFooter isFetchingNextPage={isFetchingNextPage} hasNextPage={hasNextPage} />
-				}
+				refetch={refetch}
+				isFetching={isFetching}
+				isFetchingNextPage={isFetchingNextPage}
+				hasNextPage={hasNextPage}
 			/>
 		);
 	})();

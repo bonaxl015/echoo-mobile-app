@@ -16,3 +16,5 @@ export type UserProfileParams = {
 export type UserCurrentInfoResponse = {
 	user: UserProfileData;
 };
+
+export type UserProfileResponse = UserCurrentInfoResponse;
