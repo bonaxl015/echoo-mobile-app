@@ -7,6 +7,7 @@ export default function FullScreenStackLayout() {
 	return (
 		<Stack
 			screenOptions={{
+				headerShown: false,
 				contentStyle: { backgroundColor: theme.colors.background },
 				animation: 'slide_from_right'
 			}}
@@ -14,7 +15,6 @@ export default function FullScreenStackLayout() {
 			<Stack.Screen
 				name="view-post"
 				options={{
-					headerShown: false,
 					gestureEnabled: true,
 					gestureDirection: 'horizontal'
 				}}
