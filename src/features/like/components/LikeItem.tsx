@@ -1,21 +1,36 @@
+import { PATHS } from '@constants/route';
+import { useRouter } from 'expo-router';
 import React from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { IconButton, Text, useTheme } from 'react-native-paper';
 
 interface ILikeItem {
 	userProfilePhoto: string;
 	userName: string;
+	userId: string;
 }
 
-export function LikeItem({ userProfilePhoto, userName }: ILikeItem) {
+export function LikeItem({ userProfilePhoto, userName, userId }: ILikeItem) {
 	const theme = useTheme();
+	const router = useRouter();
+
+	const handleViewProfile = () => {
+		if (userId) {
+			router.push({
+				pathname: PATHS.VIEW_USER_PROFILE,
+				params: { userId }
+			});
+		}
+	};
 
 	return (
-		<View style={styles.item}>
-			<IconButton icon="thumb-up" size={20} iconColor={theme.colors.primary} />
-			<Image source={{ uri: userProfilePhoto }} style={styles.avatar} />
-			<Text style={styles.name}>{userName}</Text>
-		</View>
+		<TouchableOpacity onPress={handleViewProfile}>
+			<View style={styles.item}>
+				<IconButton icon="thumb-up" size={20} iconColor={theme.colors.primary} />
+				<Image source={{ uri: userProfilePhoto }} style={styles.avatar} />
+				<Text style={styles.name}>{userName}</Text>
+			</View>
+		</TouchableOpacity>
 	);
 }
 
