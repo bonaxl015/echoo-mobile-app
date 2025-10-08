@@ -28,7 +28,13 @@ interface IUseLikeListProps {
 
 export default function useLikeListProps({ hasNextPage, fetchNextPage }: IUseLikeListProps) {
 	const renderItem: ListRenderItem<LikeObject> = useCallback(
-		({ item }) => <LikeItem userProfilePhoto={item.userProfilePhoto} userName={item.userName} />,
+		({ item }) => (
+			<LikeItem
+				userProfilePhoto={item.userProfilePhoto}
+				userName={item.userName}
+				userId={item.userId}
+			/>
+		),
 		[]
 	);
 
