@@ -1,27 +1,22 @@
 import { CustomToast } from '@components/Toast';
 import { AppQueryProvider } from '@provider/QueryClientProvider';
+import { useThemeStore } from '@store/useThemeStore';
 import { darkTheme, lightTheme } from '@theme/paperTheme';
 import { ColorScheme } from '@theme/types';
 import { useFonts } from 'expo-font';
 import { Slot, SplashScreen } from 'expo-router';
 import React, { useEffect } from 'react';
-import {
-	Keyboard,
-	KeyboardAvoidingView,
-	Platform,
-	TouchableWithoutFeedback,
-	useColorScheme
-} from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { PaperProvider, Portal } from 'react-native-paper';
 
 export default function RootLayout() {
-	const colorScheme = useColorScheme();
+	const mode = useThemeStore((s) => s.mode);
 	const [loaded] = useFonts({
 		SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf')
 	});
 
-	const theme = colorScheme === ColorScheme.DARK ? darkTheme : lightTheme;
+	const theme = mode === ColorScheme.DARK ? darkTheme : lightTheme;
 
 	useEffect(() => {
 		if (loaded) {
