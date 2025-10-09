@@ -18,3 +18,19 @@ export type UserCurrentInfoResponse = {
 };
 
 export type UserProfileResponse = UserCurrentInfoResponse;
+
+export type UserProfileUpdateParams = {
+	bio?: string;
+	name?: string;
+	profilePhoto?: string;
+};
+
+export type UserProfileUpdateResponse = UserCurrentInfoResponse;
+
+export type UserDeleteParams = {
+	id: string;
+};
+
+export type UserDeleteResponse = {
+	delete: boolean;
+};
