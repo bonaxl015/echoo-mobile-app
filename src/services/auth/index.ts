@@ -17,9 +17,13 @@ export async function submitLoginForm(data: LoginFormData) {
 	try {
 		const res = await apiClient.post<LoginResponse>(AUTH_API_URL.LOGIN, data);
 
+		if (!res) {
+			throw new Error('User does not exist');
+		}
+
 		return res.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}

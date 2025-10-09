@@ -15,17 +15,20 @@ export function useLogin() {
 	return useMutation({
 		mutationFn: submitLoginForm,
 		onSuccess: async (data) => {
-			setToken(data?.token ?? null);
-			const userData = await queryClient.fetchQuery({
-				queryKey: ['getCurrentUserInfo'],
-				queryFn: getUserCurrentInfo
-			});
+			if (data) {
+				setToken(data.token);
 
-			if (userData?.user) {
-				setUser(userData?.user);
+				const userData = await queryClient.fetchQuery({
+					queryKey: ['getCurrentUserInfo'],
+					queryFn: getUserCurrentInfo
+				});
+
+				if (userData?.user) {
+					setUser(userData?.user);
+				}
+
+				router.replace(PATHS.NEWSFEED);
 			}
-
-			router.replace(PATHS.NEWSFEED);
 		},
 		onError: (error) => {
 			Toast.show({

@@ -16,6 +16,10 @@ export async function getUserCurrentInfo() {
 	try {
 		const res = await apiClient.get<UserCurrentInfoResponse>(USER_API_URL.INFO);
 
+		if (!res) {
+			throw new Error('User not found');
+		}
+
 		return res.data;
 	} catch (error) {
 		if (error instanceof AxiosError) {
