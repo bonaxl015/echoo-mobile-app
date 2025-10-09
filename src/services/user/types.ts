@@ -25,6 +25,10 @@ export type UserProfileUpdateParams = {
 	profilePhoto?: string;
 };
 
+export type UserUpdateProfilePhotoParams = {
+	fileUri: string;
+};
+
 export type UserProfileUpdateResponse = UserCurrentInfoResponse;
 
 export type UserDeleteParams = {

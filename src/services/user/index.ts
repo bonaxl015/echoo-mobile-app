@@ -7,7 +7,8 @@ import {
 	UserProfileParams,
 	UserProfileResponse,
 	UserProfileUpdateParams,
-	UserProfileUpdateResponse
+	UserProfileUpdateResponse,
+	UserUpdateProfilePhotoParams
 } from './types';
 import { USER_API_URL } from './url';
 
@@ -42,6 +43,38 @@ export async function getUserProfile(data: UserProfileParams) {
 export async function updateUserProfile(data: UserProfileUpdateParams) {
 	try {
 		const res = await apiClient.patch<UserProfileUpdateResponse>(USER_API_URL.UPDATE, data);
+
+		return res.data;
+	} catch (error) {
+		if (error instanceof AxiosError) {
+			throw new Error(error.message);
+		}
+	}
+}
+
+export async function updateUserProfilePhoto(data: UserUpdateProfilePhotoParams) {
+	const formData = new FormData();
+
+	const filename = data.fileUri.split('/').pop() ?? 'profile.jpg';
+	const match = /\.(\w+)$/.exec(filename);
+	const fileType = match ? `image/${match[1]}` : 'image';
+
+	formData.append('photo', {
+		uri: data.fileUri,
+		type: fileType,
+		name: filename
+	} as any);
+
+	try {
+		const res = await apiClient.patch<UserProfileUpdateResponse>(
+			USER_API_URL.UPLOAD_PROFILE_PHOTO,
+			formData,
+			{
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			}
+		);
 
 		return res.data;
 	} catch (error) {
