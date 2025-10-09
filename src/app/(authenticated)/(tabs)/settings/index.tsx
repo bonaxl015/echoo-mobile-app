@@ -1,10 +1,13 @@
 import { PATHS } from '@constants/route';
 import { useLogout } from '@features/auth/hooks/useLogout';
+import DeleteUserDialog, {
+	ConfirmUserDeleteDialogRef
+} from '@features/user/components/DeleteUserDialog';
 import { useAuthStore } from '@store/useAuthStore';
 import { useThemeStore } from '@store/useThemeStore';
 import { ColorScheme } from '@theme/types';
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { useRef } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Avatar, List, Switch, Text, useTheme } from 'react-native-paper';
 
@@ -14,6 +17,7 @@ export default function SettingsScreen() {
 	const logoutMutation = useLogout();
 	const { user } = useAuthStore();
 	const { mode, toggleMode } = useThemeStore();
+	const deleteUserDialogRef = useRef<ConfirmUserDeleteDialogRef>(null);
 
 	const redirectToProfile = () => {
 		router.push(PATHS.VIEW_USER_PROFILE_TAB);
@@ -59,7 +63,7 @@ export default function SettingsScreen() {
 					contentStyle={styles.listContent}
 					titleStyle={{ color: theme.colors.error }}
 					left={(props) => <List.Icon {...props} icon="delete" />}
-					onPress={() => {}}
+					onPress={() => deleteUserDialogRef.current?.openDialog()}
 				/>
 
 				{/* Logout */}
@@ -71,6 +75,9 @@ export default function SettingsScreen() {
 					onPress={() => logoutMutation.mutate()}
 				/>
 			</ScrollView>
+
+			{/* Delete user confirmation dialog */}
+			<DeleteUserDialog ref={deleteUserDialogRef} />
 		</View>
 	);
 }
