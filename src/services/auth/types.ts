@@ -23,3 +23,5 @@ export type ForgotPasswordResponse = {
 };
 
 export type ResetPasswordResponse = ForgotPasswordResponse;
+
+export type LogoutResponse = ForgotPasswordResponse;

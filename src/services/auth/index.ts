@@ -5,6 +5,7 @@ import {
 	ForgotPasswordResponse,
 	LoginFormData,
 	LoginResponse,
+	LogoutResponse,
 	RegisterFormData,
 	RegisterResponse,
 	ResetPasswordFormData,
@@ -51,6 +52,18 @@ export async function submitForgotPasswordForm(data: ForgotPasswordFormData) {
 export async function submitResetPasswordForm(data: ResetPasswordFormData) {
 	try {
 		const res = await apiClient.post<ResetPasswordResponse>(AUTH_API_URL.RESET_PASSWORD, data);
+
+		return res.data;
+	} catch (error) {
+		if (error instanceof AxiosError) {
+			throw new Error(error.message);
+		}
+	}
+}
+
+export async function logoutUser() {
+	try {
+		const res = await apiClient.post<LogoutResponse>(AUTH_API_URL.LOGOUT);
 
 		return res.data;
 	} catch (error) {
