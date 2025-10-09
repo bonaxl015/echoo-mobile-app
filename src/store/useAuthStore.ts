@@ -3,14 +3,14 @@ import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
 interface User {
-	id?: string;
-	name?: string;
-	bio?: string;
-	profilePhoto?: string;
-	email?: string;
-	createdAt?: string;
-	updatedAt?: string;
-	profilePhotoPublicId?: string;
+	id: string;
+	name: string;
+	bio: string;
+	profilePhoto: string;
+	email: string;
+	createdAt: string;
+	updatedAt: string;
+	profilePhotoPublicId: string;
 }
 
 interface AuthState {

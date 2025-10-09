@@ -1,6 +1,14 @@
 import apiClient from '@services/apiClient';
 import { AxiosError } from 'axios';
-import { UserCurrentInfoResponse, UserProfileParams, UserProfileResponse } from './types';
+import {
+	UserCurrentInfoResponse,
+	UserDeleteParams,
+	UserDeleteResponse,
+	UserProfileParams,
+	UserProfileResponse,
+	UserProfileUpdateParams,
+	UserProfileUpdateResponse
+} from './types';
 import { USER_API_URL } from './url';
 
 export async function getUserCurrentInfo() {
@@ -22,6 +30,30 @@ export async function getUserProfile(data: UserProfileParams) {
 		const res = await apiClient.get<UserProfileResponse>(
 			`${USER_API_URL.PROFILE}?${urlStringParams.toString()}`
 		);
+
+		return res.data;
+	} catch (error) {
+		if (error instanceof AxiosError) {
+			throw new Error(error.message);
+		}
+	}
+}
+
+export async function updateUserProfile(data: UserProfileUpdateParams) {
+	try {
+		const res = await apiClient.patch<UserProfileUpdateResponse>(USER_API_URL.UPDATE, data);
+
+		return res.data;
+	} catch (error) {
+		if (error instanceof AxiosError) {
+			throw new Error(error.message);
+		}
+	}
+}
+
+export async function deleteUser(data: UserDeleteParams) {
+	try {
+		const res = await apiClient.delete<UserDeleteResponse>(USER_API_URL.DELETE, { data });
 
 		return res.data;
 	} catch (error) {

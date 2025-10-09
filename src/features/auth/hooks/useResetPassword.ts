@@ -1,3 +1,4 @@
+import { PATHS } from '@constants/route';
 import { submitResetPasswordForm } from '@services/auth';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
@@ -6,7 +7,7 @@ import Toast from 'react-native-toast-message';
 export function useResetPassword() {
 	const router = useRouter();
 
-	const resetPasswordMutation = useMutation({
+	return useMutation({
 		mutationFn: submitResetPasswordForm,
 		onSuccess: (data) => {
 			Toast.show({
@@ -15,7 +16,8 @@ export function useResetPassword() {
 				text2: data?.message,
 				position: 'top'
 			});
-			router.replace('/auth/login');
+
+			router.replace(PATHS.LOGIN);
 		},
 		onError: (error) => {
 			Toast.show({
@@ -26,6 +28,4 @@ export function useResetPassword() {
 			});
 		}
 	});
-
-	return resetPasswordMutation;
 }
