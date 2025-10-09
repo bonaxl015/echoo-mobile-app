@@ -13,7 +13,21 @@ export default function FullScreenStackLayout() {
 			}}
 		>
 			<Stack.Screen
-				name="view-post"
+				name="(post)/view-post"
+				options={{
+					gestureEnabled: true,
+					gestureDirection: 'horizontal'
+				}}
+			/>
+			<Stack.Screen
+				name="(user)/user-profile/[userId]"
+				options={{
+					gestureEnabled: true,
+					gestureDirection: 'horizontal'
+				}}
+			/>
+			<Stack.Screen
+				name="(user)/edit-profile"
 				options={{
 					gestureEnabled: true,
 					gestureDirection: 'horizontal'
