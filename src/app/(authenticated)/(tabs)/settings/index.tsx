@@ -16,6 +16,10 @@ export default function SettingsScreen() {
 		router.push(PATHS.VIEW_USER_PROFILE_TAB);
 	};
 
+	const redirectToEditUser = () => {
+		router.push(PATHS.EDIT_PROFILE);
+	};
+
 	return (
 		<View style={{ flex: 1, backgroundColor: theme.colors.background }}>
 			<ScrollView contentContainerStyle={{ padding: 16 }}>
@@ -33,7 +37,7 @@ export default function SettingsScreen() {
 					containerStyle={[styles.listItem, { backgroundColor: theme.colors.surface }]}
 					contentStyle={styles.listContent}
 					left={(props) => <List.Icon {...props} icon="account-edit" />}
-					onPress={() => {}}
+					onPress={redirectToEditUser}
 				/>
 
 				{/* Theme toggle */}
