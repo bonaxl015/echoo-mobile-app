@@ -1,3 +1,4 @@
+import { PATHS } from '@constants/route';
 import { submitRegistrationForm } from '@services/auth';
 import { getUserCurrentInfo } from '@services/user';
 import { useAuthStore } from '@store/useAuthStore';
@@ -11,7 +12,7 @@ export function useRegister() {
 	const setUser = useAuthStore((s) => s.setUser);
 	const queryClient = useQueryClient();
 
-	const registerMutation = useMutation({
+	return useMutation({
 		mutationFn: submitRegistrationForm,
 		onSuccess: async (data) => {
 			setToken(data?.token ?? null);
@@ -20,8 +21,11 @@ export function useRegister() {
 				queryFn: getUserCurrentInfo
 			});
 
-			setUser(userData?.user ?? null);
-			router.replace('/(authenticated)/(tabs)/newsfeed');
+			if (userData?.user) {
+				setUser(userData.user);
+			}
+
+			router.replace(PATHS.NEWSFEED);
 		},
 		onError: (error) => {
 			Toast.show({
@@ -32,6 +36,4 @@ export function useRegister() {
 			});
 		}
 	});
-
-	return registerMutation;
 }
