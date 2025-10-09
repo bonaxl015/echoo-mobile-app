@@ -1,6 +1,8 @@
 import { PATHS } from '@constants/route';
 import { useLogout } from '@features/auth/hooks/useLogout';
 import { useAuthStore } from '@store/useAuthStore';
+import { useThemeStore } from '@store/useThemeStore';
+import { ColorScheme } from '@theme/types';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
@@ -9,8 +11,9 @@ import { Avatar, List, Switch, Text, useTheme } from 'react-native-paper';
 export default function SettingsScreen() {
 	const theme = useTheme();
 	const router = useRouter();
-	const { user } = useAuthStore();
 	const logoutMutation = useLogout();
+	const { user } = useAuthStore();
+	const { mode, toggleMode } = useThemeStore();
 
 	const redirectToProfile = () => {
 		router.push(PATHS.VIEW_USER_PROFILE_TAB);
@@ -46,7 +49,7 @@ export default function SettingsScreen() {
 					containerStyle={[styles.listItem, { backgroundColor: theme.colors.surface }]}
 					contentStyle={styles.listContent}
 					left={(props) => <List.Icon {...props} icon="theme-light-dark" />}
-					right={() => <Switch value={true} />}
+					right={() => <Switch value={mode === ColorScheme.DARK} onValueChange={toggleMode} />}
 				/>
 
 				{/* Delete account */}
