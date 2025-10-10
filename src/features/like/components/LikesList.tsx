@@ -1,6 +1,7 @@
 import { LikeObject } from '@services/like/types';
+import { FlashList } from '@shopify/flash-list';
 import React from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
 import { QUERY_TYPE, useGetLikeList } from '../hooks/useGetLikeList';
 import useLikeListProps from '../hooks/useLikeListProps';
@@ -32,16 +33,13 @@ export function LikesList({ id, type }: ILikesList) {
 		}
 
 		return (
-			<FlatList
+			<FlashList
 				data={likes}
 				keyExtractor={(item, index) => item?.id ?? `like-${index}`}
 				renderItem={renderItem}
 				onEndReached={onEndReached}
 				onEndReachedThreshold={5}
 				keyboardShouldPersistTaps="handled"
-				initialNumToRender={5}
-				maxToRenderPerBatch={10}
-				windowSize={5}
 				contentContainerStyle={{ paddingBottom: 20 }}
 				removeClippedSubviews
 			/>

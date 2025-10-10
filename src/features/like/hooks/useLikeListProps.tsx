@@ -1,11 +1,11 @@
 import { CommentLikeListResponse, LikeObject, PostLikeListResponse } from '@services/like/types';
+import { ListRenderItem } from '@shopify/flash-list';
 import {
 	FetchNextPageOptions,
 	InfiniteData,
 	InfiniteQueryObserverResult
 } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { ListRenderItem } from 'react-native';
 import { LikeItem } from '../components/LikeItem';
 
 interface IUseLikeListProps {

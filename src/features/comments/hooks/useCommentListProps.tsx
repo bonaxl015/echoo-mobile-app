@@ -1,13 +1,13 @@
 import { ICommentInputRef } from '@features/comments/components/CommentInput';
 import { CommentItem } from '@features/comments/components/CommentItem';
 import { Comment, CommentListResponse } from '@services/comment/types';
+import { ListRenderItem } from '@shopify/flash-list';
 import {
 	FetchNextPageOptions,
 	InfiniteData,
 	InfiniteQueryObserverResult
 } from '@tanstack/react-query';
 import { RefObject, useCallback } from 'react';
-import { ListRenderItem } from 'react-native';
 
 interface IUseCommentListProps {
 	postId: string;

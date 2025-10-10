@@ -4,9 +4,9 @@ import useCommentListProps from '@features/comments/hooks/useCommentListProps';
 import { useGetCommentList } from '@features/comments/hooks/useGetComments';
 import PostDetail from '@features/posts/components/PostDetail';
 import { Comment } from '@services/comment/types';
+import { FlashList } from '@shopify/flash-list';
 import { useLocalSearchParams } from 'expo-router';
 import React, { useRef } from 'react';
-import { FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ViewPostScreen() {
@@ -27,7 +27,7 @@ export default function ViewPostScreen() {
 	return (
 		<>
 			<SafeAreaView style={{ flex: 1 }}>
-				<FlatList
+				<FlashList
 					data={comments}
 					keyExtractor={(item, index) => item?.id ?? `comment-${index}`}
 					renderItem={renderItem}
@@ -35,9 +35,6 @@ export default function ViewPostScreen() {
 					onEndReachedThreshold={5}
 					keyboardShouldPersistTaps="handled"
 					keyboardDismissMode="on-drag"
-					initialNumToRender={5}
-					maxToRenderPerBatch={10}
-					windowSize={5}
 					contentContainerStyle={{ paddingBottom: 20 }}
 					removeClippedSubviews
 					refreshing={isFetching}
