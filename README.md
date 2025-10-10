@@ -66,7 +66,7 @@ This app includes core social media features such as authentication, posts, comm
 1. **Clone the repository**
 
 ```bash
-gli clone https://github.com/bonaxl015/echoo-mobile-app.git
+git clone https://github.com/bonaxl015/echoo-mobile-app.git
 cd echoo-mobile-app
 ```
 
