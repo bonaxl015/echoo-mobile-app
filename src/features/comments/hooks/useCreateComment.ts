@@ -8,22 +8,17 @@ export function useCreateComment() {
 	return useMutation({
 		mutationFn: createComment,
 		onSuccess: async (data) => {
-			Toast.show({
-				type: 'success',
-				text1: 'Success',
-				text2: 'Comment added successfully'
-			});
+			if (data) {
+				Toast.show({
+					type: 'success',
+					text1: 'Success',
+					text2: 'Comment added successfully'
+				});
 
-			await queryClient.invalidateQueries({
-				queryKey: ['getCommentList', data?.comment.postId]
-			});
-		},
-		onError: () => {
-			Toast.show({
-				type: 'error',
-				text1: 'Error',
-				text2: 'Could not add comment'
-			});
+				await queryClient.invalidateQueries({
+					queryKey: ['getCommentList', data.comment.postId]
+				});
+			}
 		}
 	});
 }

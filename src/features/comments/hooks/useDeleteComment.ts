@@ -7,25 +7,20 @@ export function useDeleteComment(postId: string, action?: () => void) {
 
 	return useMutation({
 		mutationFn: deleteComment,
-		onSuccess: async () => {
-			Toast.show({
-				type: 'success',
-				text1: 'Success',
-				text2: 'Comment deleted successfully'
-			});
+		onSuccess: async (data) => {
+			if (data) {
+				Toast.show({
+					type: 'success',
+					text1: 'Success',
+					text2: 'Comment deleted successfully'
+				});
 
-			action?.();
+				action?.();
 
-			await queryClient.invalidateQueries({
-				queryKey: ['getCommentList', postId]
-			});
-		},
-		onError: () => {
-			Toast.show({
-				type: 'error',
-				text1: 'Error',
-				text2: 'Could not delete comment'
-			});
+				await queryClient.invalidateQueries({
+					queryKey: ['getCommentList', postId]
+				});
+			}
 		}
 	});
 }

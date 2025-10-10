@@ -11,23 +11,18 @@ export function useLogout() {
 
 	return useMutation({
 		mutationFn: logoutUser,
-		onSuccess: async () => {
-			logout();
+		onSuccess: async (data) => {
+			if (data) {
+				logout();
 
-			router.replace(PATHS.LOGIN);
+				router.replace(PATHS.LOGIN);
 
-			Toast.show({
-				type: 'success',
-				text1: 'Success',
-				text2: 'You have been logged out'
-			});
-		},
-		onError: (error) => {
-			Toast.show({
-				type: 'error',
-				text1: 'Logout Failed',
-				text2: error.message
-			});
+				Toast.show({
+					type: 'success',
+					text1: 'Success',
+					text2: 'You have been logged out'
+				});
+			}
 		}
 	});
 }

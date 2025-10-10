@@ -1,5 +1,4 @@
 import apiClient from '@services/apiClient';
-import { AxiosError } from 'axios';
 import {
 	ForgotPasswordFormData,
 	ForgotPasswordResponse,
@@ -17,11 +16,7 @@ export async function submitLoginForm(data: LoginFormData) {
 	try {
 		const res = await apiClient.post<LoginResponse>(AUTH_API_URL.LOGIN, data);
 
-		if (!res) {
-			throw new Error('User does not exist');
-		}
-
-		return res.data;
+		return res?.data;
 	} catch (error) {
 		if (error instanceof Error) {
 			throw new Error(error.message);
@@ -33,9 +28,9 @@ export async function submitRegistrationForm(data: RegisterFormData) {
 	try {
 		const res = await apiClient.post<RegisterResponse>(AUTH_API_URL.REGISTER, data);
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -45,9 +40,9 @@ export async function submitForgotPasswordForm(data: ForgotPasswordFormData) {
 	try {
 		const res = await apiClient.post<ForgotPasswordResponse>(AUTH_API_URL.FORGOT_PASSWORD, data);
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -57,9 +52,9 @@ export async function submitResetPasswordForm(data: ResetPasswordFormData) {
 	try {
 		const res = await apiClient.post<ResetPasswordResponse>(AUTH_API_URL.RESET_PASSWORD, data);
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -69,9 +64,9 @@ export async function logoutUser() {
 	try {
 		const res = await apiClient.post<LogoutResponse>(AUTH_API_URL.LOGOUT);
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}

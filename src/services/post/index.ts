@@ -1,7 +1,6 @@
 import apiClient from '@services/apiClient';
 import { DEFAULT_PAGE_SIZE, DEFAULT_PAGE_SIZE_STRING } from '@services/constants';
 import dateFormatter from '@utils/dateFormatter';
-import { AxiosError } from 'axios';
 import {
 	CreatePostResponse,
 	DeletePostResponse,
@@ -29,7 +28,7 @@ export async function getPostList({ pageParam = 1 }) {
 		);
 
 		const dateFormattedPosts = res.data.posts.length
-			? res.data.posts.map((item) => ({
+			? res?.data.posts.map((item) => ({
 					...item,
 					createdAt: dateFormatter(item.createdAt),
 					updatedAt: dateFormatter(item.updatedAt)
@@ -38,13 +37,10 @@ export async function getPostList({ pageParam = 1 }) {
 
 		return {
 			posts: dateFormattedPosts,
-			nextPage:
-				res.data.posts.length && res.data.posts.length === DEFAULT_PAGE_SIZE
-					? pageParam + 1
-					: undefined
+			nextPage: res?.data.posts.length === DEFAULT_PAGE_SIZE ? pageParam + 1 : undefined
 		};
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -63,7 +59,7 @@ export async function getPostListByUser({ userId, pageParam = 1 }: PostByUserReq
 		);
 
 		const dateFormattedPosts = res.data.posts.length
-			? res.data.posts.map((item) => ({
+			? res?.data.posts.map((item) => ({
 					...item,
 					createdAt: dateFormatter(item.createdAt),
 					updatedAt: dateFormatter(item.updatedAt)
@@ -72,13 +68,10 @@ export async function getPostListByUser({ userId, pageParam = 1 }: PostByUserReq
 
 		return {
 			posts: dateFormattedPosts,
-			nextPage:
-				res.data.posts.length && res.data.posts.length === DEFAULT_PAGE_SIZE
-					? pageParam + 1
-					: undefined
+			nextPage: res?.data.posts.length === DEFAULT_PAGE_SIZE ? pageParam + 1 : undefined
 		};
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -94,9 +87,9 @@ export async function getPostById(data: IGetPostByIdService) {
 			`${POST_API_URL.GET_POST_BY_ID}?${urlStringParams.toString()}`
 		);
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -106,9 +99,9 @@ export async function createPost(data: ICreatePostService) {
 	try {
 		const res = await apiClient.post<CreatePostResponse>(POST_API_URL.CREATE_POST, data);
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -118,9 +111,9 @@ export async function updatePost(data: IUpdatePostService) {
 	try {
 		const res = await apiClient.patch<UpdatePostResponse>(POST_API_URL.UPDATE_POST, data);
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -130,9 +123,9 @@ export async function deletePost(data: IDeletePostService) {
 	try {
 		const res = await apiClient.delete<DeletePostResponse>(POST_API_URL.DELETE_POST, { data });
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}

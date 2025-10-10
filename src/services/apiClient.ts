@@ -1,4 +1,5 @@
 import { ENV } from '@config/env';
+import { PATHS } from '@constants/route';
 import { STATUS_CODE } from '@constants/statusCodes';
 import { useAuthStore } from '@store/useAuthStore';
 import axios from 'axios';
@@ -25,18 +26,25 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
 	(response) => response,
 	(error) => {
+		console.log('1111111111', error.response?.data);
 		if (error.response?.status === STATUS_CODE.UNAUTHORIZED) {
 			const logout = useAuthStore.getState().logout;
 
 			Toast.show({
 				type: 'error',
-				text1: 'Session expired',
-				text2: 'Please log in again'
+				text1: 'Unauthorized',
+				text2: error.response?.data.message || 'Please log in again'
 			});
 
 			logout();
 
-			router.replace('/auth/login');
+			router.replace(PATHS.LOGIN);
+		} else {
+			Toast.show({
+				type: 'error',
+				text1: 'Error',
+				text2: error.response?.data.message ?? error.message
+			});
 		}
 	}
 );

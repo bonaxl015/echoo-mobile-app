@@ -1,5 +1,4 @@
 import apiClient from '@services/apiClient';
-import { AxiosError } from 'axios';
 import {
 	UserCurrentInfoResponse,
 	UserDeleteParams,
@@ -16,13 +15,9 @@ export async function getUserCurrentInfo() {
 	try {
 		const res = await apiClient.get<UserCurrentInfoResponse>(USER_API_URL.INFO);
 
-		if (!res) {
-			throw new Error('User not found');
-		}
-
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -36,9 +31,9 @@ export async function getUserProfile(data: UserProfileParams) {
 			`${USER_API_URL.PROFILE}?${urlStringParams.toString()}`
 		);
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -48,9 +43,9 @@ export async function updateUserProfile(data: UserProfileUpdateParams) {
 	try {
 		const res = await apiClient.patch<UserProfileUpdateResponse>(USER_API_URL.UPDATE, data);
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -80,9 +75,9 @@ export async function updateUserProfilePhoto(data: UserUpdateProfilePhotoParams)
 			}
 		);
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -92,9 +87,9 @@ export async function deleteUser(data: UserDeleteParams) {
 	try {
 		const res = await apiClient.delete<UserDeleteResponse>(USER_API_URL.DELETE, { data });
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
