@@ -1,7 +1,6 @@
 import apiClient from '@services/apiClient';
 import { DEFAULT_PAGE_SIZE, DEFAULT_PAGE_SIZE_STRING } from '@services/constants';
 import dateFormatter from '@utils/dateFormatter';
-import { AxiosError } from 'axios';
 import {
 	CommentLikeListRequest,
 	CommentLikeListResponse,
@@ -31,7 +30,7 @@ export async function getPostLikeList({ postId, pageParam = 1 }: PostLikeListReq
 		);
 
 		const dateFormattedLikes = res.data.likes.length
-			? res.data.likes.map((item) => ({
+			? res?.data.likes.map((item) => ({
 					...item,
 					createdAt: dateFormatter(item.createdAt),
 					updatedAt: dateFormatter(item.updatedAt)
@@ -40,13 +39,10 @@ export async function getPostLikeList({ postId, pageParam = 1 }: PostLikeListReq
 
 		return {
 			likes: dateFormattedLikes,
-			nextPage:
-				res.data.likes.length && res.data.likes.length === DEFAULT_PAGE_SIZE
-					? pageParam + 1
-					: undefined
+			nextPage: res?.data.likes.length === DEFAULT_PAGE_SIZE ? pageParam + 1 : undefined
 		};
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -65,7 +61,7 @@ export async function getCommentLikeList({ commentId, pageParam = 1 }: CommentLi
 		);
 
 		const dateFormattedLikes = res.data.likes.length
-			? res.data.likes.map((item) => ({
+			? res?.data.likes.map((item) => ({
 					...item,
 					createdAt: dateFormatter(item.createdAt),
 					updatedAt: dateFormatter(item.updatedAt)
@@ -74,13 +70,10 @@ export async function getCommentLikeList({ commentId, pageParam = 1 }: CommentLi
 
 		return {
 			likes: dateFormattedLikes,
-			nextPage:
-				res.data.likes.length && res.data.likes.length === DEFAULT_PAGE_SIZE
-					? pageParam + 1
-					: undefined
+			nextPage: res?.data.likes.length === DEFAULT_PAGE_SIZE ? pageParam + 1 : undefined
 		};
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -90,9 +83,9 @@ export async function likePost(data: PostLikeRequest) {
 	try {
 		const res = await apiClient.post<PostLikeResponse>(LIKE_API_URL.LIKE_POST, data);
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -102,9 +95,9 @@ export async function unlikePost(data: PostUnlikeRequest) {
 	try {
 		const res = await apiClient.delete<PostUnlikeResponse>(LIKE_API_URL.LIKE_POST, { data });
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -114,9 +107,9 @@ export async function likeComment(data: CommentLikeRequest) {
 	try {
 		const res = await apiClient.post<CommentLikeResponse>(LIKE_API_URL.LIKE_COMMENT, data);
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
@@ -126,9 +119,9 @@ export async function unlikeComment(data: CommentUnlikeRequest) {
 	try {
 		const res = await apiClient.delete<CommentUnlikeResponse>(LIKE_API_URL.LIKE_COMMENT, { data });
 
-		return res.data;
+		return res?.data;
 	} catch (error) {
-		if (error instanceof AxiosError) {
+		if (error instanceof Error) {
 			throw new Error(error.message);
 		}
 	}
