@@ -1,4 +1,4 @@
-import { PATHS } from '@constants/route';
+import { NORMALIZED_PATHS } from '@constants/route';
 import { deletePost } from '@services/post';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { usePathname, useRouter } from 'expo-router';
@@ -11,29 +11,24 @@ export function useDeletePost(actions?: () => void) {
 
 	return useMutation({
 		mutationFn: deletePost,
-		onSuccess: async () => {
-			Toast.show({
-				type: 'success',
-				text1: 'Success',
-				text2: 'Post deleted successfully'
-			});
+		onSuccess: async (data) => {
+			if (data) {
+				Toast.show({
+					type: 'success',
+					text1: 'Success',
+					text2: 'Post deleted successfully'
+				});
 
-			actions?.();
+				actions?.();
 
-			if (pathname !== PATHS.NEWSFEED) {
-				router.back();
+				if (pathname !== NORMALIZED_PATHS.NEWSFEED) {
+					router.back();
+				}
+
+				await queryClient.invalidateQueries({
+					queryKey: ['getPostList']
+				});
 			}
-
-			await queryClient.invalidateQueries({
-				queryKey: ['getPostList']
-			});
-		},
-		onError: () => {
-			Toast.show({
-				type: 'error',
-				text1: 'Error',
-				text2: 'Could not delete post'
-			});
 		}
 	});
 }

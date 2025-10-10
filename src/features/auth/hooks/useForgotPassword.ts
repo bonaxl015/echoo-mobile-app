@@ -11,22 +11,16 @@ export function useForgotPassword() {
 	const forgotPasswordMutation = useMutation({
 		mutationFn: submitForgotPasswordForm,
 		onSuccess: (data) => {
-			Toast.show({
-				type: 'success',
-				text1: 'Email Sent',
-				text2: data?.message,
-				position: 'top'
-			});
-			setIsEmailSent(true);
-			startResendTimer();
-		},
-		onError: (error) => {
-			Toast.show({
-				type: 'error',
-				text1: 'Request Failed',
-				text2: error.message,
-				position: 'top'
-			});
+			if (data) {
+				Toast.show({
+					type: 'success',
+					text1: 'Email Sent',
+					text2: data.message,
+					position: 'top'
+				});
+				setIsEmailSent(true);
+				startResendTimer();
+			}
 		}
 	});
 
@@ -40,14 +34,6 @@ export function useForgotPassword() {
 				position: 'top'
 			});
 			startResendTimer();
-		},
-		onError: () => {
-			Toast.show({
-				type: 'error',
-				text1: 'Request Failed',
-				text2: 'Could not resend reset email',
-				position: 'top'
-			});
 		}
 	});
 

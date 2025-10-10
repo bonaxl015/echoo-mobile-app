@@ -1,4 +1,4 @@
-import { PATHS } from '@constants/route';
+import { NORMALIZED_PATHS, PATHS } from '@constants/route';
 import { updateUserProfile, updateUserProfilePhoto } from '@services/user';
 import { useAuthStore } from '@store/useAuthStore';
 import { useMutation } from '@tanstack/react-query';
@@ -11,7 +11,13 @@ export function useUpdateUserProfile() {
 	const pathname = usePathname();
 
 	const redirectToSettingsTab = () => {
-		if (pathname !== PATHS.USER_SETTINGS_NORMALIZED) {
+		if (pathname !== NORMALIZED_PATHS.USER_SETTINGS) {
+			Toast.show({
+				type: 'success',
+				text1: 'Success',
+				text2: 'User data updated successfully'
+			});
+
 			router.push(PATHS.USER_SETTINGS);
 		}
 	};
@@ -19,42 +25,22 @@ export function useUpdateUserProfile() {
 	const updateUserProfileMutation = useMutation({
 		mutationFn: updateUserProfile,
 		onSuccess: async (data) => {
-			Toast.show({
-				type: 'success',
-				text1: 'Success',
-				text2: 'User data updated successfully'
-			});
-
-			if (data?.user) {
+			if (data) {
 				setUser(data.user);
-			}
 
-			redirectToSettingsTab();
-		},
-		onError: () => {
-			Toast.show({
-				type: 'error',
-				text1: 'Error',
-				text2: 'Could not update user data'
-			});
+				redirectToSettingsTab();
+			}
 		}
 	});
 
 	const updateUserProfilePhotoMutation = useMutation({
 		mutationFn: updateUserProfilePhoto,
 		onSuccess: async (data) => {
-			if (data?.user) {
+			if (data) {
 				setUser(data.user);
-			}
 
-			redirectToSettingsTab();
-		},
-		onError: () => {
-			Toast.show({
-				type: 'error',
-				text1: 'Error',
-				text2: 'Could not update user profile photo'
-			});
+				redirectToSettingsTab();
+			}
 		}
 	});
 

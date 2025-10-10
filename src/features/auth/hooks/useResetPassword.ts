@@ -10,22 +10,16 @@ export function useResetPassword() {
 	return useMutation({
 		mutationFn: submitResetPasswordForm,
 		onSuccess: (data) => {
-			Toast.show({
-				type: 'success',
-				text1: 'Password Reset',
-				text2: data?.message,
-				position: 'top'
-			});
+			if (data) {
+				Toast.show({
+					type: 'success',
+					text1: 'Password Reset',
+					text2: data.message,
+					position: 'top'
+				});
 
-			router.replace(PATHS.LOGIN);
-		},
-		onError: (error) => {
-			Toast.show({
-				type: 'error',
-				text1: 'Error',
-				text2: error.message,
-				position: 'top'
-			});
+				router.replace(PATHS.LOGIN);
+			}
 		}
 	});
 }

@@ -11,23 +11,18 @@ export function useDeleteUser() {
 
 	return useMutation({
 		mutationFn: deleteUser,
-		onSuccess: async () => {
-			logout();
+		onSuccess: async (data) => {
+			if (data) {
+				logout();
 
-			router.replace(PATHS.LOGIN);
+				router.replace(PATHS.LOGIN);
 
-			Toast.show({
-				type: 'success',
-				text1: 'Success',
-				text2: 'Your account has been deleted successfully'
-			});
-		},
-		onError: () => {
-			Toast.show({
-				type: 'error',
-				text1: 'Error',
-				text2: 'Could not delete your account'
-			});
+				Toast.show({
+					type: 'success',
+					text1: 'Success',
+					text2: 'Your account has been deleted successfully'
+				});
+			}
 		}
 	});
 }

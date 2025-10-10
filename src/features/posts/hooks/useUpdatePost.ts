@@ -1,4 +1,4 @@
-import { PATHS } from '@constants/route';
+import { NORMALIZED_PATHS } from '@constants/route';
 import { updatePost } from '@services/post';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { usePathname } from 'expo-router';
@@ -10,31 +10,26 @@ export function useUpdatePost(actions?: () => void) {
 
 	return useMutation({
 		mutationFn: updatePost,
-		onSuccess: async () => {
-			Toast.show({
-				type: 'success',
-				text1: 'Success',
-				text2: 'Post updated successfully'
-			});
-
-			actions?.();
-
-			if (pathname !== PATHS.NEWSFEED) {
-				await queryClient.invalidateQueries({
-					queryKey: ['getPostById']
+		onSuccess: async (data) => {
+			if (data) {
+				Toast.show({
+					type: 'success',
+					text1: 'Success',
+					text2: 'Post updated successfully'
 				});
-			} else {
-				await queryClient.invalidateQueries({
-					queryKey: ['getPostList']
-				});
+
+				actions?.();
+
+				if (pathname !== NORMALIZED_PATHS.NEWSFEED) {
+					await queryClient.invalidateQueries({
+						queryKey: ['getPostById']
+					});
+				} else {
+					await queryClient.invalidateQueries({
+						queryKey: ['getPostList']
+					});
+				}
 			}
-		},
-		onError: () => {
-			Toast.show({
-				type: 'error',
-				text1: 'Error',
-				text2: 'Could not update post'
-			});
 		}
 	});
 }
