@@ -1,7 +1,7 @@
 import { Post, PostByUserResponse, PostResponse } from '@services/post/types';
+import { FlashList, ListRenderItem } from '@shopify/flash-list';
 import { InfiniteData, QueryObserverResult, RefetchOptions } from '@tanstack/react-query';
 import React, { ReactElement } from 'react';
-import { FlatList, ListRenderItem } from 'react-native';
 import PostListFooter from './PostListFooter';
 
 interface IPostList {
@@ -38,7 +38,7 @@ export function PostList({
 	ListHeaderComponent
 }: IPostList) {
 	return (
-		<FlatList<Post>
+		<FlashList<Post>
 			data={posts}
 			keyExtractor={(item, index) => item?.id ?? `post-${index}`}
 			renderItem={renderItem}
@@ -46,9 +46,6 @@ export function PostList({
 			scrollEnabled
 			keyboardShouldPersistTaps="handled"
 			keyboardDismissMode="on-drag"
-			initialNumToRender={5}
-			maxToRenderPerBatch={10}
-			windowSize={5}
 			removeClippedSubviews
 			onEndReached={onEndReached}
 			onEndReachedThreshold={0.5}

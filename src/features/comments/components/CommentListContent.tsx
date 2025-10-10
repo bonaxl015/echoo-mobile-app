@@ -1,6 +1,7 @@
 import { Comment } from '@services/comment/types';
+import { FlashList } from '@shopify/flash-list';
 import React, { useRef } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Text, useTheme } from 'react-native-paper';
 import useCommentListProps from '../hooks/useCommentListProps';
 import { useGetCommentList } from '../hooks/useGetComments';
@@ -47,7 +48,7 @@ export function CommentListContent({ postId }: ICommentListContent) {
 		}
 
 		return (
-			<FlatList
+			<FlashList
 				data={comments}
 				keyExtractor={(item, index) => item?.id ?? `comment-${index}`}
 				renderItem={renderItem}
@@ -55,14 +56,15 @@ export function CommentListContent({ postId }: ICommentListContent) {
 				refreshing={isFetching}
 				onEndReachedThreshold={5}
 				keyboardShouldPersistTaps="handled"
-				initialNumToRender={5}
-				maxToRenderPerBatch={10}
-				windowSize={5}
 				contentContainerStyle={{ paddingBottom: 20 }}
 				removeClippedSubviews
 				ListFooterComponent={
 					<CommentListFooter isFetchingNextPage={isFetchingNextPage} hasNextPage={hasNextPage} />
 				}
+				maintainVisibleContentPosition={{
+					disabled: true,
+					startRenderingFromBottom: false
+				}}
 			/>
 		);
 	})();
