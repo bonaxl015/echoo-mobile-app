@@ -1,4 +1,5 @@
-import { usePostDataContext } from '@provider/PostDataProvider';
+import { PATHS } from '@constants/route';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Icon, Text, useTheme } from 'react-native-paper';
@@ -10,12 +11,11 @@ interface IViewCommentLikesButton {
 
 export function ViewCommentLikesButton({ likesCount, commentId }: IViewCommentLikesButton) {
 	const theme = useTheme();
-	const { likeListModalRef } = usePostDataContext();
+	const router = useRouter();
 
 	const handleViewCommentLikes = () => {
 		if (commentId) {
-			likeListModalRef.current?.updateCommentId(commentId);
-			likeListModalRef.current?.openModal();
+			router.push({ pathname: PATHS.VIEW_LIKES, params: { commentId } });
 		}
 	};
 

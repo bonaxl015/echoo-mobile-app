@@ -13,6 +13,13 @@ export default function FullScreenStackLayout() {
 			}}
 		>
 			<Stack.Screen
+				name="(like)/view-likes"
+				options={{
+					gestureEnabled: true,
+					gestureDirection: 'horizontal'
+				}}
+			/>
+			<Stack.Screen
 				name="(post)/view-post"
 				options={{
 					gestureEnabled: true,

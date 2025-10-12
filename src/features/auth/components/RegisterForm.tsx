@@ -1,4 +1,5 @@
 import FormTextInput from '@components/FormTextInput';
+import { PATHS } from '@constants/route';
 import { useRegister } from '@features/auth/hooks/useRegister';
 import { registerSchema } from '@features/auth/validators/register';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -68,7 +69,7 @@ export default function RegisterForm() {
 				<View style={styles.bottomText}>
 					<Text style={{ color: theme.colors.onSurfaceVariant }}>Already have an account? </Text>
 					<Text
-						onPress={() => router.push('/auth/login')}
+						onPress={() => router.push(PATHS.LOGIN)}
 						style={[styles.registerText, { color: theme.colors.primary }]}
 					>
 						Login

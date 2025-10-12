@@ -3,6 +3,7 @@ import { FlashList } from '@shopify/flash-list';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator, useTheme } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { QUERY_TYPE, useGetLikeList } from '../hooks/useGetLikeList';
 import useLikeListProps from '../hooks/useLikeListProps';
 
@@ -24,11 +25,11 @@ export function LikesList({ id, type }: ILikesList) {
 	const renderContent = (() => {
 		if (isFetching) {
 			return (
-				<View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+				<SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
 					<View style={styles.center}>
 						<ActivityIndicator size="large" color={theme.colors.primary} />
 					</View>
-				</View>
+				</SafeAreaView>
 			);
 		}
 
@@ -47,14 +48,14 @@ export function LikesList({ id, type }: ILikesList) {
 	})();
 
 	return (
-		<View
+		<SafeAreaView
 			style={{
 				flex: 1,
 				backgroundColor: theme.colors.background
 			}}
 		>
 			{renderContent}
-		</View>
+		</SafeAreaView>
 	);
 }
 
