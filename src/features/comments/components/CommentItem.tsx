@@ -1,6 +1,8 @@
+import { NORMALIZED_PATHS } from '@constants/route';
 import { UserHeadingData } from '@features/posts/components/UserHeadingData';
 import { usePostDataContext } from '@provider/PostDataProvider';
 import { useAuthStore } from '@store/useAuthStore';
+import { usePathname } from 'expo-router';
 import React, { RefObject } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
 import { IconButton, Text, useTheme } from 'react-native-paper';
@@ -18,7 +20,8 @@ interface ICommentItem {
 	isLikedByCurrentUser: boolean;
 	likesCount: number;
 	createdAt: string;
-	commentInputRef: RefObject<ICommentInputRef | null>;
+	commentInputRef?: RefObject<ICommentInputRef | null>;
+	displayMode: 'modal' | 'details';
 }
 
 export function CommentItem({
@@ -31,17 +34,33 @@ export function CommentItem({
 	isLikedByCurrentUser,
 	likesCount,
 	createdAt,
-	commentInputRef
+	commentInputRef,
+	displayMode
 }: ICommentItem) {
 	const theme = useTheme();
+	const pathname = usePathname();
 	const currentUser = useAuthStore((s) => s.user);
-	const { commentDeleteRef } = usePostDataContext();
+	const { commentDeleteRef, newsfeedCommentListModalRef, profileCommentListModalRef } =
+		usePostDataContext();
 
 	const handleEdit = () => {
-		if (id) {
-			commentInputRef.current?.updateIsFocused(true);
+		if (!id) return;
+
+		if (displayMode === 'details' && commentInputRef) {
 			commentInputRef.current?.updateContent(content);
 			commentInputRef.current?.updateCommentId(id);
+			commentInputRef.current?.updateIsFocused(true);
+		}
+
+		if (displayMode === 'modal') {
+			const currentRef =
+				pathname === NORMALIZED_PATHS.NEWSFEED
+					? newsfeedCommentListModalRef
+					: profileCommentListModalRef;
+
+			currentRef.current?.updateCommentInputFocused();
+			currentRef.current?.updateCommentContent(content);
+			currentRef.current?.updateCommentId(id);
 		}
 	};
 

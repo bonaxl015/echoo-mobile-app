@@ -1,28 +1,20 @@
+import { BottomSheetFlashList } from '@gorhom/bottom-sheet';
 import { Comment } from '@services/comment/types';
-import { FlashList } from '@shopify/flash-list';
-import React, { useRef } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Text, useTheme } from 'react-native-paper';
-import useCommentListProps from '../hooks/useCommentListProps';
 import { useGetCommentList } from '../hooks/useGetComments';
-import { CommentInput, ICommentInputRef } from './CommentInput';
+import { CommentItem } from './CommentItem';
 import { CommentListFooter } from './CommentListFooter';
 
-interface ICommentListContent {
+interface ICommentListModalContent {
 	postId: string;
 }
 
-export function CommentListContent({ postId }: ICommentListContent) {
+export function CommentListModalContent({ postId }: ICommentListModalContent) {
 	const theme = useTheme();
-	const commentInputRef = useRef<ICommentInputRef | null>(null);
 	const { data, isFetching, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useGetCommentList(postId);
-	const { renderItem, onEndReached } = useCommentListProps({
-		postId,
-		hasNextPage,
-		fetchNextPage,
-		commentInputRef
-	});
 
 	const comments = (data?.pages.flatMap((page) => page?.comments) as Comment[]) || [];
 
@@ -48,31 +40,38 @@ export function CommentListContent({ postId }: ICommentListContent) {
 		}
 
 		return (
-			<FlashList
+			<BottomSheetFlashList<Comment>
 				data={comments}
-				keyExtractor={(item, index) => item?.id ?? `comment-${index}`}
-				renderItem={renderItem}
-				onEndReached={onEndReached}
+				keyExtractor={(item: Comment, index: number) => item?.id ?? `comment-${index}`}
+				renderItem={({ item }: { item: Comment }) => (
+					<CommentItem {...item} postId={postId} displayMode="modal" />
+				)}
+				onEndReached={() => {
+					if (hasNextPage) {
+						fetchNextPage();
+					}
+				}}
 				refreshing={isFetching}
 				onEndReachedThreshold={5}
-				keyboardShouldPersistTaps="handled"
 				contentContainerStyle={{ paddingBottom: 20 }}
+				keyboardShouldPersistTaps="handled"
+				keyboardDismissMode="on-drag"
 				removeClippedSubviews
 				ListFooterComponent={
 					<CommentListFooter isFetchingNextPage={isFetchingNextPage} hasNextPage={hasNextPage} />
 				}
-				maintainVisibleContentPosition={{
-					disabled: true,
-					startRenderingFromBottom: false
-				}}
 			/>
 		);
 	})();
 
 	return (
-		<View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+		<View
+			style={{
+				flex: 1,
+				backgroundColor: theme.colors.background
+			}}
+		>
 			{renderContent}
-			<CommentInput ref={commentInputRef} postId={postId} />
 		</View>
 	);
 }

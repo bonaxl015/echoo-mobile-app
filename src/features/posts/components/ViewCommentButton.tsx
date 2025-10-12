@@ -1,5 +1,7 @@
+import { NORMALIZED_PATHS } from '@constants/route';
 import { usePostDataContext } from '@provider/PostDataProvider';
-import React from 'react';
+import { usePathname } from 'expo-router';
+import React, { useCallback } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { IconButton, Text, useTheme } from 'react-native-paper';
 
@@ -16,14 +18,20 @@ interface IViewCommentButton {
 
 export function ViewCommentButton({ mode, postId, commentsCount }: IViewCommentButton) {
 	const theme = useTheme();
-	const { commentListModalRef } = usePostDataContext();
+	const pathname = usePathname();
+	const { newsfeedCommentListModalRef, profileCommentListModalRef } = usePostDataContext();
 
-	const handleOpenCommentModal = () => {
+	const handleOpenCommentModal = useCallback(() => {
+		const currentRef =
+			pathname === NORMALIZED_PATHS.NEWSFEED
+				? newsfeedCommentListModalRef
+				: profileCommentListModalRef;
+
 		if (postId) {
-			commentListModalRef.current?.updatePostId(postId);
-			commentListModalRef.current?.openModal();
+			currentRef.current?.updatePostId(postId);
+			currentRef.current?.openModal();
 		}
-	};
+	}, [newsfeedCommentListModalRef, pathname, postId, profileCommentListModalRef]);
 
 	if (mode === COMMENT_BUTTON.ICON) {
 		return (
