@@ -26,7 +26,6 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
 	(response) => response,
 	(error) => {
-		console.log('1111111111', error.response?.data);
 		if (error.response?.status === STATUS_CODE.UNAUTHORIZED) {
 			const logout = useAuthStore.getState().logout;
 
