@@ -1,4 +1,5 @@
 import FormTextInput from '@components/FormTextInput';
+import { PATHS } from '@constants/route';
 import { useLogin } from '@features/auth/hooks/useLogin';
 import { loginSchema } from '@features/auth/validators/login';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -62,7 +63,7 @@ export default function LoginForm() {
 				<View style={styles.bottomText}>
 					<Text style={{ color: theme.colors.onSurfaceVariant }}>No account yet? </Text>
 					<Text
-						onPress={() => router.push('/auth/register')}
+						onPress={() => router.push(PATHS.REGISTER)}
 						style={[styles.registerText, { color: theme.colors.primary }]}
 					>
 						Register
@@ -71,7 +72,7 @@ export default function LoginForm() {
 				<View style={styles.bottomText}>
 					<Text style={{ color: theme.colors.onSurfaceVariant }}>Forgot password? </Text>
 					<Text
-						onPress={() => router.push('/auth/forgot-password')}
+						onPress={() => router.push(PATHS.FORGOT_PASSWORD)}
 						style={[styles.registerText, { color: theme.colors.primary }]}
 					>
 						Reset Password

@@ -1,8 +1,7 @@
-import { CommentModal, CommentModalRef } from '@features/comments/components/CommentModal';
+import { CommentModalRef } from '@features/comments/components/CommentModal';
 import DeleteCommentDialog, {
 	ConfirmCommentDeleteDialogRef
 } from '@features/comments/components/DeleteCommentDialog';
-import { LikesListModal, LikesListModalRef } from '@features/like/components/LikesListModal';
 import DeletePostDialog, {
 	ConfirmPostDeleteDialogRef
 } from '@features/posts/components/DeletePostDialog';
@@ -13,7 +12,6 @@ interface PostData {
 	postFormModalRef: RefObject<PostFormModalRef | null>;
 	postDeleteDialogRef: RefObject<ConfirmPostDeleteDialogRef | null>;
 	commentDeleteRef: RefObject<ConfirmCommentDeleteDialogRef | null>;
-	likeListModalRef: RefObject<LikesListModalRef | null>;
 	newsfeedCommentListModalRef: RefObject<CommentModalRef | null>;
 	profileCommentListModalRef: RefObject<CommentModalRef | null>;
 }
@@ -30,9 +28,6 @@ const initialPostData: PostData = {
 		current: null
 	},
 	commentDeleteRef: {
-		current: null
-	},
-	likeListModalRef: {
 		current: null
 	},
 	newsfeedCommentListModalRef: {
@@ -59,7 +54,6 @@ export function PostDataProvider({ children }: IPostDataProvider) {
 	const postFormModalRef = useRef<PostFormModalRef>(null);
 	const postDeleteDialogRef = useRef<ConfirmPostDeleteDialogRef>(null);
 	const commentDeleteRef = useRef<ConfirmCommentDeleteDialogRef>(null);
-	const likeListModalRef = useRef<LikesListModalRef>(null);
 	const newsfeedCommentListModalRef = useRef<CommentModalRef>(null);
 	const profileCommentListModalRef = useRef<CommentModalRef>(null);
 
@@ -67,7 +61,6 @@ export function PostDataProvider({ children }: IPostDataProvider) {
 		postFormModalRef,
 		postDeleteDialogRef,
 		commentDeleteRef,
-		likeListModalRef,
 		newsfeedCommentListModalRef,
 		profileCommentListModalRef
 	};
@@ -84,15 +77,6 @@ export function PostDataProvider({ children }: IPostDataProvider) {
 
 			{/* Delete comment dialog */}
 			<DeleteCommentDialog ref={commentDeleteRef} />
-
-			{/* Likes list modal */}
-			<LikesListModal ref={likeListModalRef} />
-
-			{/* View comments in newsfeed */}
-			<CommentModal ref={newsfeedCommentListModalRef} />
-
-			{/* View comments in user profile */}
-			<CommentModal ref={profileCommentListModalRef} />
 		</PostDataContext.Provider>
 	);
 }
