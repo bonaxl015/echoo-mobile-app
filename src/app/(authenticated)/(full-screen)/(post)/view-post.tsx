@@ -1,6 +1,6 @@
 import { CommentInput, ICommentInputRef } from '@features/comments/components/CommentInput';
+import { CommentItem } from '@features/comments/components/CommentItem';
 import { CommentListFooter } from '@features/comments/components/CommentListFooter';
-import useCommentListProps from '@features/comments/hooks/useCommentListProps';
 import { useGetCommentList } from '@features/comments/hooks/useGetComments';
 import PostDetail from '@features/posts/components/PostDetail';
 import { Comment } from '@services/comment/types';
@@ -15,37 +15,40 @@ export default function ViewPostScreen() {
 	const commentInputRef = useRef<ICommentInputRef | null>(null);
 	const { data, isFetching, refetch, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useGetCommentList(parsedPost.id);
-	const { renderItem, onEndReached } = useCommentListProps({
-		postId: parsedPost.id,
-		hasNextPage,
-		fetchNextPage,
-		commentInputRef
-	});
 
 	const comments = (data?.pages.flatMap((page) => page?.comments) as Comment[]) || [];
 
 	return (
-		<>
-			<SafeAreaView style={{ flex: 1 }}>
-				<FlashList
-					data={comments}
-					keyExtractor={(item, index) => item?.id ?? `comment-${index}`}
-					renderItem={renderItem}
-					onEndReached={onEndReached}
-					onEndReachedThreshold={5}
-					keyboardShouldPersistTaps="handled"
-					keyboardDismissMode="on-drag"
-					contentContainerStyle={{ paddingBottom: 20 }}
-					removeClippedSubviews
-					refreshing={isFetching}
-					onRefresh={() => refetch()}
-					ListHeaderComponent={<PostDetail {...parsedPost} commentInputRef={commentInputRef} />}
-					ListFooterComponent={
-						<CommentListFooter isFetchingNextPage={isFetchingNextPage} hasNextPage={hasNextPage} />
+		<SafeAreaView style={{ flex: 1 }}>
+			<FlashList<Comment>
+				data={comments}
+				keyExtractor={(item, index) => item?.id ?? `comment-${index}`}
+				renderItem={({ item }) => (
+					<CommentItem
+						{...item}
+						postId={parsedPost.id}
+						commentInputRef={commentInputRef}
+						displayMode="details"
+					/>
+				)}
+				onEndReached={() => {
+					if (hasNextPage) {
+						fetchNextPage();
 					}
-				/>
-				<CommentInput ref={commentInputRef} postId={parsedPost?.id} />
-			</SafeAreaView>
-		</>
+				}}
+				onEndReachedThreshold={5}
+				keyboardShouldPersistTaps="handled"
+				keyboardDismissMode="on-drag"
+				contentContainerStyle={{ paddingBottom: 20 }}
+				removeClippedSubviews
+				refreshing={isFetching}
+				onRefresh={() => refetch()}
+				ListHeaderComponent={<PostDetail {...parsedPost} commentInputRef={commentInputRef} />}
+				ListFooterComponent={
+					<CommentListFooter isFetchingNextPage={isFetchingNextPage} hasNextPage={hasNextPage} />
+				}
+			/>
+			<CommentInput ref={commentInputRef} postId={parsedPost?.id} displayMode="details" />
+		</SafeAreaView>
 	);
 }

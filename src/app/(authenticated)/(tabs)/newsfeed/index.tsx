@@ -1,9 +1,7 @@
-import { CommentListModal } from '@features/comments/components/CommentListModal';
 import { CreatePostPreview } from '@features/posts/components/CreatePostPreview';
 import { PostList } from '@features/posts/components/PostList';
 import { useGetPostList } from '@features/posts/hooks/useGetPostList';
 import usePostListProps from '@features/posts/hooks/usePostListProps';
-import { usePostDataContext } from '@provider/PostDataProvider';
 import { Post } from '@services/post/types';
 import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
@@ -14,7 +12,6 @@ export default function NewsfeedScreen() {
 	const theme = useTheme();
 	const { data, isFetching, refetch, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useGetPostList();
-	const { commentListModalRef } = usePostDataContext();
 	const { renderItem, onEndReached } = usePostListProps({
 		fetchNextPage,
 		hasNextPage
@@ -57,19 +54,13 @@ export default function NewsfeedScreen() {
 	})();
 
 	return (
-		<>
-			{/* Post list display */}
-			<SafeAreaView
-				style={[styles.container, { backgroundColor: theme.colors.background }]}
-				edges={['bottom']}
-			>
-				<CreatePostPreview />
-				{renderPostList}
-			</SafeAreaView>
-
-			{/* Comment list modal */}
-			<CommentListModal ref={commentListModalRef} />
-		</>
+		<SafeAreaView
+			style={[styles.container, { backgroundColor: theme.colors.background }]}
+			edges={['bottom']}
+		>
+			<CreatePostPreview />
+			{renderPostList}
+		</SafeAreaView>
 	);
 }
 

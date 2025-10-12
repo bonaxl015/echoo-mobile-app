@@ -1,12 +1,12 @@
 import { PostCard } from '@features/posts/components/PostCard';
 import { Post, PostResponse } from '@services/post/types';
+import { ListRenderItem } from '@shopify/flash-list';
 import {
 	FetchNextPageOptions,
 	InfiniteData,
 	InfiniteQueryObserverResult
 } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { ListRenderItem } from 'react-native';
 
 interface IUsePostListProps {
 	hasNextPage: boolean;

@@ -6,6 +6,7 @@ import { useCommentFormOperations } from '../hooks/useCommentFormOperations';
 
 interface ICommentInput {
 	postId: string;
+	displayMode: 'modal' | 'details';
 }
 
 export interface ICommentInputRef {
@@ -14,89 +15,99 @@ export interface ICommentInputRef {
 	updateCommentId: (value: string | null) => void;
 }
 
-export const CommentInput = forwardRef<ICommentInputRef, ICommentInput>(({ postId }, ref) => {
-	const theme = useTheme();
-	const insets = useSafeAreaInsets();
-	const [isFocused, setIsFocused] = useState<boolean>(false);
-	const { updateCommentId, updateContent, handleSubmit, content, textInputRef } =
-		useCommentFormOperations({ postId });
+export const CommentInput = forwardRef<ICommentInputRef, ICommentInput>(
+	({ postId, displayMode }, ref) => {
+		const theme = useTheme();
+		const insets = useSafeAreaInsets();
+		const [isFocused, setIsFocused] = useState<boolean>(false);
+		const { updateCommentId, updateContent, handleSubmit, content, textInputRef } =
+			useCommentFormOperations({ postId });
 
-	useEffect(() => {
-		const hideKeyboardEvent = Keyboard.addListener(
-			Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
-			() => {
-				setIsFocused(false);
-			}
+		useEffect(() => {
+			const hideKeyboardEvent = Keyboard.addListener(
+				Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+				() => {
+					setIsFocused(false);
+				}
+			);
+
+			return () => {
+				hideKeyboardEvent.remove();
+			};
+		}, []);
+
+		const updateIsFocused = useCallback(
+			(value: boolean) => {
+				if (!isFocused) {
+					textInputRef.current?.blur();
+					textInputRef.current?.focus();
+					setIsFocused(value);
+				}
+			},
+			[isFocused, textInputRef]
 		);
 
-		return () => {
-			hideKeyboardEvent.remove();
-		};
-	}, []);
+		useImperativeHandle(ref, () => ({
+			updateIsFocused,
+			updateContent,
+			updateCommentId
+		}));
 
-	const updateIsFocused = useCallback(
-		(value: boolean) => {
-			if (!isFocused) {
-				textInputRef.current?.blur();
-				textInputRef.current?.focus();
-				setIsFocused(value);
+		const keyboardVerticalOffset = () => {
+			if (displayMode === 'modal') {
+				return isFocused ? 70 : 0;
 			}
-		},
-		[isFocused, textInputRef]
-	);
 
-	useImperativeHandle(ref, () => ({
-		updateIsFocused,
-		updateContent,
-		updateCommentId
-	}));
+			return isFocused ? 10 : -1 * insets.bottom;
+		};
 
-	return (
-		<KeyboardAvoidingView
-			style={{ backgroundColor: theme.colors.background }}
-			behavior="padding"
-			keyboardVerticalOffset={isFocused ? 10 : -1 * insets.bottom}
-		>
-			<View
-				style={[
-					styles.container,
-					{
-						backgroundColor: theme.colors.background,
-						borderColor: theme.colors.onSurfaceDisabled
-					}
-				]}
+		return (
+			<KeyboardAvoidingView
+				style={{ backgroundColor: theme.colors.background }}
+				behavior="padding"
+				keyboardVerticalOffset={keyboardVerticalOffset()}
 			>
-				<TextInput
-					ref={textInputRef}
-					numberOfLines={1}
-					mode="outlined"
-					placeholder="Add a comment..."
-					value={content}
-					onChangeText={updateContent}
-					maxLength={1500}
-					style={[styles.textInput, { backgroundColor: theme.colors.surface }]}
-					outlineColor={theme.colors.outline}
-					activeOutlineColor={theme.colors.outline}
-					onFocus={() => setIsFocused(true)}
-					onPress={() => setIsFocused(true)}
-					onBlur={() => setIsFocused(false)}
-				/>
-				{(isFocused || Boolean(content)) && (
-					<IconButton
-						icon="send"
-						disabled={!content.trim()}
-						onPress={() => {
-							handleSubmit(content);
-							Keyboard.dismiss();
-							updateContent('');
-							setIsFocused(false);
-						}}
+				<View
+					style={[
+						styles.container,
+						{
+							backgroundColor: theme.colors.background,
+							borderColor: theme.colors.onSurfaceDisabled
+						}
+					]}
+				>
+					<TextInput
+						ref={textInputRef}
+						numberOfLines={1}
+						mode="outlined"
+						placeholder="Add a comment..."
+						value={content}
+						onChangeText={updateContent}
+						maxLength={1500}
+						style={[styles.textInput, { backgroundColor: theme.colors.surface }]}
+						outlineColor={theme.colors.outline}
+						activeOutlineColor={theme.colors.outline}
+						onFocus={() => setIsFocused(true)}
+						onPress={() => setIsFocused(true)}
+						onBlur={() => setIsFocused(false)}
 					/>
-				)}
-			</View>
-		</KeyboardAvoidingView>
-	);
-});
+					{(isFocused || Boolean(content)) && (
+						<IconButton
+							icon="send"
+							disabled={!content.trim()}
+							onPress={() => {
+								handleSubmit(content);
+								Keyboard.dismiss();
+								updateContent('');
+								setIsFocused(false);
+							}}
+						/>
+					)}
+				</View>
+			</KeyboardAvoidingView>
+		);
+	}
+);
 
 const styles = StyleSheet.create({
 	container: {
