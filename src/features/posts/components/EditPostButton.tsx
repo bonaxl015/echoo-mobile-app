@@ -11,7 +11,7 @@ export function EditPostButton({ postId, content }: IEditPostButton) {
 	const { postFormModalRef } = usePostDataContext();
 
 	const handleEditPost = () => {
-		if (postId) {
+		if (postId && content) {
 			postFormModalRef.current?.updatePostFormData({ id: postId, content });
 			postFormModalRef.current?.openModal();
 		}
