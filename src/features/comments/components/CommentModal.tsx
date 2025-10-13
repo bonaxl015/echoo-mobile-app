@@ -25,10 +25,27 @@ export interface CommentModalRef {
 export const CommentModal = forwardRef<CommentModalRef>((_props, ref) => {
 	const theme = useTheme();
 	const insets = useSafeAreaInsets();
-	const [sheetIndex, setSheetIndex] = useState<number>(-1);
 	const [postId, setPostId] = useState<string>('');
 	const bottomSheetRef = useRef<BottomSheet | null>(null);
 	const commentInputRef = useRef<ICommentInputRef | null>(null);
+	const previousIndexRef = useRef<number>(-1);
+
+	useEffect(() => {
+		if (Platform.OS !== 'android') return;
+
+		const backAction = () => {
+			if (previousIndexRef.current >= 0) {
+				bottomSheetRef.current?.close();
+
+				return true;
+			}
+			return false;
+		};
+
+		const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+		return () => backHandler.remove();
+	}, []);
 
 	const snapPoints = useMemo(() => ['100%'], []);
 
@@ -51,6 +68,10 @@ export const CommentModal = forwardRef<CommentModalRef>((_props, ref) => {
 		commentInputRef.current?.updateCommentId(id);
 	};
 
+	const handleChange = (index: number) => {
+		previousIndexRef.current = index;
+	};
+
 	useImperativeHandle(ref, () => ({
 		updatePostId,
 		openModal,
@@ -60,34 +81,18 @@ export const CommentModal = forwardRef<CommentModalRef>((_props, ref) => {
 		updateCommentId
 	}));
 
-	useEffect(() => {
-		if (Platform.OS !== 'android') return;
-
-		const backAction = () => {
-			if (sheetIndex >= 0) {
-				bottomSheetRef.current?.close();
-
-				return true;
-			}
-			return false;
-		};
-
-		const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
-
-		return () => backHandler.remove();
-	}, [ref, sheetIndex]);
-
 	return (
 		<BottomSheet
 			ref={bottomSheetRef}
 			index={-1}
 			snapPoints={snapPoints}
 			enablePanDownToClose
-			onChange={setSheetIndex}
+			onChange={handleChange}
 			backgroundStyle={{ backgroundColor: theme.colors.background }}
 			handleIndicatorStyle={{ backgroundColor: theme.colors.onSurface }}
 			topInset={insets.top}
 			bottomInset={insets.bottom}
+			enableDynamicSizing={false}
 			footerComponent={() => (
 				<CommentInput ref={commentInputRef} postId={postId} displayMode="modal" />
 			)}
