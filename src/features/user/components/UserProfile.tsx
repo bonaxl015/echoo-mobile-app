@@ -3,7 +3,7 @@ import { useGetPostByUser } from '@features/posts/hooks/useGetPostByUser';
 import usePostListProps from '@features/posts/hooks/usePostListProps';
 import { Post } from '@services/post/types';
 import { UserProfileData } from '@services/user/types';
-import React from 'react';
+import React, { memo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -14,7 +14,7 @@ interface IUserProfile {
 	isFullScreenMode?: boolean;
 }
 
-export function UserProfile({ user, isFullScreenMode }: IUserProfile) {
+function UserProfileComponent({ user, isFullScreenMode }: IUserProfile) {
 	const theme = useTheme();
 	const insets = useSafeAreaInsets();
 
@@ -73,3 +73,5 @@ const styles = StyleSheet.create({
 		alignItems: 'center'
 	}
 });
+
+export const UserProfile = memo(UserProfileComponent);
