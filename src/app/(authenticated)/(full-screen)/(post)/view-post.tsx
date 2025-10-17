@@ -13,8 +13,9 @@ export default function ViewPostScreen() {
 	const { post } = useLocalSearchParams<{ post: string }>();
 	const parsedPost = post ? JSON.parse(post) : null;
 	const commentInputRef = useRef<ICommentInputRef | null>(null);
-	const { data, isFetching, refetch, hasNextPage, fetchNextPage, isFetchingNextPage } =
-		useGetCommentList(parsedPost.id);
+	const { data, refetch, hasNextPage, fetchNextPage, isFetchingNextPage } = useGetCommentList(
+		parsedPost.id
+	);
 
 	const comments = (data?.pages.flatMap((page) => page?.comments) as Comment[]) || [];
 
@@ -41,7 +42,6 @@ export default function ViewPostScreen() {
 				keyboardDismissMode="on-drag"
 				contentContainerStyle={{ paddingBottom: 20 }}
 				removeClippedSubviews
-				refreshing={isFetching}
 				onRefresh={() => refetch()}
 				ListHeaderComponent={<PostDetail {...parsedPost} commentInputRef={commentInputRef} />}
 				ListFooterComponent={

@@ -20,7 +20,6 @@ function UserProfileComponent({ user, isFullScreenMode }: IUserProfile) {
 
 	const {
 		data: postData,
-		isFetching,
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage,
@@ -55,7 +54,6 @@ function UserProfileComponent({ user, isFullScreenMode }: IUserProfile) {
 				renderItem={renderItem}
 				onEndReached={onEndReached}
 				refetch={refetch}
-				isFetching={isFetching}
 				isFetchingNextPage={isFetchingNextPage}
 				hasNextPage={hasNextPage}
 				ListHeaderComponent={

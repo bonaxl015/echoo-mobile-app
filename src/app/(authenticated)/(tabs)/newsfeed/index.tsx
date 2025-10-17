@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function NewsfeedScreen() {
 	const theme = useTheme();
-	const { data, isFetching, refetch, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
+	const { data, refetch, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useGetPostList();
 	const { renderItem, onEndReached } = usePostListProps({
 		fetchNextPage,
@@ -46,7 +46,6 @@ export default function NewsfeedScreen() {
 				renderItem={renderItem}
 				onEndReached={onEndReached}
 				refetch={refetch}
-				isFetching={isFetching}
 				isFetchingNextPage={isFetchingNextPage}
 				hasNextPage={hasNextPage}
 			/>

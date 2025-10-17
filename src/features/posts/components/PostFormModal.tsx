@@ -1,4 +1,5 @@
 import BottomSheet from '@gorhom/bottom-sheet';
+import { useRouter } from 'expo-router';
 import React, {
 	forwardRef,
 	useCallback,
@@ -28,6 +29,7 @@ export type PostFormData = {
 
 export const PostFormModal = forwardRef<PostFormModalRef>((_props, ref) => {
 	const theme = useTheme();
+	const router = useRouter();
 	const insets = useSafeAreaInsets();
 	const bottomSheetRef = useRef<BottomSheet | null>(null);
 	const previousIndexRef = useRef<number>(-1);
@@ -49,6 +51,10 @@ export const PostFormModal = forwardRef<PostFormModalRef>((_props, ref) => {
 		if (Platform.OS !== 'android') return;
 
 		const backAction = () => {
+			if (router.canGoBack()) {
+				return false;
+			}
+
 			if (previousIndexRef.current >= 0) {
 				bottomSheetRef.current?.close();
 
@@ -60,7 +66,7 @@ export const PostFormModal = forwardRef<PostFormModalRef>((_props, ref) => {
 		const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
 
 		return () => backHandler.remove();
-	}, []);
+	}, [router]);
 
 	const snapPoints = useMemo(() => ['100%'], []);
 

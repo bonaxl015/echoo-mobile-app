@@ -13,5 +13,6 @@ export const PATHS = {
 
 export const NORMALIZED_PATHS = {
 	NEWSFEED: '/newsfeed',
-	USER_SETTINGS: '/settings'
+	USER_SETTINGS: '/settings',
+	PROFILE: '/profile'
 } as const;
