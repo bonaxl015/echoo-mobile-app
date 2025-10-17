@@ -1,6 +1,8 @@
+import { NORMALIZED_PATHS } from '@constants/route';
 import { likePost, unlikePost } from '@services/like';
 import { Post } from '@services/post/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { usePathname } from 'expo-router';
 
 interface InfinitePosts {
 	pages: {
@@ -12,7 +14,18 @@ interface InfinitePosts {
 
 export function useLikePostList(postId: string) {
 	const queryClient = useQueryClient();
-	const queryKey = ['getPostList'];
+	const pathname = usePathname();
+	const queryKey = (() => {
+		if (pathname === NORMALIZED_PATHS.NEWSFEED) {
+			return ['getPostList'];
+		}
+
+		if (pathname === NORMALIZED_PATHS.PROFILE) {
+			return ['getPostByUser'];
+		}
+
+		return [''];
+	})();
 
 	const optimisticUpdate = (liked: boolean) => {
 		queryClient.setQueryData<InfinitePosts>(queryKey, (old) => {
@@ -74,7 +87,10 @@ export function useLikePostList(postId: string) {
 			}
 		},
 		onSettled: async () => {
-			await queryClient.invalidateQueries({ queryKey });
+			await Promise.all([
+				queryClient.invalidateQueries({ queryKey: ['getPostList'] }),
+				queryClient.invalidateQueries({ queryKey: ['getPostByUser'] })
+			]);
 		}
 	});
 
