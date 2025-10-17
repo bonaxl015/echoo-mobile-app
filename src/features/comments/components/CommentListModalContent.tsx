@@ -13,7 +13,7 @@ interface ICommentListModalContent {
 
 export function CommentListModalContent({ postId }: ICommentListModalContent) {
 	const theme = useTheme();
-	const { data, isFetching, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
+	const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useGetCommentList(postId);
 
 	const comments = (data?.pages.flatMap((page) => page?.comments) as Comment[]) || [];
@@ -51,7 +51,6 @@ export function CommentListModalContent({ postId }: ICommentListModalContent) {
 						fetchNextPage();
 					}
 				}}
-				refreshing={isFetching}
 				onEndReachedThreshold={5}
 				contentContainerStyle={{ paddingBottom: 20 }}
 				keyboardShouldPersistTaps="handled"

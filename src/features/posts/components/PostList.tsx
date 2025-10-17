@@ -8,7 +8,6 @@ interface IPostList {
 	posts: Post[];
 	renderItem: ListRenderItem<Post>;
 	onEndReached: () => void;
-	isFetching: boolean;
 	isFetchingNextPage: boolean;
 	hasNextPage: boolean;
 	ListHeaderComponent?: ReactElement;
@@ -31,7 +30,6 @@ export function PostList({
 	posts,
 	renderItem,
 	onEndReached,
-	isFetching,
 	isFetchingNextPage,
 	hasNextPage,
 	refetch,
@@ -49,7 +47,6 @@ export function PostList({
 			removeClippedSubviews
 			onEndReached={onEndReached}
 			onEndReachedThreshold={0.5}
-			refreshing={isFetching}
 			onRefresh={() => refetch()}
 			ListHeaderComponent={ListHeaderComponent}
 			ListFooterComponent={
