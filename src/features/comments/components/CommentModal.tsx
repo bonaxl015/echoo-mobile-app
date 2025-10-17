@@ -1,4 +1,5 @@
 import BottomSheet from '@gorhom/bottom-sheet';
+import { useRouter } from 'expo-router';
 import React, {
 	forwardRef,
 	useEffect,
@@ -24,6 +25,7 @@ export interface CommentModalRef {
 
 export const CommentModal = forwardRef<CommentModalRef>((_props, ref) => {
 	const theme = useTheme();
+	const router = useRouter();
 	const insets = useSafeAreaInsets();
 	const [postId, setPostId] = useState<string>('');
 	const bottomSheetRef = useRef<BottomSheet | null>(null);
@@ -34,6 +36,10 @@ export const CommentModal = forwardRef<CommentModalRef>((_props, ref) => {
 		if (Platform.OS !== 'android') return;
 
 		const backAction = () => {
+			if (router.canGoBack()) {
+				return false;
+			}
+
 			if (previousIndexRef.current >= 0) {
 				bottomSheetRef.current?.close();
 
@@ -45,7 +51,7 @@ export const CommentModal = forwardRef<CommentModalRef>((_props, ref) => {
 		const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
 
 		return () => backHandler.remove();
-	}, []);
+	}, [router]);
 
 	const snapPoints = useMemo(() => ['100%'], []);
 
