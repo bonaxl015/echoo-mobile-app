@@ -1,16 +1,8 @@
 import { NORMALIZED_PATHS } from '@constants/route';
+import { InfinitePosts } from '@features/posts/types';
 import { likePost, unlikePost } from '@services/like';
-import { Post } from '@services/post/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { usePathname } from 'expo-router';
-
-interface InfinitePosts {
-	pages: {
-		posts: Post[];
-		nextPage?: number;
-	}[];
-	pageParams: unknown[];
-}
 
 export function useLikePostList(postId: string) {
 	const queryClient = useQueryClient();
