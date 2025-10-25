@@ -1,0 +1,50 @@
+{
+	"cli": {
+		"version": ">=2.0.0"
+	},
+	"build": {
+		"development": {
+			"node": "22.19.0",
+			"developmentClient": true,
+			"distribution": "internal",
+			"android": {
+				"buildType": "apk"
+			},
+			"ios": {
+				"simulator": true
+			}
+		},
+		"preview": {
+			"node": "22.19.0",
+			"releaseChannel": "preview",
+			"distribution": "internal",
+			"android": {
+				"buildType": "app-bundle"
+			},
+			"env": {
+				"EXPO_PUBLIC_BACKEND_URL": "http://192.168.1.2:5051"
+			}
+		},
+		"production": {
+			"node": "22.19.0",
+			"releaseChannel": "production",
+			"distribution": "store",
+			"android": {
+				"buildType": "app-bundle"
+			},
+			"env": {
+				"EXPO_PUBLIC_BACKEND_URL": "http://192.168.1.2:5051"
+			}
+		}
+	},
+	"submit": {
+		"production": {
+			"android": {
+				"serviceAccountKeyPath": "build/keys/android-service-account.json"
+			},
+			"ios": {
+				"appleId": "bonaxl015@echoo.com"
+			}
+		}
+	}
+}

@@ -10,7 +10,7 @@
 		"splash": {
 			"image": "./src/assets/images/splash-icon.png",
 			"resizeMode": "contain",
-			"backgroundColor": "#2563EB"
+			"backgroundColor": "#FFFFFF"
 		},
 		"android": {
 			"package": "com.bonaxl015.echoo"
@@ -23,6 +23,12 @@
 		},
 		"ios": {
 			"bundleIdentifier": "com.bonaxl015.echoo"
+		},
+		"extra": {
+			"router": {},
+			"eas": {
+				"projectId": "aaccc1d5-f056-4cec-8ccc-1b46a2f12a8b"
+			}
 		}
 	}
 }
